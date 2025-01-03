@@ -13,7 +13,7 @@
                 "-lSDL2",
                 "${workspaceFolder}/src/*.cpp",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
+                "${workspaceFolder}/build/main"
             ],
             "options": {
                 "cwd": "${fileDirname}"
