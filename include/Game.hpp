@@ -23,5 +23,6 @@ private:
     bool running;
     SDL_Window *window;
     SDL_Renderer *renderer;
+    int gravity;
     std::vector<GameObject> gameObjects;
 };

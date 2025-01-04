@@ -4,7 +4,7 @@ int main(int argc, char *argv[])
 {
     Game game;
 
-    if (!game.init("Test Game", 1280, 720, false))
+    if (!game.init("Greg's Game", 1280, 720, false))
     {
         return 1;
     }

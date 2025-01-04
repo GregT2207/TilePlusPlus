@@ -3,7 +3,7 @@
 #include <iostream>
 
 Game::Game()
-    : running(false), window(nullptr), renderer(nullptr)
+    : running(false), window(nullptr), renderer(nullptr), gravity(10)
 {
 }
 
@@ -50,8 +50,10 @@ bool Game::init(const std::string &title, int width, int height, bool fullscreen
         return false;
     }
 
-    // Create game objects
-    gameObjects.push_back(GameObject(renderer, 20, 20));
+    // Create environment
+    // gravity = 10;
+    gameObjects.push_back(GameObject(renderer, "Player1", 200, 50, (SDL_Color){255, 0, 0, 255}));
+    gameObjects.push_back(GameObject(renderer, "Player2", width - 200, 50, (SDL_Color){0, 0, 255, 255}));
 
     running = true;
     return true;
@@ -81,12 +83,24 @@ void Game::handleEvents()
 
 void Game::update()
 {
+    int winWidth, winHeight;
+    SDL_GetWindowSize(window, &winWidth, &winHeight);
+
+    for (int i = 0; i < gameObjects.size(); i++)
+    {
+        gameObjects[i].update(winWidth, winHeight, gravity);
+    }
 }
 
 void Game::render()
 {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
+
+    for (int i = 0; i < gameObjects.size(); i++)
+    {
+        gameObjects[i].render();
+    }
 
     SDL_RenderPresent(renderer);
 }
