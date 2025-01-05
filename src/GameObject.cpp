@@ -14,17 +14,25 @@ GameObject::~GameObject()
 
 void GameObject::update(float deltaTime, int worldWidth, int worldHeight, int gravity)
 {
+    updatePosition(deltaTime);
     applyGravity(deltaTime, gravity, worldHeight);
+}
+
+void GameObject::updatePosition(float deltaTime)
+{
+    x += velocity.x * deltaTime;
+    y += velocity.y * deltaTime;
 }
 
 void GameObject::applyGravity(float deltaTime, int gravity, int worldHeight)
 {
     if ((y + height / 2) < worldHeight)
     {
-        y += gravity * deltaTime;
+        velocity.y += gravity * deltaTime;
     }
     else
     {
+        velocity.y = 0;
         y = worldHeight - (height / 2);
     }
 }

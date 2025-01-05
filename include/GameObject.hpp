@@ -12,22 +12,17 @@ public:
     void render();
     int getX() const { return x; }
     int getY() const { return y; }
-    void setVelocity(float vx, float vy)
-    {
-        velocity.x = vx;
-        velocity.y = vy;
-    }
-
-    int width;
-    int height;
-    SDL_Color color;
 
 private:
+    void updatePosition(float deltaTime);
     void applyGravity(float deltaTime, int gravity, int worldHeight);
 
     SDL_Renderer *renderer;
+    SDL_Color color;
     std::string name;
 
+    int width;
+    int height;
     int x;
     int y;
 

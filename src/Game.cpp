@@ -51,7 +51,7 @@ bool Game::init(const std::string &title, int width, int height, bool fullscreen
     }
 
     // Create environment
-    gravity = 10;
+    gravity = 800;
     gameObjects.push_back(GameObject(renderer, "Player1", 200, 50, (SDL_Color){255, 0, 0, 255}));
     gameObjects.push_back(GameObject(renderer, "Player2", width - 200, 50, (SDL_Color){0, 0, 255, 255}));
 
