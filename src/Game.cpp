@@ -52,8 +52,8 @@ bool Game::init(const std::string &title, int width, int height, bool fullscreen
 
     // Create environment
     gravity = 800;
-    gameObjects.push_back(GameObject(renderer, "Player1", 200, 50, (SDL_Color){255, 0, 0, 255}));
-    gameObjects.push_back(GameObject(renderer, "Player2", width - 200, 50, (SDL_Color){0, 0, 255, 255}));
+    gameObjects.push_back(GameObject(renderer, "Player1", 200, 50, (SDL_Color){249, 102, 94, 255}));
+    gameObjects.push_back(GameObject(renderer, "Player2", width - 200, 50, (SDL_Color){121, 159, 203, 255}));
 
     running = true;
     return true;
@@ -98,7 +98,7 @@ void Game::update()
 
 void Game::render()
 {
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(renderer, 135, 206, 235, 255);
     SDL_RenderClear(renderer);
 
     for (int i = 0; i < gameObjects.size(); i++)
