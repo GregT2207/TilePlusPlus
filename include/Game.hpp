@@ -19,6 +19,8 @@ public:
 
     bool isRunning() const { return running; }
 
+    static constexpr float maxFallSpeed = 500.0f;
+
 private:
     bool running;
     SDL_Window *window;

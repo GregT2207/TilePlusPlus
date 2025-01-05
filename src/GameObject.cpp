@@ -1,4 +1,5 @@
 #include <GameObject.hpp>
+#include <Game.hpp>
 #include <string>
 
 GameObject::GameObject(SDL_Renderer *renderer, std::string name, int x, int y, SDL_Color color)
@@ -26,15 +27,19 @@ void GameObject::updatePosition(float deltaTime)
 
 void GameObject::applyGravity(float deltaTime, int gravity, int worldHeight)
 {
-    if ((y + height / 2) < worldHeight)
-    {
-        velocity.y += gravity * deltaTime;
-    }
-    else
+    if ((y + height / 2) >= worldHeight)
     {
         velocity.y = 0;
         y = worldHeight - (height / 2);
+        return;
     }
+
+    if (velocity.y >= Game::maxFallSpeed)
+    {
+        return;
+    }
+
+    velocity.y += gravity * deltaTime;
 }
 
 void GameObject::render()

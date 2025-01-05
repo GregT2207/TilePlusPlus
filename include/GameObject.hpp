@@ -10,6 +10,7 @@ public:
 
     void update(float deltaTime, int worldWidth, int worldHeight, int gravity);
     void render();
+
     int getX() const { return x; }
     int getY() const { return y; }
 
