@@ -51,7 +51,7 @@ bool Game::init(const std::string &title, int width, int height, bool fullscreen
     }
 
     // Create environment
-    // gravity = 10;
+    gravity = 10;
     gameObjects.push_back(GameObject(renderer, "Player1", 200, 50, (SDL_Color){255, 0, 0, 255}));
     gameObjects.push_back(GameObject(renderer, "Player2", width - 200, 50, (SDL_Color){0, 0, 255, 255}));
 
@@ -83,12 +83,16 @@ void Game::handleEvents()
 
 void Game::update()
 {
+    unsigned int currentFrameTime = SDL_GetTicks64();
+    deltaTime = (currentFrameTime - lastFrameTime) / 1000.0f;
+    lastFrameTime = currentFrameTime;
+
     int winWidth, winHeight;
     SDL_GetWindowSize(window, &winWidth, &winHeight);
 
     for (int i = 0; i < gameObjects.size(); i++)
     {
-        gameObjects[i].update(winWidth, winHeight, gravity);
+        gameObjects[i].update(deltaTime, winWidth, winHeight, gravity);
     }
 }
 

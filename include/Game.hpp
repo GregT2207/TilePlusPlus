@@ -23,6 +23,8 @@ private:
     bool running;
     SDL_Window *window;
     SDL_Renderer *renderer;
+    float deltaTime;
+    unsigned int lastFrameTime;
     int gravity;
     std::vector<GameObject> gameObjects;
 };
