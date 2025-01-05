@@ -12,12 +12,12 @@ GameObject::~GameObject()
 {
 }
 
-void GameObject::update(unsigned int deltaTime, int worldWidth, int worldHeight, int gravity)
+void GameObject::update(float deltaTime, int worldWidth, int worldHeight, int gravity)
 {
     applyGravity(deltaTime, gravity, worldHeight);
 }
 
-void GameObject::applyGravity(unsigned int deltaTime, int gravity, int worldHeight)
+void GameObject::applyGravity(float deltaTime, int gravity, int worldHeight)
 {
     if ((y + height / 2) < worldHeight)
     {
