@@ -64,22 +64,15 @@ void Game::handleEvents()
     SDL_Event event;
     while (SDL_PollEvent(&event))
     {
-        switch (event.type)
+        if (event.type == SDL_QUIT || (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE))
         {
-        case SDL_QUIT:
             running = false;
-            break;
-        case SDL_KEYDOWN:
-            if (event.key.keysym.sym == SDLK_ESCAPE)
-            {
-                running = false;
-            }
-            break;
-        default:
-            for (auto &gameObject : gameObjects)
-            {
-                gameObject->handleEvents(event);
-            }
+            return;
+        }
+
+        for (auto &gameObject : gameObjects)
+        {
+            gameObject->handleEvents(event);
         }
     }
 }
