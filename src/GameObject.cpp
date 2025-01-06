@@ -13,7 +13,7 @@ GameObject::~GameObject()
 {
 }
 
-void GameObject::handleEvents(SDL_Event event) {};
+void GameObject::handleEvents(SDL_Event &event) {};
 
 void GameObject::update(float deltaTime, int worldWidth, int worldHeight, int gravity)
 {

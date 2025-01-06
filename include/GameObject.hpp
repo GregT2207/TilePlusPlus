@@ -6,9 +6,9 @@ class GameObject
 {
 public:
     GameObject(SDL_Renderer *renderer, std::string name, int x, int y);
-    ~GameObject();
+    virtual ~GameObject();
 
-    void handleEvents(SDL_Event event);
+    virtual void handleEvents(SDL_Event &event);
     void update(float deltaTime, int worldWidth, int worldHeight, int gravity);
     void render();
 
