@@ -12,6 +12,7 @@ public:
     void update(float deltaTime, int worldWidth, int worldHeight, int gravity);
     void render();
 
+    std::string getName() const { return name; }
     int getX() const { return x; }
     int getY() const { return y; }
 
