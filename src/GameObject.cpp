@@ -1,6 +1,6 @@
-#include <GameObject.hpp>
-#include <Game.hpp>
-#include <string>
+#include "GameObject.hpp"
+#include "Game.hpp"
+#include "string"
 
 GameObject::GameObject(SDL_Renderer *renderer, std::string name, int x, int y)
     : renderer(renderer), name(name), x(x), y(y)

@@ -1,6 +1,7 @@
+#include <iostream>
 #include "Game.hpp"
 #include "GameObject.hpp"
-#include <iostream>
+#include "Player.hpp"
 
 Game::Game()
     : running(false), window(nullptr), renderer(nullptr), gravity(10)
@@ -52,8 +53,7 @@ bool Game::init(const std::string &title, int width, int height, bool fullscreen
 
     // Create environment
     gravity = 800;
-    gameObjects.push_back(GameObject(renderer, "Player1", 200, 50));
-    gameObjects.push_back(GameObject(renderer, "Player2", width - 200, 50));
+    gameObjects.push_back(Player(renderer, "Player1", 200, 50));
 
     running = true;
     return true;
