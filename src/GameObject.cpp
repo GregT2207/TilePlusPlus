@@ -2,16 +2,18 @@
 #include <Game.hpp>
 #include <string>
 
-GameObject::GameObject(SDL_Renderer *renderer, std::string name, int x, int y, SDL_Color color)
-    : renderer(renderer), name(name), x(x), y(y), color(color)
+GameObject::GameObject(SDL_Renderer *renderer, std::string name, int x, int y)
+    : renderer(renderer), name(name), x(x), y(y)
 {
-    this->width = 100;
+    this->width = 50;
     this->height = 100;
 }
 
 GameObject::~GameObject()
 {
 }
+
+void GameObject::handleEvents(SDL_Event event) {};
 
 void GameObject::update(float deltaTime, int worldWidth, int worldHeight, int gravity)
 {
@@ -44,7 +46,7 @@ void GameObject::applyGravity(float deltaTime, int gravity, int worldHeight)
 
 void GameObject::render()
 {
-    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
 
     SDL_Rect sprite = {x - (width / 2), y - (height / 2), width, height};
     SDL_RenderFillRect(renderer, &sprite);
