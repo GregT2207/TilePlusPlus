@@ -93,7 +93,7 @@ void Game::update()
     int winWidth, winHeight;
     SDL_GetWindowSize(window, &winWidth, &winHeight);
 
-    for (auto gameObject : gameObjects)
+    for (auto &gameObject : gameObjects)
     {
         gameObject.update(deltaTime, winWidth, winHeight, gravity);
     }
@@ -104,7 +104,7 @@ void Game::render()
     SDL_SetRenderDrawColor(renderer, 135, 206, 235, 255);
     SDL_RenderClear(renderer);
 
-    for (auto gameObject : gameObjects)
+    for (auto &gameObject : gameObjects)
     {
         gameObject.render();
     }
