@@ -53,7 +53,7 @@ bool Game::init(const std::string &title, int width, int height, bool fullscreen
 
     // Create environment
     gravity = 800;
-    gameObjects.push_back(Player(renderer, "Player1", 200, 50));
+    gameObjects.push_back(std::make_unique<Player>(renderer, "Player1", 200, 50));
 
     running = true;
     return true;
@@ -78,7 +78,7 @@ void Game::handleEvents()
         default:
             for (auto &gameObject : gameObjects)
             {
-                gameObject.handleEvents(event);
+                gameObject->handleEvents(event);
             }
         }
     }
@@ -95,7 +95,7 @@ void Game::update()
 
     for (auto &gameObject : gameObjects)
     {
-        gameObject.update(deltaTime, winWidth, winHeight, gravity);
+        gameObject->update(deltaTime, winWidth, winHeight, gravity);
     }
 }
 
@@ -106,7 +106,7 @@ void Game::render()
 
     for (auto &gameObject : gameObjects)
     {
-        gameObject.render();
+        gameObject->render();
     }
 
     SDL_RenderPresent(renderer);

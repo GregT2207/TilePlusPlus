@@ -28,5 +28,5 @@ private:
     float deltaTime;
     unsigned int lastFrameTime;
     int gravity;
-    std::vector<GameObject> gameObjects;
+    std::vector<std::unique_ptr<GameObject>> gameObjects;
 };
