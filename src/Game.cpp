@@ -91,7 +91,7 @@ void Game::createGameObjects()
 
     GameObject *player = new Player("Greg");
     player->transform = new Transform(player, {400.0f, 10.0f}, {0.0f, 0.0f}, {50.0f, 100.0f});
-    player->spriteRenderer = new SpriteRenderer(player);
+    player->spriteRenderer = new SpriteRenderer(player, renderer, "sprites/player.png");
 
     gameObjects.push_back(player);
 

@@ -8,10 +8,10 @@ class GameObject;
 class SpriteRenderer : public Component
 {
 public:
-    SpriteRenderer(GameObject *owner);
+    SpriteRenderer(GameObject *owner, SDL_Renderer *renderer, std::string textureFilePath);
 
     void render(SDL_Renderer *renderer, Vector pos, Vector size);
 
 protected:
-    SDL_Color sprite;
+    SDL_Texture *texture;
 };
