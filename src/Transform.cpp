@@ -18,8 +18,13 @@ void Transform::applyGravity(float deltaTime, int gravity, int worldHeight)
 {
     if ((position.y + size.y / 2) >= worldHeight)
     {
-        velocity.y = 0;
         position.y = worldHeight - (size.y / 2);
+
+        if (velocity.y > 0)
+        {
+            velocity.y = 0;
+        }
+
         return;
     }
 

@@ -23,7 +23,7 @@ public:
         return running;
     }
 
-    static constexpr float maxFallSpeed = 500.0f;
+    static constexpr float maxFallSpeed = 1000.0f;
 
 private:
     bool running;

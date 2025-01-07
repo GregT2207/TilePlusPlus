@@ -27,6 +27,16 @@ bool Game::init(const std::string &title, int width, int height, bool fullscreen
         return false;
     }
 
+    SDL_GameController *controller = SDL_GameControllerOpen(0);
+    if (controller)
+    {
+        std::cout << "Controller connected: " << SDL_GameControllerName(controller) << std::endl;
+    }
+    else
+    {
+        std::cerr << "No controller found" << std::endl;
+    }
+
     // Create window
     window = SDL_CreateWindow(
         title.c_str(),
@@ -57,13 +67,13 @@ bool Game::init(const std::string &title, int width, int height, bool fullscreen
 
 void Game::createEnvironment()
 {
-    gravity = 180;
+    gravity = 2000;
 
-    GameObject *testObject = new GameObject("Test Object");
-    testObject->transform = new Transform(testObject, {400.0f, 10.0f}, {0.0f, 0.0f}, {50.0f, 100.0f});
-    testObject->spriteRenderer = new SpriteRenderer(testObject);
+    GameObject *player = new Player("Greg");
+    player->transform = new Transform(player, {400.0f, 10.0f}, {0.0f, 0.0f}, {50.0f, 100.0f});
+    player->spriteRenderer = new SpriteRenderer(player);
 
-    gameObjects.push_back(testObject);
+    gameObjects.push_back(player);
 
     for (auto &gameObject : gameObjects)
     {
@@ -106,7 +116,7 @@ void Game::update()
 
 void Game::render()
 {
-    SDL_SetRenderDrawColor(renderer, 135, 206, 235, 255);
+    SDL_SetRenderDrawColor(renderer, 169, 211, 255, 255);
     SDL_RenderClear(renderer);
 
     for (auto &gameObject : gameObjects)

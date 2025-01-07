@@ -15,9 +15,11 @@ public:
     void setY(float y) { position.y = y; };
 
     void setVelocity(Vector newVel) { velocity = newVel; };
-    void addVelocity(Vector newVel) { velocity += newVel; };
     void setVelocityX(float x) { velocity.x = x; };
     void setVelocityY(float y) { velocity.y = y; };
+    void addVelocity(Vector newVel) { velocity += newVel; };
+    void addVelocityX(float x) { velocity.x += x; };
+    void addVelocityY(float y) { velocity.y += y; };
 
     void setSize(Vector newSize) { size = newSize; };
     void setWidth(float x) { size.x = x; };

@@ -4,10 +4,8 @@ Player::Player(std::string name) : GameObject(name) {}
 
 void Player::handleEvents(SDL_Event &event)
 {
-    GameObject::handleEvents(event);
-
-    const int movementSpeed = 200;
-    const int jumpPower = 300;
+    const int movementSpeed = 300;
+    const int jumpPower = 800;
 
     if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
     {
@@ -16,16 +14,35 @@ void Player::handleEvents(SDL_Event &event)
         switch (event.key.keysym.sym)
         {
         case SDLK_a:
-            // velocity.x = keyDown ? -movementSpeed : -0;
+            transform->setVelocityX(keyDown ? -movementSpeed : 0);
             break;
         case SDLK_d:
-            // velocity.x = keyDown ? movementSpeed : 0;
+            transform->setVelocityX(keyDown ? movementSpeed : 0);
             break;
         case SDLK_SPACE:
             if (keyDown)
             {
-                // velocity.y = -jumpPower;
+                transform->setVelocityY(-jumpPower);
             }
         }
     }
+
+    if (event.type == SDL_CONTROLLERAXISMOTION)
+    {
+        if (event.caxis.axis == SDL_CONTROLLER_AXIS_LEFTX)
+        {
+            float movementNormalized = ((event.caxis.value >= 1000 || event.caxis.value <= -1000) ? event.caxis.value * 0.00005 : 0);
+            transform->setVelocityX(movementNormalized * movementSpeed);
+        }
+    }
+
+    if (event.type == SDL_CONTROLLERBUTTONDOWN)
+    {
+        if (event.cbutton.button == SDL_CONTROLLER_BUTTON_A)
+        {
+            transform->setVelocityY(-jumpPower);
+        }
+    }
+
+    GameObject::handleEvents(event);
 }
