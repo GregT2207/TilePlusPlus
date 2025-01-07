@@ -1,9 +1,9 @@
 #pragma once
-
 #include <SDL2/SDL.h>
 #include <string>
 #include <vector>
-#include <GameObject.hpp>
+
+class GameObject;
 
 class Game
 {
@@ -15,9 +15,13 @@ public:
     void handleEvents();
     void update();
     void render();
-    void clean();
+    void cleanUp();
+    void createEnvironment();
 
-    bool isRunning() const { return running; }
+    bool isRunning() const
+    {
+        return running;
+    }
 
     static constexpr float maxFallSpeed = 500.0f;
 
@@ -28,5 +32,5 @@ private:
     float deltaTime;
     unsigned int lastFrameTime;
     int gravity;
-    std::vector<std::unique_ptr<GameObject>> gameObjects;
+    std::vector<GameObject *> gameObjects;
 };

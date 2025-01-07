@@ -1,16 +1,14 @@
 #include <iostream>
 #include "Game.hpp"
 #include "GameObject.hpp"
+#include "Transform.hpp"
+#include "SpriteRenderer.hpp"
 #include "Player.hpp"
 
-Game::Game()
-    : running(false), window(nullptr), renderer(nullptr), gravity(10)
-{
-}
-
+Game::Game() : running(false), window(nullptr), renderer(nullptr), gravity(10) {}
 Game::~Game()
 {
-    clean();
+    cleanUp();
 }
 
 bool Game::init(const std::string &title, int width, int height, bool fullscreen)
@@ -51,12 +49,27 @@ bool Game::init(const std::string &title, int width, int height, bool fullscreen
         return false;
     }
 
-    // Create environment
-    gravity = 800;
-    gameObjects.push_back(std::make_unique<Player>(renderer, "Player1", 200, 50));
+    createEnvironment();
 
     running = true;
     return true;
+}
+
+void Game::createEnvironment()
+{
+    gravity = 800;
+
+    GameObject *testObject = new GameObject("Test Object");
+    testObject->transform = new Transform(testObject);
+    testObject->transform->setPosition({100, 100});
+    testObject->spriteRenderer = new SpriteRenderer(testObject);
+
+    gameObjects.push_back(testObject);
+
+    for (auto &gameObject : gameObjects)
+    {
+        gameObject->init();
+    }
 }
 
 void Game::handleEvents()
@@ -99,13 +112,13 @@ void Game::render()
 
     for (auto &gameObject : gameObjects)
     {
-        gameObject->render();
+        gameObject->render(renderer);
     }
 
     SDL_RenderPresent(renderer);
 }
 
-void Game::clean()
+void Game::cleanUp()
 {
     if (renderer)
     {

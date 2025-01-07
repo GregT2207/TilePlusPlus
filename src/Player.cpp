@@ -1,9 +1,6 @@
 #include "Player.hpp"
 
-Player::Player(SDL_Renderer *renderer, std::string name, int x, int y)
-    : GameObject(renderer, name, x, y)
-{
-}
+Player::Player(std::string name) : GameObject(name) {}
 
 void Player::handleEvents(SDL_Event &event)
 {
@@ -19,15 +16,15 @@ void Player::handleEvents(SDL_Event &event)
         switch (event.key.keysym.sym)
         {
         case SDLK_a:
-            velocity.x = keyDown ? -movementSpeed : -0;
+            // velocity.x = keyDown ? -movementSpeed : -0;
             break;
         case SDLK_d:
-            velocity.x = keyDown ? movementSpeed : 0;
+            // velocity.x = keyDown ? movementSpeed : 0;
             break;
         case SDLK_SPACE:
             if (keyDown)
             {
-                velocity.y = -jumpPower;
+                // velocity.y = -jumpPower;
             }
         }
     }
