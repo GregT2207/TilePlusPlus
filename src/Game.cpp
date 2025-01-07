@@ -57,11 +57,10 @@ bool Game::init(const std::string &title, int width, int height, bool fullscreen
 
 void Game::createEnvironment()
 {
-    gravity = 800;
+    gravity = 180;
 
     GameObject *testObject = new GameObject("Test Object");
-    testObject->transform = new Transform(testObject);
-    testObject->transform->setPosition({100, 100});
+    testObject->transform = new Transform(testObject, {400.0f, 10.0f}, {0.0f, 0.0f}, {50.0f, 100.0f});
     testObject->spriteRenderer = new SpriteRenderer(testObject);
 
     gameObjects.push_back(testObject);

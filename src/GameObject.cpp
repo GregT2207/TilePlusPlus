@@ -13,7 +13,7 @@ void GameObject::update(float deltaTime, int worldWidth, int worldHeight, int gr
 {
     if (transform)
     {
-        transform->update(deltaTime);
+        transform->update(deltaTime, gravity, worldHeight);
     }
 }
 
@@ -21,6 +21,6 @@ void GameObject::render(SDL_Renderer *renderer)
 {
     if (spriteRenderer)
     {
-        spriteRenderer->render(renderer, transform->getPosition());
+        spriteRenderer->render(renderer, transform->getPosition(), transform->getSize());
     }
 }

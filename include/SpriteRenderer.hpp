@@ -10,7 +10,7 @@ class SpriteRenderer : public Component
 public:
     SpriteRenderer(GameObject *owner);
 
-    void render(SDL_Renderer *renderer, Vector pos);
+    void render(SDL_Renderer *renderer, Vector pos, Vector size);
 
 protected:
     SDL_Color sprite;
