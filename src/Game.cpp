@@ -1,4 +1,6 @@
 #include <iostream>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include "Game.hpp"
 #include "GameObject.hpp"
 #include "Transform.hpp"
@@ -59,13 +61,31 @@ bool Game::init(const std::string &title, int width, int height, bool fullscreen
         return false;
     }
 
-    createEnvironment();
+    // Initialize SDL_image
+    int imgFlags = IMG_INIT_PNG;
+    if (!(IMG_Init(imgFlags) & imgFlags))
+    {
+        std::cerr << "SDL_image could not initialize! SDL_image Error: " << IMG_GetError() << std::endl;
+        return false;
+    }
+
+    // Load background texture
+    SDL_Surface *backgroundSurface = IMG_Load("../assets//backgrounds/forest.jpeg");
+    if (!backgroundSurface)
+    {
+        std::cerr << "Failed to load background image! SDL_image Error: " << IMG_GetError() << std::endl;
+    }
+    background = SDL_CreateTextureFromSurface(renderer, backgroundSurface);
+    SDL_FreeSurface(backgroundSurface);
+
+    gravity = 2000;
+    createGameObjects();
 
     running = true;
     return true;
 }
 
-void Game::createEnvironment()
+void Game::createGameObjects()
 {
     gravity = 2000;
 
@@ -116,8 +136,9 @@ void Game::update()
 
 void Game::render()
 {
-    SDL_SetRenderDrawColor(renderer, 169, 211, 255, 255);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
+    SDL_RenderCopy(renderer, background, nullptr, nullptr);
 
     for (auto &gameObject : gameObjects)
     {
@@ -139,6 +160,11 @@ void Game::cleanUp()
     {
         SDL_DestroyWindow(window);
         window = nullptr;
+    }
+
+    if (background)
+    {
+        SDL_DestroyTexture(background);
     }
 
     SDL_Quit();

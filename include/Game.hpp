@@ -16,7 +16,7 @@ public:
     void update();
     void render();
     void cleanUp();
-    void createEnvironment();
+    void createGameObjects();
 
     bool isRunning() const
     {
@@ -29,6 +29,7 @@ private:
     bool running;
     SDL_Window *window;
     SDL_Renderer *renderer;
+    SDL_Texture *background;
     float deltaTime;
     unsigned int lastFrameTime;
     int gravity;

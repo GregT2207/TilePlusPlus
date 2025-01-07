@@ -12,6 +12,7 @@
                 "-I${workspaceFolder}/include",
                 "-L${workspaceFolder}/lib",
                 "-lSDL2",
+                "-lSDL2_image",
                 "-lSDL2_test",
                 "${workspaceFolder}/src/*.cpp",
                 "-o",

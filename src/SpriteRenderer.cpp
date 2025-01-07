@@ -15,6 +15,6 @@ void SpriteRenderer::render(SDL_Renderer *renderer, Vector pos, Vector size)
     SDL_Rect rect = {left, top, static_cast<int>(size.x), static_cast<int>(size.y)};
     SDL_RenderFillRect(renderer, &rect);
 
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDLTest_DrawString(renderer, left + 10, top - 20, owner->getName().c_str());
 }
