@@ -21,6 +21,6 @@ void GameObject::render(SDL_Renderer *renderer)
 {
     if (spriteRenderer)
     {
-        spriteRenderer->render(renderer, transform->getPosition(), transform->getSize());
+        spriteRenderer->render(renderer, transform->getPosition(), transform->getSize(), transform->getVelocity().x < 0);
     }
 }

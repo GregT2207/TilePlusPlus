@@ -20,13 +20,13 @@ SpriteRenderer::SpriteRenderer(GameObject *owner, SDL_Renderer *renderer, std::s
     texture = SDL_CreateTextureFromSurface(renderer, surface);
 }
 
-void SpriteRenderer::render(SDL_Renderer *renderer, Vector pos, Vector size)
+void SpriteRenderer::render(SDL_Renderer *renderer, Vector pos, Vector size, bool flipLeft)
 {
     int left = static_cast<int>(pos.x - (size.x / 2));
     int top = static_cast<int>(pos.y - (size.y / 2));
 
     SDL_Rect dest = {left, top, static_cast<int>(size.x), static_cast<int>(size.y)};
-    SDL_RenderCopy(renderer, texture, nullptr, &dest);
+    SDL_RenderCopyEx(renderer, texture, nullptr, &dest, 0, nullptr, flipLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDLTest_DrawString(renderer, left + 10, top - 20, owner->getName().c_str());
