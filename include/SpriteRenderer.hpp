@@ -4,11 +4,12 @@
 
 struct Vector;
 class GameObject;
+class ResourceManager;
 
 class SpriteRenderer : public Component
 {
 public:
-    SpriteRenderer(GameObject *owner, SDL_Renderer *renderer, std::string textureFilePath);
+    SpriteRenderer(GameObject *owner, ResourceManager &resourceManager, const std::string &textureFilePath);
 
     void render(SDL_Renderer *renderer, Vector pos, Vector size, bool flipLeft = false);
 

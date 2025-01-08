@@ -2,6 +2,8 @@
 #include <SDL2/SDL.h>
 #include <string>
 #include <vector>
+#include "enums/Tile.hpp"
+#include "ResourceManager.hpp"
 
 class GameObject;
 
@@ -16,7 +18,6 @@ public:
     void update();
     void render();
     void cleanUp();
-    void createGameObjects();
 
     bool isRunning() const
     {
@@ -24,6 +25,9 @@ public:
     }
 
     static constexpr float maxFallSpeed = 1000.0f;
+
+protected:
+    ResourceManager resourceManager;
 
 private:
     bool running;
@@ -34,4 +38,9 @@ private:
     unsigned int lastFrameTime;
     int gravity;
     std::vector<GameObject *> gameObjects;
+    std::vector<std::vector<Tile>> tiles;
+
+    void createTiles();
+    void createGameObjects();
+    void renderTiles();
 };

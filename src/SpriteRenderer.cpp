@@ -3,21 +3,17 @@
 #include <SDL2/SDL_test.h>
 #include "SpriteRenderer.hpp"
 #include "GameObject.hpp"
+#include "ResourceManager.hpp"
 
 struct Vector;
 
-SpriteRenderer::SpriteRenderer(GameObject *owner, SDL_Renderer *renderer, std::string textureFilePath) : Component(owner)
+SpriteRenderer::SpriteRenderer(GameObject *owner, ResourceManager &resourceManager, const std::string &textureFilePath) : Component(owner)
 {
-    textureFilePath = "../assets/" + textureFilePath;
-
-    SDL_Surface *surface = IMG_Load(textureFilePath.c_str());
-    if (!surface)
+    texture = resourceManager.loadTexture(textureFilePath);
+    if (!texture)
     {
         std::cerr << "Failed to load texture: " << textureFilePath << std::endl;
-        return;
     }
-
-    texture = SDL_CreateTextureFromSurface(renderer, surface);
 }
 
 void SpriteRenderer::render(SDL_Renderer *renderer, Vector pos, Vector size, bool flipLeft)

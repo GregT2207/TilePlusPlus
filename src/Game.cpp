@@ -1,19 +1,21 @@
 #include <iostream>
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include "Game.hpp"
 #include "GameObject.hpp"
 #include "Transform.hpp"
 #include "SpriteRenderer.hpp"
 #include "Player.hpp"
+#include "enums/Tile.hpp"
 
-Game::Game() : running(false), window(nullptr), renderer(nullptr), gravity(10) {}
+using namespace std;
+
+Game::Game() : running(false), window(nullptr), renderer(nullptr), resourceManager(nullptr), gravity(10) {}
 Game::~Game()
 {
     cleanUp();
 }
 
-bool Game::init(const std::string &title, int width, int height, bool fullscreen)
+bool Game::init(const string &title, int width, int height, bool fullscreen)
 {
     // Flags
     int flags = 0;
@@ -25,18 +27,18 @@ bool Game::init(const std::string &title, int width, int height, bool fullscreen
     // Initialize SDL
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
     {
-        std::cerr << "SDL could not initialize! SDL Error: " << SDL_GetError() << std::endl;
+        cerr << "SDL could not initialize! SDL Error: " << SDL_GetError() << endl;
         return false;
     }
 
     SDL_GameController *controller = SDL_GameControllerOpen(0);
     if (controller)
     {
-        std::cout << "Controller connected: " << SDL_GameControllerName(controller) << std::endl;
+        cout << "Controller connected: " << SDL_GameControllerName(controller) << endl;
     }
     else
     {
-        std::cerr << "No controller found" << std::endl;
+        cerr << "No controller found" << endl;
     }
 
     // Create window
@@ -49,7 +51,7 @@ bool Game::init(const std::string &title, int width, int height, bool fullscreen
         flags);
     if (!window)
     {
-        std::cerr << "Window could not be created! SDL Error: " << SDL_GetError() << std::endl;
+        cerr << "Window could not be created! SDL Error: " << SDL_GetError() << endl;
         return false;
     }
 
@@ -57,32 +59,54 @@ bool Game::init(const std::string &title, int width, int height, bool fullscreen
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (!renderer)
     {
-        std::cerr << "Renderer could not be created! SDL Error: " << SDL_GetError() << std::endl;
+        cerr << "Renderer could not be created! SDL Error: " << SDL_GetError() << endl;
         return false;
     }
 
-    // Initialize SDL_image
-    int imgFlags = IMG_INIT_PNG;
-    if (!(IMG_Init(imgFlags) & imgFlags))
+    // Load resources
+    resourceManager = ResourceManager(renderer);
+    if (!resourceManager.init())
     {
-        std::cerr << "SDL_image could not initialize! SDL_image Error: " << IMG_GetError() << std::endl;
+        cerr << "Resources could not load!" << endl;
         return false;
     }
+    background = resourceManager.loadTexture("backgrounds/forest.jpeg");
 
-    // Load background texture
-    SDL_Surface *backgroundSurface = IMG_Load("../assets//backgrounds/forest.jpeg");
-    if (!backgroundSurface)
-    {
-        std::cerr << "Failed to load background image! SDL_image Error: " << IMG_GetError() << std::endl;
-    }
-    background = SDL_CreateTextureFromSurface(renderer, backgroundSurface);
-    SDL_FreeSurface(backgroundSurface);
-
+    // Set up environment
     gravity = 2000;
+    createTiles();
     createGameObjects();
 
     running = true;
     return true;
+}
+
+void Game::createTiles()
+{
+    vector<Tile> airRow = {};
+    vector<Tile> dirtRow = {};
+    vector<Tile> stoneRow = {};
+    for (int i = 0; i < 1280; i++)
+    {
+        airRow.push_back(Tile::Air);
+        dirtRow.push_back(Tile::Dirt);
+        stoneRow.push_back(Tile::Stone);
+    }
+
+    for (int i = 0; i < 500; i++)
+    {
+        tiles.push_back(airRow);
+    }
+
+    for (int i = 0; i < 200; i++)
+    {
+        tiles.push_back(dirtRow);
+    }
+
+    for (int i = 0; i < 20; i++)
+    {
+        tiles.push_back(stoneRow);
+    }
 }
 
 void Game::createGameObjects()
@@ -91,7 +115,7 @@ void Game::createGameObjects()
 
     GameObject *player = new Player("Greg");
     player->transform = new Transform(player, {400.0f, 10.0f}, {0.0f, 0.0f}, {50.0f, 100.0f});
-    player->spriteRenderer = new SpriteRenderer(player, renderer, "sprites/player.png");
+    player->spriteRenderer = new SpriteRenderer(player, resourceManager, "sprites/player.png");
 
     gameObjects.push_back(player);
 
@@ -140,12 +164,17 @@ void Game::render()
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, background, nullptr, nullptr);
 
+    renderTiles();
     for (auto &gameObject : gameObjects)
     {
         gameObject->render(renderer);
     }
 
     SDL_RenderPresent(renderer);
+}
+
+void Game::renderTiles()
+{
 }
 
 void Game::cleanUp()
