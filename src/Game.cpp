@@ -86,24 +86,24 @@ void Game::createTiles()
     vector<Tile> airRow = {};
     vector<Tile> dirtRow = {};
     vector<Tile> stoneRow = {};
-    for (int i = 0; i < 1280; i++)
+    for (int i = 0; i < 40; i++)
     {
         airRow.push_back(Tile::Air);
         dirtRow.push_back(Tile::Dirt);
         stoneRow.push_back(Tile::Stone);
     }
 
-    for (int i = 0; i < 500; i++)
+    for (int i = 0; i < 16; i++)
     {
         tiles.push_back(airRow);
     }
 
-    for (int i = 0; i < 200; i++)
+    for (int i = 0; i < 4; i++)
     {
         tiles.push_back(dirtRow);
     }
 
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < 3; i++)
     {
         tiles.push_back(stoneRow);
     }
@@ -175,6 +175,29 @@ void Game::render()
 
 void Game::renderTiles()
 {
+    const int tileSize = 32;
+
+    for (int y = 0; y < tiles.size(); y++)
+    {
+        for (int x = 0; x < tiles[y].size(); x++)
+        {
+            switch (tiles[y][x])
+            {
+            case Tile::Air:
+                continue;
+                break;
+            case Tile::Dirt:
+                SDL_SetRenderDrawColor(renderer, 84, 45, 28, 255);
+                break;
+            case Tile::Stone:
+                SDL_SetRenderDrawColor(renderer, 119, 115, 114, 255);
+                break;
+            }
+
+            SDL_Rect tileRect = {x * tileSize, y * tileSize, tileSize, tileSize};
+            SDL_RenderFillRect(renderer, &tileRect);
+        }
+    }
 }
 
 void Game::cleanUp()
