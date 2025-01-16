@@ -7,7 +7,7 @@ class GameObject;
 class Transform : public Component
 {
 public:
-    Transform(GameObject *owner, Vector position = {0.0f, 0.0f}, Vector velocity = {0.0f, 0.0f}, Vector size = {10.0f, 10.0f});
+    Transform(Vector position = {0.0f, 0.0f}, Vector velocity = {0.0f, 0.0f}, Vector size = {10.0f, 10.0f});
 
     void setPosition(Vector newPos) { position = newPos; };
     void addPosition(Vector newPos) { position += newPos; };
@@ -29,7 +29,7 @@ public:
     Vector getVelocity() const { return velocity; }
     Vector getSize() const { return size; }
 
-    void update(float deltaTime, int gravity, int worldHeight);
+    void update(float deltaTime, int gravity, int worldHeight) override;
 
 protected:
     Vector position;

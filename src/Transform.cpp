@@ -3,8 +3,7 @@
 
 struct Vector;
 
-Transform::Transform(GameObject *owner, Vector position, Vector velocity, Vector size)
-    : Component(owner), position(position), velocity(velocity), size(size) {};
+Transform::Transform(Vector position, Vector velocity, Vector size) : position(position), velocity(velocity), size(size) {}
 
 void Transform::update(float deltaTime, int gravity, int worldHeight)
 {

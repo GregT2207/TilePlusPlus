@@ -4,7 +4,7 @@
 class Player : public GameObject
 {
 public:
-    Player(std::string name);
+    Player();
 
     void handleEvents(SDL_Event &event) override;
 };

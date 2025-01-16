@@ -16,9 +16,31 @@ public:
 
     std::string getName() const { return name; }
 
-    Transform *transform;
-    SpriteRenderer *spriteRenderer;
+    template <typename T, typename... Args>
+    T *addComponent(Args &&...args)
+    {
+        T *comp = new T(std::forward<Args>(args)...);
+        comp->owner = this;
+        components.push_back(comp);
+        return comp;
+    }
+
+    template <typename T>
+    T *getComponent()
+    {
+        for (auto comp : components)
+        {
+            if (T *casted = dynamic_cast<T *>(comp))
+            {
+                return casted;
+            }
+        }
+        return nullptr;
+    }
 
 protected:
     std::string name;
+
+private:
+    std::vector<Component *> components;
 };

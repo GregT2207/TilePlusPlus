@@ -9,9 +9,9 @@ class ResourceManager;
 class SpriteRenderer : public Component
 {
 public:
-    SpriteRenderer(GameObject *owner, ResourceManager &resourceManager, const std::string &textureFilePath);
+    SpriteRenderer(ResourceManager &resourceManager, const std::string &textureFilePath);
 
-    void render(SDL_Renderer *renderer, Vector pos, Vector size, bool flipLeft = false);
+    void render(SDL_Renderer *renderer);
 
 protected:
     SDL_Texture *texture;

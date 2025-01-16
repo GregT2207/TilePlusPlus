@@ -113,11 +113,11 @@ void Game::createGameObjects()
 {
     gravity = 2000;
 
-    GameObject *player = new Player("Greg");
-    player->transform = new Transform(player, {400.0f, 10.0f}, {0.0f, 0.0f}, {50.0f, 100.0f});
-    player->spriteRenderer = new SpriteRenderer(player, resourceManager, "sprites/player.png");
+    GameObject player("Greg");
+    player.addComponent<Transform>({400.0f, 10.0f}, {0.0f, 0.0f}, {50.0f, 100.0f});
+    player.addComponent<SpriteRenderer>(resourceManager, "sprites/player.png");
 
-    gameObjects.push_back(player);
+    gameObjects.push_back(&player);
 
     for (auto &gameObject : gameObjects)
     {

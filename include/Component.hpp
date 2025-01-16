@@ -6,11 +6,11 @@ class GameObject;
 class Component
 {
 public:
-    Component(GameObject *owner) : owner(owner) {};
+    Component() {};
     virtual ~Component() = 0;
 
-    GameObject *getOwner() const { return owner; }
+    virtual void update(float deltaTime, int gravity, int worldHeight) {}
+    virtual void render(SDL_Renderer *renderer) {}
 
-protected:
     GameObject *owner;
 };

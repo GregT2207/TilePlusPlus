@@ -7,7 +7,7 @@
 
 struct Vector;
 
-SpriteRenderer::SpriteRenderer(GameObject *owner, ResourceManager &resourceManager, const std::string &textureFilePath) : Component(owner)
+SpriteRenderer::SpriteRenderer(ResourceManager &resourceManager, const std::string &textureFilePath)
 {
     texture = resourceManager.loadTexture(textureFilePath);
     if (!texture)
@@ -16,13 +16,18 @@ SpriteRenderer::SpriteRenderer(GameObject *owner, ResourceManager &resourceManag
     }
 }
 
-void SpriteRenderer::render(SDL_Renderer *renderer, Vector pos, Vector size, bool flipLeft)
+void SpriteRenderer::render(SDL_Renderer *renderer)
 {
+    Transform *transform = owner->getComponent<Transform>();
+    Vector pos = transform->getPosition();
+    Vector size = transform->getSize();
+    Vector vel = transform->getVelocity();
+
     int left = static_cast<int>(pos.x - (size.x / 2));
     int top = static_cast<int>(pos.y - (size.y / 2));
 
     SDL_Rect dest = {left, top, static_cast<int>(size.x), static_cast<int>(size.y)};
-    SDL_RenderCopyEx(renderer, texture, nullptr, &dest, 0, nullptr, flipLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+    SDL_RenderCopyEx(renderer, texture, nullptr, &dest, 0, nullptr, vel.x < 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDLTest_DrawString(renderer, left + 10, top - 20, owner->getName().c_str());

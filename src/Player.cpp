@@ -1,11 +1,15 @@
 #include "Player.hpp"
 
-Player::Player(std::string name) : GameObject(name) {}
-
 void Player::handleEvents(SDL_Event &event)
 {
     const int movementSpeed = 300;
     const int jumpPower = 800;
+
+    Transform *transform = getComponent<Transform>();
+    if (!transform)
+    {
+        return;
+    }
 
     if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
     {
