@@ -114,7 +114,7 @@ void Game::createGameObjects()
     gravity = 2000;
 
     GameObject player("Greg");
-    player.addComponent<Transform>({400.0f, 10.0f}, {0.0f, 0.0f}, {50.0f, 100.0f});
+    player.addComponent<Transform>(Vector{400.0f, 10.0f}, Vector{0.0f, 0.0f}, Vector{50.0f, 100.0f});
     player.addComponent<SpriteRenderer>(resourceManager, "sprites/player.png");
 
     gameObjects.push_back(&player);
