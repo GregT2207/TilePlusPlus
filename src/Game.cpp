@@ -2,10 +2,11 @@
 #include <SDL2/SDL.h>
 #include "Game.hpp"
 #include "GameObject.hpp"
-#include "Transform.hpp"
-#include "SpriteRenderer.hpp"
-#include "Player.hpp"
+#include "PlayerBehaviour.hpp"
 #include "enums/Tile.hpp"
+
+class Transform;
+class SpriteRenderer;
 
 using namespace std;
 
@@ -116,6 +117,7 @@ void Game::createGameObjects()
     GameObject *player = new GameObject("Greg");
     player->addComponent<Transform>(Vector{40.0f, 10.0f}, Vector{0.0f, 0.0f}, Vector{50.0f, 100.0f});
     player->addComponent<SpriteRenderer>(resourceManager, "sprites/player.png");
+    player->addComponent<PlayerBehaviour>();
 
     gameObjects.push_back(player);
 

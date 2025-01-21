@@ -1,11 +1,15 @@
-#include "Player.hpp"
+#include "PlayerBehaviour.hpp"
+#include "Component.hpp"
+#include "GameObject.hpp"
 
-void Player::handleEvents(SDL_Event &event)
+class Transform;
+
+void PlayerBehaviour::handleEvents(SDL_Event &event)
 {
     const int movementSpeed = 300;
     const int jumpPower = 800;
 
-    Transform *transform = getComponent<Transform>();
+    Transform *transform = owner->getComponent<Transform>();
     if (!transform)
     {
         return;
@@ -47,6 +51,4 @@ void Player::handleEvents(SDL_Event &event)
             transform->setVelocityY(-jumpPower);
         }
     }
-
-    GameObject::handleEvents(event);
 }

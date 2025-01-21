@@ -2,8 +2,6 @@
 #include <SDL2/SDL.h>
 #include "Component.hpp"
 
-struct Vector;
-class GameObject;
 class ResourceManager;
 
 class SpriteRenderer : public Component
