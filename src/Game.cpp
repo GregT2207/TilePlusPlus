@@ -6,6 +6,7 @@
 #include "enums/Tile.hpp"
 
 class Transform;
+class Collider;
 class SpriteRenderer;
 
 using namespace std;
@@ -71,7 +72,7 @@ bool Game::init(const string &title, int width, int height, bool fullscreen)
         cerr << "Resources could not load!" << endl;
         return false;
     }
-    background = resourceManager.loadTexture("backgrounds/forest.jpeg");
+    background = resourceManager.loadTexture("backgrounds/background.jpeg");
 
     // Set up environment
     gravity = 2000;
@@ -115,11 +116,17 @@ void Game::createGameObjects()
     gravity = 2000;
 
     GameObject *player = new GameObject("Greg");
-    player->addComponent<Transform>(Vector{40.0f, 10.0f}, Vector{0.0f, 0.0f}, Vector{50.0f, 100.0f});
+    player->addComponent<Transform>(Vector{40.0f, 10.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
+    player->addComponent<Collider>(Vector{70.0f, 100.0f});
     player->addComponent<SpriteRenderer>(resourceManager, "sprites/player.png");
     player->addComponent<PlayerBehaviour>();
-
     gameObjects.push_back(player);
+
+    GameObject *enemy = new GameObject("Flobbage Jr.");
+    enemy->addComponent<Transform>(Vector{200.0f, 10.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
+    enemy->addComponent<Collider>(Vector{70.0f, 100.0f});
+    enemy->addComponent<SpriteRenderer>(resourceManager, "sprites/enemy.png");
+    gameObjects.push_back(enemy);
 
     for (auto &gameObject : gameObjects)
     {

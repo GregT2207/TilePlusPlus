@@ -3,6 +3,7 @@
 #include <vector>
 #include "Component.hpp"
 #include "Transform.hpp"
+#include "Collider.hpp"
 #include "SpriteRenderer.hpp"
 
 class GameObject
