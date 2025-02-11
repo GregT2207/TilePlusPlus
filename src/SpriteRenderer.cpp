@@ -30,5 +30,8 @@ void SpriteRenderer::render(SDL_Renderer *renderer)
     SDL_RenderCopyEx(renderer, texture, nullptr, &dest, 0, nullptr, vel.x < 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    SDLTest_DrawString(renderer, left + 10, top - 20, owner->getName().c_str());
+
+    std::string label = owner->getName();
+    const int approxCharWidth = 8;
+    SDLTest_DrawString(renderer, pos.x - (label.size() * approxCharWidth / 2), top - 20, label.c_str());
 }
