@@ -1,5 +1,6 @@
 #include <iostream>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_test.h>
 #include "Game.hpp"
 #include "GameObject.hpp"
 #include "PlayerBehaviour.hpp"
@@ -191,6 +192,8 @@ void Game::checkCollisions()
             }
         }
     }
+
+    colliders.clear();
 }
 
 void Game::render()
@@ -198,6 +201,9 @@ void Game::render()
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, background, nullptr, nullptr);
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDLTest_DrawString(renderer, 10, 10, "Greg's Game");
+    SDLTest_DrawString(renderer, 10, 40, (std::to_string(static_cast<int>(round(1.0f / deltaTime))) + "FPS").c_str());
 
     renderTiles();
     for (auto &gameObject : gameObjects)
