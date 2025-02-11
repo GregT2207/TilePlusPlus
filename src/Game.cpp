@@ -163,7 +163,33 @@ void Game::update()
 
     for (auto &gameObject : gameObjects)
     {
+        Collider *collider = gameObject->getComponent<Collider>();
+        if (collider)
+        {
+            colliders.push_back(collider);
+        }
+
         gameObject->update(deltaTime, winWidth, winHeight, gravity);
+    }
+
+    checkCollisions();
+}
+
+void Game::checkCollisions()
+{
+    for (auto &collider : colliders)
+    {
+        for (auto &otherCollider : colliders)
+        {
+            if (collider == otherCollider)
+            {
+                continue;
+            }
+
+            if (collider->intersects(*otherCollider))
+            {
+            }
+        }
     }
 }
 

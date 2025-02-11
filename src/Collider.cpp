@@ -17,6 +17,8 @@ void Collider::update(float deltaTime, int gravity, int worldHeight)
         return;
     }
 
+    debugColor = SDL_Color({0, 0, 255, 255});
+
     position = transform->getPosition() + offset;
 }
 
@@ -25,7 +27,7 @@ void Collider::render(SDL_Renderer *renderer)
     if (debug)
     {
         SDL_Rect box = getBoundingBox();
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        SDL_SetRenderDrawColor(renderer, debugColor.r, debugColor.g, debugColor.b, debugColor.a);
         SDL_RenderDrawRect(renderer, &box);
     }
 }
@@ -42,7 +44,7 @@ SDL_Rect Collider::getBoundingBox() const
     return box;
 }
 
-bool Collider::intersects(const Collider &other) const
+bool Collider::intersects(const Collider &other)
 {
     SDL_Rect a = getBoundingBox();
     SDL_Rect b = other.getBoundingBox();
@@ -56,5 +58,6 @@ bool Collider::intersects(const Collider &other) const
     if (b.y + b.h <= a.y)
         return false;
 
+    debugColor = SDL_Color({255, 0, 0, 255});
     return true;
 }
