@@ -237,6 +237,8 @@ void Game::renderTiles()
 
             SDL_Rect tileRect = {x * tileSize, y * tileSize, tileSize, tileSize};
             SDL_RenderFillRect(renderer, &tileRect);
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+            SDL_RenderDrawRect(renderer, &tileRect);
         }
     }
 }
