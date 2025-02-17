@@ -180,10 +180,14 @@ void Game::update()
 
                 if (collider->intersects(*otherCollider))
                 {
-                    Vector position = transform->getPosition();
-                    Vector otherPosition = otherCollider->owner->getComponent<Transform>()->getPosition();
-                    transform->addX((position.x < otherPosition.x) ? -1 : 1);
-                    transform->addY((position.y < otherPosition.y) ? -1 : 1);
+                    Transform *otherTransform = otherCollider->owner->getComponent<Transform>();
+
+                    Transform *fasterTransform = transform->getVelocity().magnitude() > otherTransform->getVelocity().magnitude() ? transform : otherTransform;
+                    Transform *slowerTransform = fasterTransform == transform ? otherTransform : transform;
+
+                    Vector direction = fasterTransform->getPosition() - slowerTransform->getPosition();
+                    direction.normalize();
+                    fasterTransform->addPosition(direction * 0.02f);
                 }
             }
         }
