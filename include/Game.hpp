@@ -2,8 +2,11 @@
 #include <SDL2/SDL.h>
 #include <string>
 #include <vector>
+#include <map>
 #include "enums/Tile.hpp"
 #include "ResourceManager.hpp"
+
+using namespace std;
 
 class GameObject;
 class Collider;
@@ -14,7 +17,7 @@ public:
     Game();
     ~Game();
 
-    bool init(const std::string &title, int width, int height, bool fullscreen);
+    bool init(const string &title, int width, int height, bool fullscreen);
     void handleEvents();
     void update();
     void render();
@@ -38,9 +41,10 @@ private:
     float deltaTime;
     unsigned int lastFrameTime;
     int gravity;
-    std::vector<GameObject *> gameObjects;
-    std::vector<Collider *> colliders;
-    std::vector<std::vector<Tile>> tiles;
+    vector<GameObject *> gameObjects;
+    vector<Collider *> colliders;
+    vector<vector<Tile>> tiles;
+    map<Tile, SDL_Texture *> tileTextures;
 
     void createTiles();
     void createGameObjects();

@@ -86,14 +86,17 @@ bool Game::init(const string &title, int width, int height, bool fullscreen)
 
 void Game::createTiles()
 {
+    tileTextures.insert({Tile::Dirt, resourceManager.loadTexture("sprites/dirt.jpg")});
+    tileTextures.insert({Tile::Grass, resourceManager.loadTexture("sprites/grass.jpg")});
+
     vector<Tile> airRow = {};
+    vector<Tile> grassRow = {};
     vector<Tile> dirtRow = {};
-    vector<Tile> stoneRow = {};
     for (int i = 0; i < 40; i++)
     {
         airRow.push_back(Tile::Air);
+        grassRow.push_back(Tile::Grass);
         dirtRow.push_back(Tile::Dirt);
-        stoneRow.push_back(Tile::Stone);
     }
 
     for (int i = 0; i < 16; i++)
@@ -101,14 +104,14 @@ void Game::createTiles()
         tiles.push_back(airRow);
     }
 
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 1; i++)
     {
-        tiles.push_back(dirtRow);
+        tiles.push_back(grassRow);
     }
 
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 5; i++)
     {
-        tiles.push_back(stoneRow);
+        tiles.push_back(dirtRow);
     }
 }
 
@@ -182,12 +185,12 @@ void Game::update()
                 {
                     Transform *otherTransform = otherCollider->owner->getComponent<Transform>();
 
-                    Transform *fasterTransform = transform->getVelocity().magnitude() > otherTransform->getVelocity().magnitude() ? transform : otherTransform;
-                    Transform *slowerTransform = fasterTransform == transform ? otherTransform : transform;
+                    Transform *givingTransform = otherCollider->isStatic ? transform : (transform->getVelocity().magnitude() > otherTransform->getVelocity().magnitude() ? transform : otherTransform);
+                    Transform *receivingTransform = givingTransform == transform ? otherTransform : transform;
 
-                    Vector direction = fasterTransform->getPosition() - slowerTransform->getPosition();
+                    Vector direction = givingTransform->getPosition() - receivingTransform->getPosition();
                     direction.normalize();
-                    fasterTransform->addPosition(direction * 0.02f);
+                    givingTransform->addPosition(direction * 0.02f);
                 }
             }
         }
@@ -220,23 +223,14 @@ void Game::renderTiles()
     {
         for (int x = 0; x < tiles[y].size(); x++)
         {
-            switch (tiles[y][x])
-            {
-            case Tile::Air:
-                continue;
-                break;
-            case Tile::Dirt:
-                SDL_SetRenderDrawColor(renderer, 84, 45, 28, 255);
-                break;
-            case Tile::Stone:
-                SDL_SetRenderDrawColor(renderer, 119, 115, 114, 255);
-                break;
-            }
+            SDL_Texture *tileTexture = tileTextures[tiles[y][x]];
 
-            SDL_Rect tileRect = {x * tileSize, y * tileSize, tileSize, tileSize};
-            SDL_RenderFillRect(renderer, &tileRect);
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-            SDL_RenderDrawRect(renderer, &tileRect);
+            if (tileTexture)
+            {
+
+                SDL_Rect tileRect = {x * tileSize, y * tileSize, tileSize, tileSize};
+                SDL_RenderCopy(renderer, tileTexture, nullptr, &tileRect);
+            }
         }
     }
 }

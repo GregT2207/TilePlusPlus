@@ -3,6 +3,7 @@
 enum class Tile
 {
     Air = 0,
-    Dirt = 1,
-    Stone = 2,
+    Grass = 1,
+    Dirt = 2,
+    Stone = 3,
 };
