@@ -73,7 +73,7 @@ bool Game::init(const string &title, int width, int height, bool fullscreen)
         cerr << "Resources could not load!" << endl;
         return false;
     }
-    background = resourceManager.loadTexture("backgrounds/background.jpeg");
+    background = resourceManager.loadTexture("backgrounds/background.png");
 
     // Set up environment
     gravity = 2000;
@@ -118,14 +118,15 @@ void Game::createGameObjects()
 
     GameObject *player = new GameObject("Greg");
     player->addComponent<Transform>(Vector{40.0f, 10.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
-    player->addComponent<Collider>(Vector{70.0f, 100.0f});
+    colliders.push_back(player->addComponent<Collider>(Vector{70.0f, 100.0f}));
+
     player->addComponent<SpriteRenderer>(resourceManager, "sprites/player.png");
     player->addComponent<PlayerBehaviour>();
     gameObjects.push_back(player);
 
     GameObject *enemy = new GameObject("Flobbage Jr.");
     enemy->addComponent<Transform>(Vector{200.0f, 10.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
-    enemy->addComponent<Collider>(Vector{70.0f, 100.0f});
+    colliders.push_back(enemy->addComponent<Collider>(Vector{70.0f, 100.0f}));
     enemy->addComponent<SpriteRenderer>(resourceManager, "sprites/enemy.png");
     gameObjects.push_back(enemy);
 
@@ -164,36 +165,29 @@ void Game::update()
 
     for (auto &gameObject : gameObjects)
     {
-        Collider *collider = gameObject->getComponent<Collider>();
-        if (collider)
-        {
-            colliders.push_back(collider);
-        }
-
         gameObject->update(deltaTime, winWidth, winHeight, gravity);
-    }
 
-    checkCollisions();
-}
-
-void Game::checkCollisions()
-{
-    for (auto &collider : colliders)
-    {
-        for (auto &otherCollider : colliders)
+        Transform *transform = gameObject->getComponent<Transform>();
+        Collider *collider = gameObject->getComponent<Collider>();
+        if (transform && collider && !collider->isStatic)
         {
-            if (collider == otherCollider)
+            for (auto &otherCollider : colliders)
             {
-                continue;
-            }
+                if (collider == otherCollider)
+                {
+                    continue;
+                }
 
-            if (collider->intersects(*otherCollider))
-            {
+                if (collider->intersects(*otherCollider))
+                {
+                    Vector position = transform->getPosition();
+                    Vector otherPosition = otherCollider->owner->getComponent<Transform>()->getPosition();
+                    transform->addX((position.x < otherPosition.x) ? -1 : 1);
+                    transform->addY((position.y < otherPosition.y) ? -1 : 1);
+                }
             }
         }
     }
-
-    colliders.clear();
 }
 
 void Game::render()

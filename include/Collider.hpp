@@ -6,7 +6,7 @@
 class Collider : public Component
 {
 public:
-    Collider(Vector size, Vector offset = Vector{0.0f, 0.0f});
+    Collider(Vector size, Vector offset = Vector{0.0f, 0.0f}, bool isStatic = false);
 
     void update(float deltaTime, int gravity, int worldHeight) override;
     void render(SDL_Renderer *renderer) override;
@@ -14,14 +14,16 @@ public:
     SDL_Rect getBoundingBox() const;
     bool intersects(const Collider &other);
 
-    void setSize(const Vector &newSize) { size = newSize; }
-    void addSize(const Vector &newSize) { size += newSize; }
+    void setSize(const Vector newSize) { size = newSize; }
+    void addSize(const Vector newSize) { size += newSize; }
 
-    void setOffset(const Vector &newOffset) { offset = newOffset; }
-    void addOffset(const Vector &newOffset) { offset += newOffset; }
+    void setOffset(const Vector newOffset) { offset = newOffset; }
+    void addOffset(const Vector newOffset) { offset += newOffset; }
 
     Vector getSize() const { return size; };
     Vector getOffset() const { return offset; };
+
+    bool isStatic = false;
 
 protected:
     Vector position;

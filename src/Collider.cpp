@@ -4,8 +4,8 @@
 
 bool Collider::debug = true;
 
-Collider::Collider(Vector size, Vector offset)
-    : size(size), offset(offset)
+Collider::Collider(Vector size, Vector offset, bool isStatic)
+    : size(size), offset(offset), isStatic(isStatic)
 {
 }
 
