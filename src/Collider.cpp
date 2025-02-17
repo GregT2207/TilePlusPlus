@@ -1,6 +1,7 @@
 #include "Collider.hpp"
 #include "Component.hpp"
 #include "GameObject.hpp"
+#include "PlayerBehaviour.hpp"
 
 bool Collider::debug = true;
 
@@ -16,8 +17,6 @@ void Collider::update(float deltaTime, int gravity, int worldHeight)
     {
         return;
     }
-
-    debugColor = SDL_Color({0, 0, 255, 255});
 
     position = transform->getPosition() + offset;
 }
@@ -44,20 +43,26 @@ SDL_Rect Collider::getBoundingBox() const
     return box;
 }
 
-bool Collider::intersects(const Collider &other)
+Vector Collider::overlap(const Collider &other)
+{
+    return overlap(other.getBoundingBox());
+}
+
+Vector Collider::overlap(const SDL_Rect b)
 {
     SDL_Rect a = getBoundingBox();
-    SDL_Rect b = other.getBoundingBox();
 
-    if (a.x + a.w <= b.x)
-        return false;
-    if (b.x + b.w <= a.x)
-        return false;
-    if (a.y + a.h <= b.y)
-        return false;
-    if (b.y + b.h <= a.y)
-        return false;
+    float xOverlap = a.x > b.x ? std::min(0, (a.x - (b.x + b.w))) : std::max(0, ((a.x + a.w) - b.x));
+    float yOverlap = a.y > b.y ? std::min(0, (a.y - (b.y + b.h))) : std::max(0, ((a.y + a.h) - b.y));
 
-    debugColor = SDL_Color({255, 0, 0, 255});
-    return true;
+    grounded = (a.y + a.h) >= b.y;
+
+    if (xOverlap != 0 && yOverlap != 0)
+    {
+        debugColor = SDL_Color({255, 0, 0, 255});
+        return {xOverlap, yOverlap};
+    }
+
+    debugColor = grounded ? SDL_Color({0, 180, 0, 255}) : SDL_Color({0, 0, 180, 255});
+    return {0, 0};
 }

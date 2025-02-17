@@ -43,6 +43,7 @@ private:
     int gravity;
     vector<GameObject *> gameObjects;
     vector<Collider *> colliders;
+    int tileSize = 32;
     vector<vector<Tile>> tiles;
     map<Tile, SDL_Texture *> tileTextures;
 

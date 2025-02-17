@@ -3,6 +3,7 @@
 #include "GameObject.hpp"
 
 class Transform;
+class Collider;
 
 void PlayerBehaviour::handleEvents(SDL_Event &event)
 {
@@ -30,7 +31,11 @@ void PlayerBehaviour::handleEvents(SDL_Event &event)
         case SDLK_SPACE:
             if (keyDown)
             {
-                transform->setVelocityY(-jumpPower);
+                Collider *collider = owner->getComponent<Collider>();
+                if (collider && collider->isGrounded())
+                {
+                    transform->setVelocityY(-jumpPower);
+                }
             }
         }
     }

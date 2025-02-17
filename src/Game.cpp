@@ -181,16 +181,30 @@ void Game::update()
                     continue;
                 }
 
-                if (collider->intersects(*otherCollider))
+                Vector overlap = collider->overlap(*otherCollider);
+                if (overlap.x != 0 || overlap.y != 0)
                 {
-                    Transform *otherTransform = otherCollider->owner->getComponent<Transform>();
-
-                    Transform *givingTransform = otherCollider->isStatic ? transform : (transform->getVelocity().magnitude() > otherTransform->getVelocity().magnitude() ? transform : otherTransform);
-                    Transform *receivingTransform = givingTransform == transform ? otherTransform : transform;
-
-                    Vector direction = givingTransform->getPosition() - receivingTransform->getPosition();
-                    direction.normalize();
-                    givingTransform->addPosition(direction * 0.02f);
+                    float resolutionBuffer = 0.5f;
+                    if (overlap.x < 0 && transform->getVelocity().x < 0)
+                    {
+                        transform->addX(-(overlap.x + (overlap.x > 0 ? resolutionBuffer : -resolutionBuffer)));
+                        transform->setVelocityX(0);
+                    }
+                    if (overlap.x > 0 && transform->getVelocity().x > 0)
+                    {
+                        transform->addX(-(overlap.x + (overlap.x > 0 ? resolutionBuffer : -resolutionBuffer)));
+                        transform->setVelocityX(0);
+                    }
+                    if (overlap.y < 0 && transform->getVelocity().y < 0)
+                    {
+                        transform->addY(-(overlap.y + (overlap.y > 0 ? resolutionBuffer : -resolutionBuffer)));
+                        transform->setVelocityY(0);
+                    }
+                    if (overlap.y > 0 && transform->getVelocity().y > 0)
+                    {
+                        transform->addY(-(overlap.y + (overlap.y > 0 ? resolutionBuffer : -resolutionBuffer)));
+                        transform->setVelocityY(0);
+                    }
                 }
             }
         }
@@ -217,8 +231,6 @@ void Game::render()
 
 void Game::renderTiles()
 {
-    const int tileSize = 32;
-
     for (int y = 0; y < tiles.size(); y++)
     {
         for (int x = 0; x < tiles[y].size(); x++)

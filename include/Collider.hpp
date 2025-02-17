@@ -12,16 +12,18 @@ public:
     void render(SDL_Renderer *renderer) override;
 
     SDL_Rect getBoundingBox() const;
-    bool intersects(const Collider &other);
+    Vector overlap(const Collider &other);
+    Vector overlap(const SDL_Rect other);
 
     void setSize(const Vector newSize) { size = newSize; }
     void addSize(const Vector newSize) { size += newSize; }
-
     void setOffset(const Vector newOffset) { offset = newOffset; }
     void addOffset(const Vector newOffset) { offset += newOffset; }
+    void setGrounded(bool newGrounded) { grounded = newGrounded; }
 
     Vector getSize() const { return size; };
     Vector getOffset() const { return offset; };
+    bool isGrounded() const { return grounded; }
 
     bool isStatic = false;
 
@@ -33,4 +35,5 @@ protected:
 
 private:
     static bool debug;
+    float grounded = false;
 };
