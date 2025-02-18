@@ -86,14 +86,14 @@ void Game::createTiles()
     vector<Tile> airRow = {};
     vector<Tile> grassRow = {};
     vector<Tile> dirtRow = {};
-    for (int i = 0; i < 40; i++)
+    for (int i = 0; i < 45; i++)
     {
         airRow.push_back(Tile::Air);
         grassRow.push_back(Tile::Grass);
         dirtRow.push_back(Tile::Dirt);
     }
 
-    for (int i = 0; i < 16; i++)
+    for (int i = 0; i < 12; i++)
     {
         tiles.push_back(airRow);
     }
@@ -103,7 +103,7 @@ void Game::createTiles()
         tiles.push_back(grassRow);
     }
 
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 15; i++)
     {
         tiles.push_back(dirtRow);
     }
@@ -114,7 +114,7 @@ void Game::createGameObjects()
     gravity = 2000;
 
     GameObject *player = new GameObject(this, "Greg");
-    player->addComponent<Transform>(Vector{40.0f, 10.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
+    player->addComponent<Transform>(Vector{40.0f, 0.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
     colliders.push_back(player->addComponent<Collider>(Vector{70.0f, 100.0f}));
 
     player->addComponent<SpriteRenderer>(resourceManager, "sprites/player.png");
@@ -122,7 +122,7 @@ void Game::createGameObjects()
     gameObjects.push_back(player);
 
     GameObject *enemy = new GameObject(this, "Flobbage Jr.");
-    enemy->addComponent<Transform>(Vector{200.0f, 10.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
+    enemy->addComponent<Transform>(Vector{200.0f, 0.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
     colliders.push_back(enemy->addComponent<Collider>(Vector{70.0f, 100.0f}));
     enemy->addComponent<SpriteRenderer>(resourceManager, "sprites/enemy.png");
     gameObjects.push_back(enemy);
@@ -148,6 +148,19 @@ void Game::handleEvents()
         {
             gameObject->handleEvents(event);
         }
+    }
+}
+
+bool Game::setTile(Vector tilePos, Tile tile)
+{
+    try
+    {
+        tiles.at(tilePos.y).at(tilePos.x) = tile;
+        return true;
+    }
+    catch (const std::out_of_range &e)
+    {
+        return false;
     }
 }
 
@@ -212,7 +225,7 @@ void Game::resolveCollisions(Transform *transform, Collider *collider, BoundingB
     Vector overlap = collider->getOverlap(other);
     if (overlap.y != 0)
     {
-        transform->addY(-overlap.y);
+        transform->addY(-overlap.y * 1.0f + 1.0f);
         transform->setVelocityY(0);
         collider->followTransform();
     }
@@ -220,7 +233,7 @@ void Game::resolveCollisions(Transform *transform, Collider *collider, BoundingB
     overlap = collider->getOverlap(other);
     if (overlap.x != 0)
     {
-        transform->addX(-overlap.x);
+        transform->addX(-overlap.x * 1.0f + 1.0f);
         transform->setVelocityX(0);
         collider->followTransform();
     }

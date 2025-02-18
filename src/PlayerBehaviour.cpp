@@ -86,12 +86,10 @@ void PlayerBehaviour::jump()
 
 void PlayerBehaviour::destroyTile(Vector mousePos)
 {
-    Vector tilePos = owner->game->getTilePos(mousePos.x, mousePos.y);
-    owner->game->tiles[tilePos.y][tilePos.x] = Tile::Air;
+    owner->game->setTile(owner->game->getTilePos(mousePos), Tile::Air);
 }
 
 void PlayerBehaviour::placeTile(Vector mousePos)
 {
-    Vector tilePos = owner->game->getTilePos(mousePos.x, mousePos.y);
-    owner->game->tiles[tilePos.y][tilePos.x] = Tile::Dirt;
+    owner->game->setTile(owner->game->getTilePos(mousePos), Tile::Dirt);
 }

@@ -22,15 +22,15 @@ public:
 
     bool init(const string &title, int width, int height, bool fullscreen);
     void handleEvents();
+    bool setTile(Vector tilePos, Tile tile);
     void update();
     void render();
     void cleanUp();
 
     bool isRunning() const { return running; }
-    Vector getTilePos(float x, float y) const { return {floor(x / tileSize), floor(y / tileSize)}; }
+    Vector getTilePos(Vector worldPos) const { return {floor(worldPos.x / tileSize), floor(worldPos.y / tileSize)}; }
 
     static constexpr float maxFallSpeed = 1000.0f;
-    vector<vector<Tile>> tiles;
 
 protected:
     ResourceManager resourceManager;
@@ -45,6 +45,7 @@ private:
     int gravity;
     vector<GameObject *> gameObjects;
     vector<Collider *> colliders;
+    vector<vector<Tile>> tiles;
     int tileSize = 32;
     map<Tile, SDL_Texture *> tileTextures;
 
