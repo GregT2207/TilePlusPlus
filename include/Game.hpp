@@ -9,6 +9,7 @@
 using namespace std;
 
 class Vector;
+class BoundingBox;
 class GameObject;
 class Transform;
 class Collider;
@@ -51,6 +52,6 @@ private:
 
     void createTiles();
     void createGameObjects();
-    void resolveCollisions(Transform *transform, Vector overlap);
+    void resolveCollisions(Transform *transform, Collider *collider, BoundingBox other);
     void renderTiles();
 };

@@ -6,13 +6,6 @@
 #include "PlayerBehaviour.hpp"
 #include "enums/Tile.hpp"
 
-class Vector;
-class Transform;
-class Collider;
-class SpriteRenderer;
-
-using namespace std;
-
 Game::Game() : running(false), window(nullptr), renderer(nullptr), resourceManager(nullptr), gravity(10) {}
 Game::~Game()
 {
@@ -183,13 +176,7 @@ void Game::update()
                     continue;
                 }
 
-                Vector overlap = collider->overlap(*otherCollider);
-                if (overlap.y != 0)
-                    resolveCollisions(transform, {0.0f, overlap.y});
-
-                overlap = collider->overlap(*otherCollider);
-                if (overlap.x != 0)
-                    resolveCollisions(transform, {overlap.x, 0.0f});
+                resolveCollisions(transform, collider, otherCollider->getBoundingBox());
             }
 
             // Resolve collisions for tiles
@@ -212,7 +199,7 @@ void Game::update()
 
                     if (tiles[y][x] != Tile::Air)
                     {
-                        resolveCollisions(transform, collider->overlap({static_cast<float>(x * tileSize), static_cast<float>(y * tileSize), static_cast<float>(tileSize), static_cast<float>(tileSize)}));
+                        resolveCollisions(transform, collider, {static_cast<float>(x * tileSize), static_cast<float>(y * tileSize), static_cast<float>(tileSize), static_cast<float>(tileSize)});
                     }
                 }
             }
@@ -220,29 +207,22 @@ void Game::update()
     }
 }
 
-void Game::resolveCollisions(Transform *transform, Vector overlap)
+void Game::resolveCollisions(Transform *transform, Collider *collider, BoundingBox other)
 {
+    Vector overlap = collider->getOverlap(other);
+    if (overlap.y != 0)
+    {
+        transform->addY(-overlap.y);
+        transform->setVelocityY(0);
+        collider->followTransform();
+    }
 
-    float resolutionBuffer = 0.1f;
-    if (overlap.x < 0 && transform->getVelocity().x < 0)
+    overlap = collider->getOverlap(other);
+    if (overlap.x != 0)
     {
-        transform->addX(-(overlap.x + (overlap.x > 0 ? resolutionBuffer : -resolutionBuffer)));
+        transform->addX(-overlap.x);
         transform->setVelocityX(0);
-    }
-    if (overlap.x > 0 && transform->getVelocity().x > 0)
-    {
-        transform->addX(-(overlap.x + (overlap.x > 0 ? resolutionBuffer : -resolutionBuffer)));
-        transform->setVelocityX(0);
-    }
-    if (overlap.y < 0 && transform->getVelocity().y < 0)
-    {
-        transform->addY(-(overlap.y + (overlap.y > 0 ? resolutionBuffer : -resolutionBuffer)));
-        transform->setVelocityY(0);
-    }
-    if (overlap.y > 0 && transform->getVelocity().y > 0)
-    {
-        transform->addY(-(overlap.y + (overlap.y > 0 ? resolutionBuffer : -resolutionBuffer)));
-        transform->setVelocityY(0);
+        collider->followTransform();
     }
 }
 

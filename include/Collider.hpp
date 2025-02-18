@@ -10,11 +10,11 @@ public:
     Collider(Vector size, Vector offset = Vector{0.0f, 0.0f}, bool isStatic = false);
 
     void update(float deltaTime, int gravity, int worldHeight) override;
+    void followTransform();
     void render(SDL_Renderer *renderer) override;
 
     BoundingBox getBoundingBox() const;
-    Vector overlap(const Collider &other);
-    Vector overlap(const BoundingBox other);
+    Vector getOverlap(const BoundingBox b);
 
     void setSize(const Vector newSize) { size = newSize; }
     void addSize(const Vector newSize) { size += newSize; }

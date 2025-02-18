@@ -12,6 +12,11 @@ Collider::Collider(Vector size, Vector offset, bool isStatic)
 
 void Collider::update(float deltaTime, int gravity, int worldHeight)
 {
+    followTransform();
+}
+
+void Collider::followTransform()
+{
     Transform *transform = owner->getComponent<Transform>();
     if (!transform)
     {
@@ -44,19 +49,13 @@ BoundingBox Collider::getBoundingBox() const
     return box;
 }
 
-Vector Collider::overlap(const Collider &other)
-{
-    return overlap(other.getBoundingBox());
-}
-
-Vector Collider::overlap(const BoundingBox b)
+// Returns a positive (right/down) or negative (left/up) overlap, or 0s if none
+Vector Collider::getOverlap(const BoundingBox b)
 {
     BoundingBox a = getBoundingBox();
 
     float xOverlap = a.x > b.x ? std::min(0.0f, (a.x - (b.x + b.w))) : std::max(0.0f, ((a.x + a.w) - b.x));
-    SDL_Log("xOverlap %f", xOverlap);
     float yOverlap = a.y > b.y ? std::min(0.0f, (a.y - (b.y + b.h))) : std::max(0.0f, ((a.y + a.h) - b.y));
-    SDL_Log("yOverlap %f", yOverlap);
 
     grounded = (a.y + a.h) >= (b.y - 0.1f);
 
