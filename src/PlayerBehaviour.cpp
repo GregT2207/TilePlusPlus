@@ -7,53 +7,73 @@ class Collider;
 
 void PlayerBehaviour::handleEvents(SDL_Event &event)
 {
-    const int movementSpeed = 300;
-    const int jumpPower = 800;
-
     Transform *transform = owner->getComponent<Transform>();
     if (!transform)
-    {
         return;
-    }
 
-    if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
+    switch (event.type)
     {
-        bool keyDown = (event.type == SDL_KEYDOWN);
-
+    case SDL_KEYDOWN:
         switch (event.key.keysym.sym)
         {
         case SDLK_a:
-            transform->setVelocityX(keyDown ? -movementSpeed : 0);
+            transform->setVelocityX(-movementSpeed);
             break;
         case SDLK_d:
-            transform->setVelocityX(keyDown ? movementSpeed : 0);
+            transform->setVelocityX(movementSpeed);
             break;
         case SDLK_SPACE:
-            if (keyDown)
-            {
-                Collider *collider = owner->getComponent<Collider>();
-                if (collider && collider->isGrounded())
-                {
-                    transform->setVelocityY(-jumpPower);
-                }
-            }
+            jump();
+            break;
         }
-    }
+        break;
 
-    if (event.type == SDL_CONTROLLERAXISMOTION)
-    {
+    case SDL_KEYUP:
+        switch (event.key.keysym.sym)
+        {
+        case SDLK_a:
+            if (transform->getVelocity().x < 0)
+                transform->setVelocityX(0);
+            break;
+        case SDLK_d:
+            if (transform->getVelocity().x > 0)
+                transform->setVelocityX(0);
+            break;
+        }
+        break;
+
+    case SDL_CONTROLLERAXISMOTION:
         if (event.caxis.axis == SDL_CONTROLLER_AXIS_LEFTX)
         {
             float movementNormalized = ((event.caxis.value >= 1000 || event.caxis.value <= -1000) ? event.caxis.value * 0.00005 : 0);
             transform->setVelocityX(movementNormalized * movementSpeed);
         }
-    }
+        break;
 
-    if (event.type == SDL_CONTROLLERBUTTONDOWN)
-    {
+    case SDL_CONTROLLERBUTTONDOWN:
         if (event.cbutton.button == SDL_CONTROLLER_BUTTON_A)
-        {
-            transform->setVelocityY(-jumpPower);
-        }
+            jump();
+        break;
     }
+}
+
+void PlayerBehaviour::jump()
+{
+    Transform *transform = owner->getComponent<Transform>();
+    Collider *collider = owner->getComponent<Collider>();
+
+    if (transform && collider && collider->isGrounded())
+    {
+        transform->setVelocityY(-jumpPower);
+    }
+}
+
+void PlayerBehaviour::destroyTile()
+{
+    Transform *transform = owner->getComponent<Transform>();
+}
+
+void PlayerBehaviour::placeTile()
+{
+    Transform *transform = owner->getComponent<Transform>();
 }
