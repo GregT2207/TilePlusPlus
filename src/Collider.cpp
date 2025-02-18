@@ -25,20 +25,21 @@ void Collider::render(SDL_Renderer *renderer)
 {
     if (debug)
     {
-        SDL_Rect box = getBoundingBox();
+        BoundingBox box = getBoundingBox();
         SDL_SetRenderDrawColor(renderer, debugColor.r, debugColor.g, debugColor.b, debugColor.a);
-        SDL_RenderDrawRect(renderer, &box);
+        SDL_Rect rect = {static_cast<int>(box.x), static_cast<int>(box.y), static_cast<int>(box.w), static_cast<int>(box.h)};
+        SDL_RenderDrawRect(renderer, &rect);
     }
 }
 
-SDL_Rect Collider::getBoundingBox() const
+BoundingBox Collider::getBoundingBox() const
 {
-    SDL_Rect box;
+    BoundingBox box;
 
-    box.x = static_cast<int>(position.x - size.x / 2);
-    box.y = static_cast<int>(position.y - size.y / 2);
-    box.w = static_cast<int>(size.x);
-    box.h = static_cast<int>(size.y);
+    box.x = (position.x - size.x / 2);
+    box.y = (position.y - size.y / 2);
+    box.w = (size.x);
+    box.h = (size.y);
 
     return box;
 }
@@ -48,14 +49,16 @@ Vector Collider::overlap(const Collider &other)
     return overlap(other.getBoundingBox());
 }
 
-Vector Collider::overlap(const SDL_Rect b)
+Vector Collider::overlap(const BoundingBox b)
 {
-    SDL_Rect a = getBoundingBox();
+    BoundingBox a = getBoundingBox();
 
-    float xOverlap = a.x > b.x ? std::min(0, (a.x - (b.x + b.w))) : std::max(0, ((a.x + a.w) - b.x));
-    float yOverlap = a.y > b.y ? std::min(0, (a.y - (b.y + b.h))) : std::max(0, ((a.y + a.h) - b.y));
+    float xOverlap = a.x > b.x ? std::min(0.0f, (a.x - (b.x + b.w))) : std::max(0.0f, ((a.x + a.w) - b.x));
+    SDL_Log("xOverlap %f", xOverlap);
+    float yOverlap = a.y > b.y ? std::min(0.0f, (a.y - (b.y + b.h))) : std::max(0.0f, ((a.y + a.h) - b.y));
+    SDL_Log("yOverlap %f", yOverlap);
 
-    grounded = (a.y + a.h) >= b.y;
+    grounded = (a.y + a.h) >= (b.y - 0.1f);
 
     if (xOverlap != 0 && yOverlap != 0)
     {

@@ -2,6 +2,7 @@
 #include <SDL2/SDL.h>
 #include "Component.hpp"
 #include "Vector.hpp"
+#include "BoundingBox.hpp"
 
 class Collider : public Component
 {
@@ -11,9 +12,9 @@ public:
     void update(float deltaTime, int gravity, int worldHeight) override;
     void render(SDL_Renderer *renderer) override;
 
-    SDL_Rect getBoundingBox() const;
+    BoundingBox getBoundingBox() const;
     Vector overlap(const Collider &other);
-    Vector overlap(const SDL_Rect other);
+    Vector overlap(const BoundingBox other);
 
     void setSize(const Vector newSize) { size = newSize; }
     void addSize(const Vector newSize) { size += newSize; }

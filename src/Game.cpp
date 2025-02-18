@@ -175,6 +175,7 @@ void Game::update()
         Collider *collider = gameObject->getComponent<Collider>();
         if (transform && collider && !collider->isStatic)
         {
+            // Resolve collisions for game objects
             for (auto &otherCollider : colliders)
             {
                 if (collider == otherCollider)
@@ -182,7 +183,38 @@ void Game::update()
                     continue;
                 }
 
-                resolveCollisions(transform, collider->overlap(*otherCollider));
+                Vector overlap = collider->overlap(*otherCollider);
+                if (overlap.y != 0)
+                    resolveCollisions(transform, {0.0f, overlap.y});
+
+                overlap = collider->overlap(*otherCollider);
+                if (overlap.x != 0)
+                    resolveCollisions(transform, {overlap.x, 0.0f});
+            }
+
+            // Resolve collisions for tiles
+            BoundingBox boundingBox = collider->getBoundingBox();
+
+            int yRangeStart = ((boundingBox.y - (static_cast<int>(boundingBox.y) % tileSize)) / tileSize) - 1;
+            int yRangeEnd = ((boundingBox.y + boundingBox.h) - (static_cast<int>(boundingBox.y + boundingBox.h) % tileSize)) / tileSize;
+            int xRangeStart = ((boundingBox.x - (static_cast<int>(boundingBox.x) % tileSize)) / tileSize) - 1;
+            int xRangeEnd = ((boundingBox.x + boundingBox.w) - (static_cast<int>(boundingBox.x + boundingBox.w) % tileSize)) / tileSize;
+
+            for (int y = yRangeStart; y < yRangeEnd; y++)
+            {
+                if (y >= tiles.size())
+                    continue;
+
+                for (int x = xRangeStart; x < xRangeEnd; x++)
+                {
+                    if (x >= tiles[y].size())
+                        continue;
+
+                    if (tiles[y][x] != Tile::Air)
+                    {
+                        resolveCollisions(transform, collider->overlap({static_cast<float>(x * tileSize), static_cast<float>(y * tileSize), static_cast<float>(tileSize), static_cast<float>(tileSize)}));
+                    }
+                }
             }
         }
     }
@@ -190,29 +222,27 @@ void Game::update()
 
 void Game::resolveCollisions(Transform *transform, Vector overlap)
 {
-    if (overlap.x != 0 || overlap.y != 0)
+
+    float resolutionBuffer = 0.1f;
+    if (overlap.x < 0 && transform->getVelocity().x < 0)
     {
-        float resolutionBuffer = 0.5f;
-        if (overlap.x < 0 && transform->getVelocity().x < 0)
-        {
-            transform->addX(-(overlap.x + (overlap.x > 0 ? resolutionBuffer : -resolutionBuffer)));
-            transform->setVelocityX(0);
-        }
-        if (overlap.x > 0 && transform->getVelocity().x > 0)
-        {
-            transform->addX(-(overlap.x + (overlap.x > 0 ? resolutionBuffer : -resolutionBuffer)));
-            transform->setVelocityX(0);
-        }
-        if (overlap.y < 0 && transform->getVelocity().y < 0)
-        {
-            transform->addY(-(overlap.y + (overlap.y > 0 ? resolutionBuffer : -resolutionBuffer)));
-            transform->setVelocityY(0);
-        }
-        if (overlap.y > 0 && transform->getVelocity().y > 0)
-        {
-            transform->addY(-(overlap.y + (overlap.y > 0 ? resolutionBuffer : -resolutionBuffer)));
-            transform->setVelocityY(0);
-        }
+        transform->addX(-(overlap.x + (overlap.x > 0 ? resolutionBuffer : -resolutionBuffer)));
+        transform->setVelocityX(0);
+    }
+    if (overlap.x > 0 && transform->getVelocity().x > 0)
+    {
+        transform->addX(-(overlap.x + (overlap.x > 0 ? resolutionBuffer : -resolutionBuffer)));
+        transform->setVelocityX(0);
+    }
+    if (overlap.y < 0 && transform->getVelocity().y < 0)
+    {
+        transform->addY(-(overlap.y + (overlap.y > 0 ? resolutionBuffer : -resolutionBuffer)));
+        transform->setVelocityY(0);
+    }
+    if (overlap.y > 0 && transform->getVelocity().y > 0)
+    {
+        transform->addY(-(overlap.y + (overlap.y > 0 ? resolutionBuffer : -resolutionBuffer)));
+        transform->setVelocityY(0);
     }
 }
 
