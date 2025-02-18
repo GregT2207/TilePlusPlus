@@ -3,6 +3,8 @@
 #include "GameObject.hpp"
 #include "PlayerBehaviour.hpp"
 
+using namespace std;
+
 bool Collider::debug = true;
 
 Collider::Collider(Vector size, Vector offset, bool isStatic)
@@ -12,6 +14,9 @@ Collider::Collider(Vector size, Vector offset, bool isStatic)
 
 void Collider::update(float deltaTime, int gravity, int worldHeight)
 {
+    debugColor = SDL_Color({0, 0, 255, 255});
+
+    grounded = false;
     followTransform();
 }
 
@@ -54,17 +59,25 @@ Vector Collider::getOverlap(const BoundingBox b)
 {
     BoundingBox a = getBoundingBox();
 
-    float xOverlap = a.x > b.x ? std::min(0.0f, (a.x - (b.x + b.w))) : std::max(0.0f, ((a.x + a.w) - b.x));
-    float yOverlap = a.y > b.y ? std::min(0.0f, (a.y - (b.y + b.h))) : std::max(0.0f, ((a.y + a.h) - b.y));
+    float xGap = a.x > b.x ? a.x - (b.x + b.w) : (a.x + a.w) - b.x;
+    float yGap = a.y > b.y ? a.y - (b.y + b.h) : (a.y + a.h) - b.y;
 
-    if (xOverlap != 0 && yOverlap != 0)
+    bool xNear = fabs(xGap) < a.w / 2 + b.w / 2;
+    bool yNear = fabs(yGap) < a.h / 2 + b.h / 2;
+
+    float xOverlap = a.x > b.x ? min(0.0f, xGap) : max(0.0f, xGap);
+    float yOverlap = a.y > b.y ? min(0.0f, yGap) : max(0.0f, yGap);
+
+    if (xNear && yNear)
     {
-        grounded = yOverlap > 0;
         debugColor = SDL_Color({255, 0, 0, 255});
-        return {xOverlap, yOverlap};
+
+        if (yOverlap > 0)
+            grounded = true;
     }
 
-    grounded = false;
-    debugColor = SDL_Color({0, 0, 180, 255});
+    if (xOverlap != 0 && yOverlap != 0)
+        return {xOverlap, yOverlap};
+
     return {0, 0};
 }
