@@ -57,14 +57,16 @@ Vector Collider::getOverlap(const BoundingBox b)
     float xOverlap = a.x > b.x ? std::min(0.0f, (a.x - (b.x + b.w))) : std::max(0.0f, ((a.x + a.w) - b.x));
     float yOverlap = a.y > b.y ? std::min(0.0f, (a.y - (b.y + b.h))) : std::max(0.0f, ((a.y + a.h) - b.y));
 
-    grounded = (a.y + a.h) >= (b.y - 0.1f);
+    // grounded = (a.y + a.h) >= b.y;
 
     if (xOverlap != 0 && yOverlap != 0)
     {
+        grounded = yOverlap > 0;
         debugColor = SDL_Color({255, 0, 0, 255});
         return {xOverlap, yOverlap};
     }
 
+    grounded = false;
     debugColor = grounded ? SDL_Color({0, 180, 0, 255}) : SDL_Color({0, 0, 180, 255});
     return {0, 0};
 }
