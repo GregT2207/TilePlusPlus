@@ -12,6 +12,7 @@ public:
 
 protected:
     void jump();
+    void checkTileActions(SDL_Event &event);
     void destroyTile(Vector mousePos);
     void placeTile(Vector mousePos);
 

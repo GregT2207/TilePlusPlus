@@ -55,20 +55,28 @@ void PlayerBehaviour::handleEvents(SDL_Event &event)
             jump();
         break;
 
-    case SDL_MOUSEBUTTONUP:
-        int x, y;
-        SDL_GetMouseState(&x, &y);
+    case SDL_MOUSEBUTTONDOWN:
+        checkTileActions(event);
+        break;
+    case SDL_MOUSEMOTION:
+        checkTileActions(event);
+        break;
+    }
+}
 
-        switch (event.button.button)
-        {
-        case SDL_BUTTON_LEFT:
-            destroyTile({x, y});
-            break;
+void PlayerBehaviour::checkTileActions(SDL_Event &event)
+{
+    int x, y;
+    SDL_GetMouseState(&x, &y);
 
-        case SDL_BUTTON_RIGHT:
-            placeTile({x, y});
-            break;
-        }
+    switch (event.button.button)
+    {
+    case SDL_BUTTON_LEFT:
+        destroyTile({x, y});
+        break;
+
+    case SDL_BUTTON_RIGHT:
+        placeTile({x, y});
         break;
     }
 }
@@ -91,5 +99,8 @@ void PlayerBehaviour::destroyTile(Vector mousePos)
 
 void PlayerBehaviour::placeTile(Vector mousePos)
 {
-    owner->game->setTile(owner->game->getTilePos(mousePos), Tile::Dirt);
+    Vector tilePos = owner->game->getTilePos(mousePos);
+
+    if (owner->game->getTile(tilePos) == Tile::Air)
+        owner->game->setTile(tilePos, Tile::Dirt);
 }
