@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_test.h>
+#include <SDL2/SDL_mixer.h>
 #include "Game.hpp"
 #include "GameObject.hpp"
 #include "PlayerBehaviour.hpp"
@@ -69,6 +70,20 @@ bool Game::init(const string &title, int width, int height, bool fullscreen)
     }
     background = resourceManager.loadTexture("backgrounds/background.png");
 
+    // Load audio
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+    {
+        cerr << "SDL_mixer could not initialize! SDL_mixer Error: " << Mix_GetError() << endl;
+        return false;
+    }
+    Mix_Music *music = Mix_LoadMUS("../assets/audio/combat.wav");
+    if (!music)
+    {
+        cerr << "Failed to load music! SDL_mixer Error: " << Mix_GetError() << endl;
+        return false;
+    }
+    Mix_PlayMusic(music, -1);
+
     // Set up environment
     gravity = 2000;
     createTiles();
@@ -111,10 +126,8 @@ void Game::createTiles()
 
 void Game::createGameObjects()
 {
-    gravity = 2000;
-
     GameObject *player = new GameObject(this, "Greg");
-    player->addComponent<Transform>(Vector{40.0f, 0.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
+    player->addComponent<Transform>(Vector{40.0f, 60.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
     colliders.push_back(player->addComponent<Collider>(Vector{70.0f, 100.0f}));
 
     player->addComponent<SpriteRenderer>(resourceManager, "sprites/player.png");
@@ -122,7 +135,7 @@ void Game::createGameObjects()
     gameObjects.push_back(player);
 
     GameObject *enemy = new GameObject(this, "Flobbage Jr.");
-    enemy->addComponent<Transform>(Vector{200.0f, 0.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
+    enemy->addComponent<Transform>(Vector{1000.0f, 60.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
     colliders.push_back(enemy->addComponent<Collider>(Vector{70.0f, 100.0f}));
     enemy->addComponent<SpriteRenderer>(resourceManager, "sprites/enemy.png");
     gameObjects.push_back(enemy);
@@ -222,21 +235,19 @@ void Game::update()
 
 void Game::resolveCollisions(Transform *transform, Collider *collider, BoundingBox other)
 {
-    Vector overlap = collider->getOverlap(other);
-    if (overlap.y != 0)
+    auto resolveAxis = [transform, collider](char axis, float overlap = 0.0f) -> void
     {
-        transform->addY(-overlap.y * 1.0f + 1.0f);
-        transform->setVelocityY(0);
-        collider->followTransform();
-    }
+        axis == 'x' ? transform->addX(-overlap) : transform->addY(-overlap);
+        axis == 'x' ? transform->setVelocityX(0) : transform->setVelocityY(0);
 
-    overlap = collider->getOverlap(other);
-    if (overlap.x != 0)
-    {
-        transform->addX(-overlap.x * 1.0f + 1.0f);
-        transform->setVelocityX(0);
         collider->followTransform();
-    }
+    };
+
+    Vector overlap = collider->getOverlap(other);
+    if (overlap.x == 0 && overlap.y == 0)
+        return;
+
+    fabs(overlap.x) < fabs(overlap.y) ? resolveAxis('x', overlap.x) : resolveAxis('y', overlap.y);
 }
 
 void Game::render()

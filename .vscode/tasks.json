@@ -13,6 +13,7 @@
                 "-L${workspaceFolder}/lib",
                 "-lSDL2",
                 "-lSDL2_image",
+                "-lSDL2_mixer",
                 "-lSDL2_test",
                 "${workspaceFolder}/src/*.cpp",
                 "-o",
