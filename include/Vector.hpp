@@ -2,8 +2,8 @@
 
 struct Vector
 {
-    float x = 0.0f;
-    float y = 0.0f;
+    Vector(float x, float y) : x(x), y(y) {};
+    Vector(int x = 0, int y = 0) : x(x), y(y) {};
 
     float magnitude() const
     {
@@ -15,6 +15,9 @@ struct Vector
         float length = sqrt(x * x + y * y);
         return {x / length, y / length};
     }
+
+    float x;
+    float y;
 };
 
 inline Vector operator+(const Vector &a, const Vector &b)

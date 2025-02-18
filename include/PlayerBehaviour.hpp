@@ -1,6 +1,8 @@
 #pragma once
 #include "Component.hpp"
 
+class Vector;
+
 class PlayerBehaviour : public Component
 {
 public:
@@ -10,8 +12,8 @@ public:
 
 protected:
     void jump();
-    void destroyTile();
-    void placeTile();
+    void destroyTile(Vector mousePos);
+    void placeTile(Vector mousePos);
 
     const int movementSpeed = 300;
     const int jumpPower = 800;

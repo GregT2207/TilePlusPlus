@@ -1,7 +1,7 @@
 #include "string"
 #include "GameObject.hpp"
 
-GameObject::GameObject(std::string name) : name(name) {}
+GameObject::GameObject(Game *game, std::string name) : game(game), name(name) {}
 GameObject::~GameObject() {}
 
 void GameObject::init() {};

@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include "Game.hpp"
 #include "Component.hpp"
 #include "Transform.hpp"
 #include "Collider.hpp"
@@ -9,7 +10,7 @@
 class GameObject
 {
 public:
-    GameObject(std::string name);
+    GameObject(Game *game, std::string name);
     ~GameObject();
 
     void virtual init();
@@ -40,6 +41,8 @@ public:
         }
         return nullptr;
     }
+
+    Game *game;
 
 protected:
     std::string name;

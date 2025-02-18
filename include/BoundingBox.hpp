@@ -2,7 +2,8 @@
 
 struct BoundingBox
 {
-    BoundingBox(float x = 0.0f, float y = 0.0f, float w = 0.0f, float h = 0.0f) : x(x), y(y), w(w), h(h) {}
+    BoundingBox(float x, float y, float w, float h) : x(x), y(y), w(w), h(h) {}
+    BoundingBox(int x = 0, int y = 0, int w = 0, int h = 0) : x(x), y(y), w(w), h(h) {}
 
     float x;
     float y;

@@ -3,12 +3,12 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "Vector.hpp"
 #include "enums/Tile.hpp"
 #include "ResourceManager.hpp"
 
 using namespace std;
 
-class Vector;
 class BoundingBox;
 class GameObject;
 class Transform;
@@ -26,12 +26,11 @@ public:
     void render();
     void cleanUp();
 
-    bool isRunning() const
-    {
-        return running;
-    }
+    bool isRunning() const { return running; }
+    Vector getTilePos(float x, float y) const { return {floor(x / tileSize), floor(y / tileSize)}; }
 
     static constexpr float maxFallSpeed = 1000.0f;
+    vector<vector<Tile>> tiles;
 
 protected:
     ResourceManager resourceManager;
@@ -47,7 +46,6 @@ private:
     vector<GameObject *> gameObjects;
     vector<Collider *> colliders;
     int tileSize = 32;
-    vector<vector<Tile>> tiles;
     map<Tile, SDL_Texture *> tileTextures;
 
     void createTiles();

@@ -54,6 +54,22 @@ void PlayerBehaviour::handleEvents(SDL_Event &event)
         if (event.cbutton.button == SDL_CONTROLLER_BUTTON_A)
             jump();
         break;
+
+    case SDL_MOUSEBUTTONUP:
+        int x, y;
+        SDL_GetMouseState(&x, &y);
+
+        switch (event.button.button)
+        {
+        case SDL_BUTTON_LEFT:
+            destroyTile({x, y});
+            break;
+
+        case SDL_BUTTON_RIGHT:
+            placeTile({x, y});
+            break;
+        }
+        break;
     }
 }
 
@@ -68,12 +84,14 @@ void PlayerBehaviour::jump()
     }
 }
 
-void PlayerBehaviour::destroyTile()
+void PlayerBehaviour::destroyTile(Vector mousePos)
 {
-    Transform *transform = owner->getComponent<Transform>();
+    Vector tilePos = owner->game->getTilePos(mousePos.x, mousePos.y);
+    owner->game->tiles[tilePos.y][tilePos.x] = Tile::Air;
 }
 
-void PlayerBehaviour::placeTile()
+void PlayerBehaviour::placeTile(Vector mousePos)
 {
-    Transform *transform = owner->getComponent<Transform>();
+    Vector tilePos = owner->game->getTilePos(mousePos.x, mousePos.y);
+    owner->game->tiles[tilePos.y][tilePos.x] = Tile::Dirt;
 }
