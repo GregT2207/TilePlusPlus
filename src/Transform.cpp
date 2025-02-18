@@ -15,6 +15,9 @@ void Transform::update(float deltaTime, int gravity, int worldHeight)
 
 void Transform::applyGravity(float deltaTime, int gravity, int worldHeight)
 {
+    if (SDL_GetTicks64() < 3000)
+        return;
+
     if ((position.y + size.y / 2) >= worldHeight)
     {
         position.y = worldHeight - (size.y / 2);
