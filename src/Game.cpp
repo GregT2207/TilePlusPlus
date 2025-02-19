@@ -7,7 +7,7 @@
 #include "PlayerBehaviour.hpp"
 #include "enums/Tile.hpp"
 
-Game::Game() : running(false), window(nullptr), renderer(nullptr), resourceManager(nullptr), gravity(10) {}
+Game::Game() : running(false), window(nullptr), renderer(nullptr), resourceManager(nullptr), gravity(2000) {}
 Game::~Game()
 {
     cleanUp();
@@ -82,7 +82,7 @@ bool Game::init(const string &title, int width, int height, bool fullscreen)
         cerr << "Failed to load music! SDL_mixer Error: " << Mix_GetError() << endl;
         return false;
     }
-    Mix_PlayMusic(music, -1);
+    // Mix_PlayMusic(music, -1);
 
     // Set up environment
     gravity = 2000;
@@ -97,6 +97,7 @@ void Game::createTiles()
 {
     tileTextures.insert({Tile::Dirt, resourceManager.loadTexture("sprites/dirt.jpg")});
     tileTextures.insert({Tile::Grass, resourceManager.loadTexture("sprites/grass.jpg")});
+    tileTextures.insert({Tile::Water, resourceManager.loadTexture("sprites/water.png")});
 
     vector<Tile> airRow = {};
     vector<Tile> grassRow = {};
@@ -104,7 +105,7 @@ void Game::createTiles()
     for (int i = 0; i < 45; i++)
     {
         airRow.push_back(Tile::Air);
-        grassRow.push_back(Tile::Grass);
+        grassRow.push_back(rand() % 3 == 1 ? Tile::Water : Tile::Grass);
         dirtRow.push_back(Tile::Dirt);
     }
 
@@ -190,45 +191,70 @@ void Game::update()
     {
         gameObject->update(deltaTime, winWidth, winHeight, gravity);
 
-        Transform *transform = gameObject->getComponent<Transform>();
-        Collider *collider = gameObject->getComponent<Collider>();
-        if (transform && collider && !collider->isStatic)
+        handleCollisions(gameObject);
+    }
+}
+
+void Game::handleCollisions(GameObject *gameObject)
+{
+    Transform *transform = gameObject->getComponent<Transform>();
+    Collider *collider = gameObject->getComponent<Collider>();
+
+    if (transform && collider && !collider->isStatic)
+    {
+        // Handle collisions for game objects
+        for (auto &otherCollider : colliders)
         {
-            // Resolve collisions for game objects
-            for (auto &otherCollider : colliders)
+            if (collider == otherCollider)
             {
-                if (collider == otherCollider)
+                continue;
+            }
+
+            resolveCollisions(transform, collider, otherCollider->getBoundingBox());
+        }
+
+        // Handle collisions for tiles
+        BoundingBox boundingBox = collider->getBoundingBox();
+
+        int yRangeStart = ((boundingBox.y - (static_cast<int>(boundingBox.y) % tileSize)) / tileSize) - 2;
+        int yRangeEnd = ((boundingBox.y + boundingBox.h) - (static_cast<int>(boundingBox.y + boundingBox.h) % tileSize)) / tileSize + 1;
+        int xRangeStart = ((boundingBox.x - (static_cast<int>(boundingBox.x) % tileSize)) / tileSize) - 2;
+        int xRangeEnd = ((boundingBox.x + boundingBox.w) - (static_cast<int>(boundingBox.x + boundingBox.w) % tileSize)) / tileSize + 1;
+
+        float waterOverlap = 0.0f;
+
+        for (int y = yRangeStart; y < yRangeEnd; y++)
+        {
+            if (y >= tiles.size())
+                continue;
+
+            for (int x = xRangeStart; x < xRangeEnd; x++)
+            {
+                if (x >= tiles[y].size())
+                    continue;
+
+                if (tiles[y][x] == Tile::Air)
                 {
                     continue;
                 }
 
-                resolveCollisions(transform, collider, otherCollider->getBoundingBox());
-            }
+                BoundingBox tileBb = {x * tileSize, y * tileSize, tileSize, tileSize};
 
-            // Resolve collisions for tiles
-            BoundingBox boundingBox = collider->getBoundingBox();
-
-            int yRangeStart = ((boundingBox.y - (static_cast<int>(boundingBox.y) % tileSize)) / tileSize) - 2;
-            int yRangeEnd = ((boundingBox.y + boundingBox.h) - (static_cast<int>(boundingBox.y + boundingBox.h) % tileSize)) / tileSize + 1;
-            int xRangeStart = ((boundingBox.x - (static_cast<int>(boundingBox.x) % tileSize)) / tileSize) - 2;
-            int xRangeEnd = ((boundingBox.x + boundingBox.w) - (static_cast<int>(boundingBox.x + boundingBox.w) % tileSize)) / tileSize + 1;
-
-            for (int y = yRangeStart; y < yRangeEnd; y++)
-            {
-                if (y >= tiles.size())
-                    continue;
-
-                for (int x = xRangeStart; x < xRangeEnd; x++)
+                if (tiles[y][x] == Tile::Water)
                 {
-                    if (x >= tiles[y].size())
-                        continue;
-
-                    if (tiles[y][x] != Tile::Air)
-                    {
-                        resolveCollisions(transform, collider, {static_cast<float>(x * tileSize), static_cast<float>(y * tileSize), static_cast<float>(tileSize), static_cast<float>(tileSize)});
-                    }
+                    Vector overlap = collider->getOverlap(tileBb);
+                    waterOverlap = max(waterOverlap, overlap.y);
+                    continue;
                 }
+
+                resolveCollisions(transform, collider, tileBb);
             }
+        }
+
+        if (waterOverlap > 0)
+        {
+            float waterBuoyancy = 0.02f;
+            transform->addVelocityY(((waterOverlap > tileSize * 0.2f) ? -waterBuoyancy : -waterBuoyancy / 2) * gravity);
         }
     }
 }
@@ -247,6 +273,7 @@ void Game::resolveCollisions(Transform *transform, Collider *collider, BoundingB
     if (overlap.x == 0 && overlap.y == 0)
         return;
 
+    collider->setGrounded(overlap.y > 0);
     fabs(overlap.x) < fabs(overlap.y) ? resolveAxis('x', overlap.x) : resolveAxis('y', overlap.y);
 }
 

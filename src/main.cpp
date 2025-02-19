@@ -2,6 +2,8 @@
 
 int main(int argc, char *argv[])
 {
+    srand(time(0));
+
     Game game;
 
     if (!game.init("Greg's Game", 1440, 896, false))

@@ -6,4 +6,5 @@ enum class Tile
     Grass = 1,
     Dirt = 2,
     Stone = 3,
+    Water = 4,
 };

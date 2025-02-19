@@ -52,6 +52,7 @@ private:
 
     void createTiles();
     void createGameObjects();
+    void handleCollisions(GameObject *gameobject);
     void resolveCollisions(Transform *transform, Collider *collider, BoundingBox other);
     void renderTiles();
 };
