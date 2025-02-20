@@ -30,6 +30,7 @@ public:
     bool isRunning() const { return running; }
     Vector getTilePos(Vector worldPos) const { return {floor(worldPos.x / tileSize), floor(worldPos.y / tileSize)}; }
     Tile getTile(Vector tilePos) const { return tiles[tilePos.y][tilePos.x]; }
+    int getGravity() const { return gravity; }
 
     static constexpr float maxFallSpeed = 1000.0f;
 

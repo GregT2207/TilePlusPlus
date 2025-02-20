@@ -12,7 +12,7 @@ Collider::Collider(Vector size, Vector offset, bool isStatic)
 {
 }
 
-void Collider::update(float deltaTime, int gravity, int worldHeight)
+void Collider::update(float deltaTime)
 {
     debugColor = SDL_Color({0, 0, 255, 255});
 

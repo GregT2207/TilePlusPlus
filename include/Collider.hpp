@@ -9,7 +9,7 @@ class Collider : public Component
 public:
     Collider(Vector size, Vector offset = Vector{0.0f, 0.0f}, bool isStatic = false);
 
-    void update(float deltaTime, int gravity, int worldHeight) override;
+    void update(float deltaTime) override;
     void followTransform();
     void render(SDL_Renderer *renderer) override;
 

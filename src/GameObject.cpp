@@ -14,11 +14,11 @@ void GameObject::handleEvents(SDL_Event &event)
     }
 };
 
-void GameObject::update(float deltaTime, int worldWidth, int worldHeight, int gravity)
+void GameObject::update(float deltaTime)
 {
     for (auto component : components)
     {
-        component->update(deltaTime, gravity, worldHeight);
+        component->update(deltaTime);
     }
 }
 

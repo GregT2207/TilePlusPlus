@@ -189,7 +189,7 @@ void Game::update()
 
     for (auto &gameObject : gameObjects)
     {
-        gameObject->update(deltaTime, winWidth, winHeight, gravity);
+        gameObject->update(deltaTime);
 
         handleCollisions(gameObject);
     }

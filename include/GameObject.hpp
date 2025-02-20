@@ -15,7 +15,7 @@ public:
 
     void virtual init();
     void virtual handleEvents(SDL_Event &event);
-    void virtual update(float deltaTime, int worldWidth, int worldHeight, int gravity);
+    void virtual update(float deltaTime);
     void render(SDL_Renderer *renderer);
 
     std::string getName() const { return name; }

@@ -31,7 +31,7 @@ public:
     Vector getVelocity() const { return velocity; }
     Vector getSize() const { return size; }
 
-    void update(float deltaTime, int gravity, int worldHeight) override;
+    void update(float deltaTime) override;
 
 protected:
     Vector position;
@@ -39,5 +39,5 @@ protected:
     Vector size;
 
 private:
-    void applyGravity(float deltaTime, int gravity, int worldHeight);
+    void applyGravity(float deltaTime);
 };
