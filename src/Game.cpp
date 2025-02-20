@@ -253,8 +253,17 @@ void Game::handleCollisions(GameObject *gameObject)
 
         if (waterOverlap > 0)
         {
-            float waterBuoyancy = 0.02f;
-            transform->addVelocityY(((waterOverlap > tileSize * 0.2f) ? -waterBuoyancy : -waterBuoyancy / 2) * gravity);
+            float waterBuoyancy = 0.01f;
+            if ((waterOverlap < tileSize * 0.05) && transform->getVelocity().y <= 0)
+            {
+                waterBuoyancy *= 4.0f;
+            }
+            else if (waterOverlap > tileSize * 0.2f)
+            {
+                waterBuoyancy *= 2.0f;
+            }
+
+            transform->addVelocityY(-waterBuoyancy * gravity);
         }
     }
 }

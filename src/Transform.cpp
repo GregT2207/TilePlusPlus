@@ -6,7 +6,7 @@ Transform::Transform(Vector position, Vector velocity, Vector size) : position(p
 
 void Transform::update(float deltaTime, int gravity, int worldHeight)
 {
-    if (SDL_GetTicks64() >= 3000)
+    if (SDL_GetTicks64() >= 5000)
         applyGravity(deltaTime, gravity, worldHeight);
 
     position.x += velocity.x * deltaTime;
