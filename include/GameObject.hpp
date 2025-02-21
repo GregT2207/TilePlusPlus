@@ -10,10 +10,12 @@
 #include "EnemyBehaviour.hpp"
 #include "MovementBehaviour.hpp"
 
+using namespace std;
+
 class GameObject
 {
 public:
-    GameObject(Game *game, std::string name);
+    GameObject(Game *game, string name);
     ~GameObject();
 
     void virtual init();
@@ -21,7 +23,7 @@ public:
     void virtual update(float deltaTime);
     void render(SDL_Renderer *renderer);
 
-    std::string getName() const { return name; }
+    string getName() const { return name; }
 
     template <typename T, typename... Args>
     T *addComponent(Args &&...args)
@@ -29,6 +31,12 @@ public:
         T *comp = new T(std::forward<Args>(args)...);
         comp->owner = this;
         components.push_back(comp);
+
+        if constexpr (is_same_v<T, Collider>)
+        {
+            game->colliders.push_back(comp);
+        }
+
         return comp;
     }
 
@@ -42,6 +50,7 @@ public:
                 return casted;
             }
         }
+
         return nullptr;
     }
 

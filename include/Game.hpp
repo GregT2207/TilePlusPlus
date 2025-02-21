@@ -32,6 +32,7 @@ public:
     Tile getTile(Vector tilePos) const { return tiles[tilePos.y][tilePos.x]; }
     int getGravity() const { return gravity; }
     int getMaxFallSpeed() const { return maxFallSpeed; }
+    vector<Collider *> colliders;
 
 protected:
     ResourceManager resourceManager;
@@ -46,7 +47,6 @@ private:
     int gravity;
     int maxFallSpeed;
     vector<GameObject *> gameObjects;
-    vector<Collider *> colliders;
     vector<vector<Tile>> tiles;
     int tileSize = 32;
     map<Tile, SDL_Texture *> tileTextures;

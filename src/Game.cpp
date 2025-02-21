@@ -127,7 +127,7 @@ void Game::createGameObjects()
 {
     GameObject *player = new GameObject(this, "Greg");
     player->addComponent<Transform>(Vector{40.0f, 60.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
-    colliders.push_back(player->addComponent<Collider>(Vector{70.0f, 100.0f}));
+    player->addComponent<Collider>(Vector{70.0f, 100.0f});
     player->addComponent<SpriteRenderer>(resourceManager, "sprites/player.png");
     player->addComponent<PlayerBehaviour>();
     player->addComponent<MovementBehaviour>();
@@ -135,7 +135,7 @@ void Game::createGameObjects()
 
     GameObject *enemy = new GameObject(this, "Flobbage Jr.");
     enemy->addComponent<Transform>(Vector{1000.0f, 60.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
-    colliders.push_back(enemy->addComponent<Collider>(Vector{70.0f, 100.0f}));
+    enemy->addComponent<Collider>(Vector{70.0f, 100.0f});
     enemy->addComponent<EnemyBehaviour>(player);
     enemy->addComponent<MovementBehaviour>();
     enemy->addComponent<SpriteRenderer>(resourceManager, "sprites/enemy.png");
