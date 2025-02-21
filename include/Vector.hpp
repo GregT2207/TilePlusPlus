@@ -10,7 +10,7 @@ struct Vector
         return sqrt(x * x + y * y);
     }
 
-    Vector &normalized()
+    Vector &normalize()
     {
         float length = magnitude();
         if (length != 0)
@@ -22,10 +22,12 @@ struct Vector
         return *this;
     }
 
-    Vector &normalize()
+    Vector normalized() const
     {
-        this->normalize();
-        return *this;
+        Vector copy = *this;
+        copy.normalize();
+
+        return copy;
     }
 
     float x;
