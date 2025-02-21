@@ -20,12 +20,12 @@ void EnemyBehaviour::followPlayer()
     if (!transform)
         return;
 
-    Vector direction = (playerTransform->getPosition() - transform->getPosition()).normalized();
+    Vector direction = (playerTransform->getPosition() - transform->getPosition());
 
     if (direction.x != 0)
-        transform->addVelocityX(direction.x);
+        transform->addVelocityX(direction.normalized().x);
 
-    if (direction.y < 0)
+    if (direction.y < -(transform->getSize().y * 0.9f))
     {
         MovementBehaviour *mb = owner->getComponent<MovementBehaviour>();
         if (mb)
