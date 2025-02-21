@@ -21,9 +21,11 @@ void PlayerBehaviour::handleEvents(SDL_Event &event)
         {
         case SDLK_a:
             movementVelocity = -keyboardMovementSpeed;
+            transform->setDirection({1.0f, 1.0f});
             break;
         case SDLK_d:
             movementVelocity = keyboardMovementSpeed;
+            transform->setDirection({-1.0f, 1.0f});
             break;
         case SDLK_SPACE:
             if (mb)

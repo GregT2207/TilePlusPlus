@@ -31,6 +31,25 @@ struct Vector
         return copy;
     }
 
+    Vector &sgn()
+    {
+        if (x != 0)
+            x = x > 0 ? 1.0f : -1.0f;
+
+        if (y != 0)
+            y = y > 0 ? 1.0f : -1.0f;
+
+        return *this;
+    }
+
+    Vector sgned() const
+    {
+        Vector copy = *this;
+        copy.sgn();
+
+        return copy;
+    }
+
     float x;
     float y;
 };

@@ -21,13 +21,13 @@ void SpriteRenderer::render(SDL_Renderer *renderer)
     Transform *transform = owner->getComponent<Transform>();
     Vector pos = transform->getPosition();
     Vector size = transform->getSize();
-    Vector vel = transform->getVelocity();
+    Vector dir = transform->getDirection();
 
     int left = static_cast<int>(pos.x - (size.x / 2));
     int top = static_cast<int>(pos.y - (size.y / 2));
 
     SDL_Rect dest = owner->game->getCamera()->getWorldPos({left, top, static_cast<int>(size.x), static_cast<int>(size.y)});
-    SDL_RenderCopyEx(renderer, texture, nullptr, &dest, 0, nullptr, vel.x < 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+    SDL_RenderCopyEx(renderer, texture, nullptr, &dest, 0, nullptr, dir.x > 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 
     std::string label = owner->getName();
     const int approxCharWidth = 8;
