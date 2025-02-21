@@ -6,7 +6,7 @@
 #include "GameObject.hpp"
 #include "enums/Tile.hpp"
 
-Game::Game() : running(false), window(nullptr), renderer(nullptr), resourceManager(nullptr), gravity(2000) {}
+Game::Game() : running(false), window(nullptr), renderer(nullptr), resourceManager(nullptr), gravity(20) {}
 Game::~Game()
 {
     cleanUp();
@@ -75,16 +75,15 @@ bool Game::init(const string &title, int width, int height, bool fullscreen)
         cerr << "SDL_mixer could not initialize! SDL_mixer Error: " << Mix_GetError() << endl;
         return false;
     }
-    Mix_Music *music = Mix_LoadMUS("../assets/audio/combat.wav");
+    Mix_Music *music = Mix_LoadMUS("../assets/audio/night.wav");
     if (!music)
     {
         cerr << "Failed to load music! SDL_mixer Error: " << Mix_GetError() << endl;
         return false;
     }
-    // Mix_PlayMusic(music, -1);
+    Mix_PlayMusic(music, -1);
 
     // Set up environment
-    gravity = 2000;
     createTiles();
     createGameObjects();
 

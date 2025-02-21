@@ -18,5 +18,5 @@ void Transform::applyGravity(float deltaTime)
     if (velocity.y >= Game::maxFallSpeed)
         return;
 
-    velocity.y += owner->game->getGravity() * deltaTime;
+    addVelocityY(owner->game->getGravity());
 }
