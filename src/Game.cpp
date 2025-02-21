@@ -6,7 +6,7 @@
 #include "GameObject.hpp"
 #include "enums/Tile.hpp"
 
-Game::Game() : running(false), window(nullptr), renderer(nullptr), resourceManager(nullptr), gravity(20) {}
+Game::Game() : running(false), window(nullptr), renderer(nullptr), resourceManager(nullptr), gravity(20), maxFallSpeed(1000) {}
 Game::~Game()
 {
     cleanUp();

@@ -31,8 +31,7 @@ public:
     Vector getTilePos(Vector worldPos) const { return {floor(worldPos.x / tileSize), floor(worldPos.y / tileSize)}; }
     Tile getTile(Vector tilePos) const { return tiles[tilePos.y][tilePos.x]; }
     int getGravity() const { return gravity; }
-
-    static constexpr float maxFallSpeed = 1000.0f;
+    int getMaxFallSpeed() const { return maxFallSpeed; }
 
 protected:
     ResourceManager resourceManager;
@@ -45,6 +44,7 @@ private:
     float deltaTime;
     unsigned int lastFrameTime;
     int gravity;
+    int maxFallSpeed;
     vector<GameObject *> gameObjects;
     vector<Collider *> colliders;
     vector<vector<Tile>> tiles;
