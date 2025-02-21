@@ -20,10 +20,10 @@ void PlayerBehaviour::handleEvents(SDL_Event &event)
         switch (event.key.keysym.sym)
         {
         case SDLK_a:
-            transform->setVelocityX(-movementSpeed);
+            movementVelocity = -keyboardMovementSpeed;
             break;
         case SDLK_d:
-            transform->setVelocityX(movementSpeed);
+            movementVelocity = keyboardMovementSpeed;
             break;
         case SDLK_SPACE:
             if (mb)
@@ -37,11 +37,11 @@ void PlayerBehaviour::handleEvents(SDL_Event &event)
         {
         case SDLK_a:
             if (transform->getVelocity().x < 0)
-                transform->setVelocityX(0);
+                movementVelocity = 0.0f;
             break;
         case SDLK_d:
             if (transform->getVelocity().x > 0)
-                transform->setVelocityX(0);
+                movementVelocity = 0.0f;
             break;
         }
         break;
@@ -50,7 +50,7 @@ void PlayerBehaviour::handleEvents(SDL_Event &event)
         if (event.caxis.axis == SDL_CONTROLLER_AXIS_LEFTX)
         {
             float movementNormalized = ((event.caxis.value >= 1000 || event.caxis.value <= -1000) ? event.caxis.value * 0.00005 : 0);
-            transform->setVelocityX(movementNormalized * movementSpeed);
+            movementVelocity = movementNormalized * keyboardMovementSpeed;
         }
         break;
 
@@ -71,6 +71,16 @@ void PlayerBehaviour::handleEvents(SDL_Event &event)
     case SDL_MOUSEMOTION:
         checkTileActions(event);
         break;
+    }
+}
+
+void PlayerBehaviour::update(float deltaTime)
+{
+    Transform *transform = owner->getComponent<Transform>();
+
+    if (transform)
+    {
+        transform->setVelocityX(movementVelocity);
     }
 }
 
