@@ -4,7 +4,6 @@
 #include <SDL2/SDL_mixer.h>
 #include "Game.hpp"
 #include "GameObject.hpp"
-#include "PlayerBehaviour.hpp"
 #include "enums/Tile.hpp"
 
 Game::Game() : running(false), window(nullptr), renderer(nullptr), resourceManager(nullptr), gravity(2000) {}
@@ -130,14 +129,16 @@ void Game::createGameObjects()
     GameObject *player = new GameObject(this, "Greg");
     player->addComponent<Transform>(Vector{40.0f, 60.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
     colliders.push_back(player->addComponent<Collider>(Vector{70.0f, 100.0f}));
-
     player->addComponent<SpriteRenderer>(resourceManager, "sprites/player.png");
     player->addComponent<PlayerBehaviour>();
+    player->addComponent<MovementBehaviour>();
     gameObjects.push_back(player);
 
     GameObject *enemy = new GameObject(this, "Flobbage Jr.");
     enemy->addComponent<Transform>(Vector{1000.0f, 60.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
     colliders.push_back(enemy->addComponent<Collider>(Vector{70.0f, 100.0f}));
+    enemy->addComponent<EnemyBehaviour>(player);
+    enemy->addComponent<MovementBehaviour>();
     enemy->addComponent<SpriteRenderer>(resourceManager, "sprites/enemy.png");
     gameObjects.push_back(enemy);
 
@@ -190,7 +191,6 @@ void Game::update()
     for (auto &gameObject : gameObjects)
     {
         gameObject->update(deltaTime);
-
         handleCollisions(gameObject);
     }
 }
@@ -254,11 +254,11 @@ void Game::handleCollisions(GameObject *gameObject)
         if (waterOverlap > 0)
         {
             float waterBuoyancy = 0.01f;
-            if ((waterOverlap < tileSize * 0.05) && transform->getVelocity().y <= 0)
+            if ((waterOverlap > tileSize * 0.1f) && (waterOverlap < tileSize * 0.2f) && transform->getVelocity().y <= 0)
             {
-                waterBuoyancy *= 4.0f;
+                waterBuoyancy *= 3.0f;
             }
-            else if (waterOverlap > tileSize * 0.2f)
+            else if (waterOverlap >= tileSize * 0.2f)
             {
                 waterBuoyancy *= 2.0f;
             }
@@ -282,7 +282,9 @@ void Game::resolveCollisions(Transform *transform, Collider *collider, BoundingB
     if (overlap.x == 0 && overlap.y == 0)
         return;
 
-    collider->setGrounded(overlap.y > 0);
+    if (overlap.y > 0)
+        collider->setGrounded(true);
+
     fabs(overlap.x) < fabs(overlap.y) ? resolveAxis('x', overlap.x) : resolveAxis('y', overlap.y);
 }
 

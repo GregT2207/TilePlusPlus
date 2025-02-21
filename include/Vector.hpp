@@ -10,10 +10,22 @@ struct Vector
         return sqrt(x * x + y * y);
     }
 
-    Vector normalize()
+    Vector &normalized()
     {
-        float length = sqrt(x * x + y * y);
-        return {x / length, y / length};
+        float length = magnitude();
+        if (length != 0)
+        {
+            x /= length;
+            y /= length;
+        }
+
+        return *this;
+    }
+
+    Vector &normalize()
+    {
+        this->normalize();
+        return *this;
     }
 
     float x;

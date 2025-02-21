@@ -1,6 +1,7 @@
 #include "PlayerBehaviour.hpp"
 #include "Component.hpp"
 #include "GameObject.hpp"
+#include "MovementBehaviour.hpp"
 
 class Transform;
 class Collider;
@@ -10,6 +11,8 @@ void PlayerBehaviour::handleEvents(SDL_Event &event)
     Transform *transform = owner->getComponent<Transform>();
     if (!transform)
         return;
+
+    MovementBehaviour *mb = owner->getComponent<MovementBehaviour>();
 
     switch (event.type)
     {
@@ -23,7 +26,8 @@ void PlayerBehaviour::handleEvents(SDL_Event &event)
             transform->setVelocityX(movementSpeed);
             break;
         case SDLK_SPACE:
-            jump();
+            if (mb)
+                mb->jump();
             break;
         }
         break;
@@ -51,8 +55,14 @@ void PlayerBehaviour::handleEvents(SDL_Event &event)
         break;
 
     case SDL_CONTROLLERBUTTONDOWN:
-        if (event.cbutton.button == SDL_CONTROLLER_BUTTON_A)
-            jump();
+        switch (event.cbutton.button)
+        {
+        case SDL_CONTROLLER_BUTTON_A:
+            if (mb)
+                mb->jump();
+            break;
+        }
+
         break;
 
     case SDL_MOUSEBUTTONDOWN:
@@ -78,17 +88,6 @@ void PlayerBehaviour::checkTileActions(SDL_Event &event)
     case SDL_BUTTON_RIGHT:
         placeTile({x, y});
         break;
-    }
-}
-
-void PlayerBehaviour::jump()
-{
-    Transform *transform = owner->getComponent<Transform>();
-    Collider *collider = owner->getComponent<Collider>();
-
-    if (transform && collider && collider->isGrounded())
-    {
-        transform->setVelocityY(-jumpPower);
     }
 }
 
