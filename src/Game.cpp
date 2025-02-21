@@ -327,10 +327,8 @@ void Game::renderTiles()
         for (int x = 0; x < tiles[y].size(); x++)
         {
             SDL_Texture *tileTexture = tileTextures[tiles[y][x]];
-
             if (tileTexture)
             {
-
                 SDL_Rect tileRect = {x * tileSize, y * tileSize, tileSize, tileSize};
                 SDL_RenderCopy(renderer, tileTexture, nullptr, &tileRect);
             }
