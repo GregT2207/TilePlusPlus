@@ -136,9 +136,9 @@ void Game::createGameObjects()
     GameObject *enemy = new GameObject(this, "Flobbage Jr.");
     enemy->addComponent<Transform>(Vector{1000.0f, 60.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
     enemy->addComponent<Collider>(Vector{70.0f, 100.0f});
+    enemy->addComponent<SpriteRenderer>(resourceManager, "sprites/enemy.png");
     enemy->addComponent<EnemyBehaviour>(player);
     enemy->addComponent<MovementBehaviour>();
-    enemy->addComponent<SpriteRenderer>(resourceManager, "sprites/enemy.png");
     gameObjects.push_back(enemy);
 
     for (auto &gameObject : gameObjects)
@@ -276,8 +276,18 @@ void Game::resolveCollisions(Transform *transform, Collider *collider, BoundingB
 {
     auto resolveAxis = [transform, collider](char axis, float overlap = 0.0f) -> void
     {
-        axis == 'x' ? transform->addX(-overlap) : transform->addY(-overlap);
-        axis == 'x' ? transform->setVelocityX(0) : transform->setVelocityY(0);
+        if (axis == 'x')
+        {
+            transform->addX(-overlap);
+            if ((overlap < 0 && transform->getVelocity().x < 0) || (overlap > 0 && transform->getVelocity().x > 0))
+                transform->setVelocityX(0);
+        }
+        else
+        {
+            transform->addY(-overlap);
+            if ((overlap < 0 && transform->getVelocity().y < 0) || (overlap > 0 && transform->getVelocity().y > 0))
+                transform->setVelocityY(0);
+        }
 
         collider->followTransform();
     };
