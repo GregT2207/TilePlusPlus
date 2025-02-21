@@ -4,8 +4,9 @@
 #include <vector>
 #include <map>
 #include "Vector.hpp"
-#include "enums/Tile.hpp"
+#include "Camera.hpp"
 #include "ResourceManager.hpp"
+#include "enums/Tile.hpp"
 
 using namespace std;
 
@@ -28,6 +29,7 @@ public:
     void cleanUp();
 
     bool isRunning() const { return running; }
+    Camera *getCamera() const { return camera; }
     Vector getTilePos(Vector worldPos) const { return {floor(worldPos.x / tileSize), floor(worldPos.y / tileSize)}; }
     Tile getTile(Vector tilePos) const { return tiles[tilePos.y][tilePos.x]; }
     int getGravity() const { return gravity; }
@@ -46,6 +48,7 @@ private:
     unsigned int lastFrameTime;
     int gravity;
     int maxFallSpeed;
+    Camera *camera;
     vector<GameObject *> gameObjects;
     vector<vector<Tile>> tiles;
     int tileSize = 32;

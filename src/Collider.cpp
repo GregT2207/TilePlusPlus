@@ -5,7 +5,7 @@
 
 using namespace std;
 
-bool Collider::debug = true;
+bool Collider::debug = false;
 
 Collider::Collider(Vector size, Vector offset, bool isStatic)
     : size(size), offset(offset), isStatic(isStatic)
@@ -36,7 +36,7 @@ void Collider::render(SDL_Renderer *renderer)
     {
         BoundingBox box = getBoundingBox();
         SDL_SetRenderDrawColor(renderer, debugColor.r, debugColor.g, debugColor.b, debugColor.a);
-        SDL_Rect rect = {static_cast<int>(box.x), static_cast<int>(box.y), static_cast<int>(box.w), static_cast<int>(box.h)};
+        SDL_Rect rect = owner->game->getCamera()->getWorldPos({static_cast<int>(box.x), static_cast<int>(box.y), static_cast<int>(box.w), static_cast<int>(box.h)});
         SDL_RenderDrawRect(renderer, &rect);
     }
 }

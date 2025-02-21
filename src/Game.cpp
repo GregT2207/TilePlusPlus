@@ -84,6 +84,7 @@ bool Game::init(const string &title, int width, int height, bool fullscreen)
     // Mix_PlayMusic(music, -1);
 
     // Set up environment
+    camera = new Camera(width, height);
     createTiles();
     createGameObjects();
 
@@ -132,6 +133,7 @@ void Game::createGameObjects()
     player->addComponent<PlayerBehaviour>();
     player->addComponent<MovementBehaviour>();
     gameObjects.push_back(player);
+    camera->attach(player);
 
     GameObject *enemy = new GameObject(this, "Flobbage Jr.");
     enemy->addComponent<Transform>(Vector{1000.0f, 60.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
@@ -329,7 +331,7 @@ void Game::renderTiles()
             SDL_Texture *tileTexture = tileTextures[tiles[y][x]];
             if (tileTexture)
             {
-                SDL_Rect tileRect = {x * tileSize, y * tileSize, tileSize, tileSize};
+                SDL_Rect tileRect = camera->getWorldPos({x * tileSize, y * tileSize, tileSize, tileSize});
                 SDL_RenderCopy(renderer, tileTexture, nullptr, &tileRect);
             }
         }

@@ -89,14 +89,17 @@ void PlayerBehaviour::checkTileActions(SDL_Event &event)
     int x, y;
     SDL_GetMouseState(&x, &y);
 
+    Vector offsetPos = owner->game->getCamera()->getScreenPos({x, y});
+    SDL_Log("Offset Position: (%f, %f)", offsetPos.x, offsetPos.y);
+
     switch (event.button.button)
     {
     case SDL_BUTTON_LEFT:
-        destroyTile({x, y});
+        destroyTile(offsetPos);
         break;
 
     case SDL_BUTTON_RIGHT:
-        placeTile({x, y});
+        placeTile(offsetPos);
         break;
     }
 }
