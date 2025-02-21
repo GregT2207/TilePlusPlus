@@ -6,7 +6,7 @@
 #include "GameObject.hpp"
 #include "enums/Tile.hpp"
 
-Game::Game() : running(false), window(nullptr), renderer(nullptr), resourceManager(nullptr), gravity(20), maxFallSpeed(1000) {}
+Game::Game() : running(false), window(nullptr), renderer(nullptr), resourceManager(nullptr), gravity(2000), maxFallSpeed(1000) {}
 Game::~Game()
 {
     cleanUp();
@@ -81,7 +81,7 @@ bool Game::init(const string &title, int width, int height, bool fullscreen)
         cerr << "Failed to load music! SDL_mixer Error: " << Mix_GetError() << endl;
         return false;
     }
-    Mix_PlayMusic(music, -1);
+    // Mix_PlayMusic(music, -1);
 
     // Set up environment
     createTiles();
@@ -267,7 +267,7 @@ void Game::handleCollisions(GameObject *gameObject)
                 waterBuoyancy = defaultBuoyancy;
             }
 
-            transform->addVelocityY(-waterBuoyancy * gravity);
+            transform->addVelocityY(-waterBuoyancy * gravity * 0.01f);
         }
     }
 }
