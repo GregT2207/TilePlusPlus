@@ -16,7 +16,6 @@ void Collider::update(float deltaTime)
 {
     debugColor = SDL_Color({0, 0, 255, 255});
 
-    grounded = false;
     followTransform();
 }
 

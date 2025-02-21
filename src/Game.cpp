@@ -202,6 +202,8 @@ void Game::handleCollisions(GameObject *gameObject)
 
     if (transform && collider && !collider->isStatic)
     {
+        collider->setGrounded(false);
+
         // Handle collisions for game objects
         for (auto &otherCollider : colliders)
         {
