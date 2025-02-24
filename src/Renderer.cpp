@@ -27,16 +27,27 @@ int Renderer::renderClear()
     return SDL_RenderClear(sdlRenderer);
 }
 
-int Renderer::renderDrawRect(SDL_Rect rect)
+int Renderer::renderDrawRect(SDL_Rect rect, bool fixed)
 {
+    if (fixed)
+    {
+        return SDL_RenderDrawRect(sdlRenderer, &rect);
+    }
+
     SDL_Rect offsetRect = game->getCamera()->getWorldPos(rect);
     return SDL_RenderDrawRect(sdlRenderer, &offsetRect);
 }
 
 int Renderer::renderCopy(SDL_Texture *texture,
                          SDL_Rect srcRect,
-                         SDL_Rect destRect)
+                         SDL_Rect destRect,
+                         bool fixed)
 {
+    if (fixed)
+    {
+        return SDL_RenderCopy(sdlRenderer, texture, &srcRect, &destRect);
+    }
+
     SDL_Rect *srcRectPtr = srcRect.w == -1 && srcRect.h == -1 ? nullptr : &srcRect;
     SDL_Rect *offsetDestRectPtr = nullptr;
     if (destRect.w != -1 && destRect.h != -1)
@@ -53,8 +64,14 @@ int Renderer::renderCopyEx(SDL_Texture *texture,
                            SDL_Rect destRect,
                            const double angle,
                            const SDL_Point *center,
-                           const SDL_RendererFlip flip)
+                           const SDL_RendererFlip flip,
+                           bool fixed)
 {
+    if (fixed)
+    {
+        return SDL_RenderCopyEx(sdlRenderer, texture, &srcRect, &destRect, angle, center, flip);
+    }
+
     SDL_Rect *srcRectPtr = srcRect.w == -1 && srcRect.h == -1 ? nullptr : &srcRect;
     SDL_Rect *offsetDestRectPtr = nullptr;
     if (destRect.w != -1 && destRect.h != -1)
@@ -66,8 +83,13 @@ int Renderer::renderCopyEx(SDL_Texture *texture,
     return SDL_RenderCopyEx(sdlRenderer, texture, srcRectPtr, offsetDestRectPtr, angle, center, flip);
 }
 
-int Renderer::drawString(int x, int y, const char *s)
+int Renderer::drawString(int x, int y, const char *s, bool fixed)
 {
+    if (fixed)
+    {
+        return SDLTest_DrawString(sdlRenderer, x, y, s);
+    }
+
     Vector offsetPos = game->getCamera()->getWorldPos(Vector({x, y}));
     return SDLTest_DrawString(sdlRenderer, offsetPos.x, offsetPos.y, s);
 }

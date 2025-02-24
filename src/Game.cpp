@@ -305,8 +305,8 @@ void Game::render()
     renderer->renderClear();
     renderer->renderCopy(background, {-1, -1, -1, -1}, {-1, -1, -1, -1});
     renderer->setRenderDrawColor(255, 0, 0, 255);
-    renderer->drawString(10, 10, "Greg's Game");
-    renderer->drawString(10, 40, (std::to_string(static_cast<int>(round(1.0f / deltaTime))) + "FPS").c_str());
+    renderer->drawString(10, 10, "Greg's Game", true);
+    renderer->drawString(10, 40, (std::to_string(static_cast<int>(round(1.0f / deltaTime))) + "FPS").c_str(), true);
 
     renderTiles();
     for (auto &gameObject : gameObjects)

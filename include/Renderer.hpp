@@ -16,17 +16,19 @@ public:
                            Uint8 a);
     void renderPresent();
     int renderClear();
-    int renderDrawRect(SDL_Rect rect);
+    int renderDrawRect(SDL_Rect rect, bool fixed = false);
     int renderCopy(SDL_Texture *texture,
                    SDL_Rect srcRect,
-                   SDL_Rect dstRect);
+                   SDL_Rect dstRect,
+                   bool fixed = false);
     int renderCopyEx(SDL_Texture *texture,
                      SDL_Rect srcRect,
                      SDL_Rect dstRect,
                      const double angle,
                      const SDL_Point *center,
-                     const SDL_RendererFlip flip);
-    int drawString(int x, int y, const char *s);
+                     const SDL_RendererFlip flip,
+                     bool fixed = false);
+    int drawString(int x, int y, const char *s, bool fixed = false);
 
 private:
     Game *game;
