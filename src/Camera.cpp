@@ -28,5 +28,6 @@ Vector Camera::getWorldPos(Vector vector) const
 SDL_Rect Camera::getWorldPos(SDL_Rect rect) const
 {
     Vector offsetPos = getWorldPos(Vector({rect.x, rect.y}));
+
     return {static_cast<int>(offsetPos.x), static_cast<int>(offsetPos.y), rect.w, rect.h};
 }

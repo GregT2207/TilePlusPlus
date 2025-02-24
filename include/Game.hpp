@@ -12,6 +12,8 @@
 using namespace std;
 
 class BoundingBox;
+class Renderer;
+class ResourceManager;
 class GameObject;
 class Transform;
 class Collider;
@@ -40,7 +42,7 @@ public:
     vector<Collider *> colliders;
 
 protected:
-    ResourceManager resourceManager;
+    ResourceManager *resourceManager;
 
 private:
     bool running;

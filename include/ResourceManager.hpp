@@ -4,6 +4,8 @@
 #include <string>
 #include "Renderer.hpp"
 
+class Renderer;
+
 class ResourceManager
 {
 public:
