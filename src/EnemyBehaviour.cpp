@@ -28,7 +28,7 @@ void EnemyBehaviour::followPlayer()
     if (direction.y < -(transform->getSize().y * 0.9f))
     {
         MovementBehaviour *mb = owner->getComponent<MovementBehaviour>();
-        // if (mb)
-        //     mb->jump();
+        if (mb)
+            mb->jump();
     }
 }
