@@ -9,7 +9,7 @@ class SpriteRenderer : public Component
 public:
     SpriteRenderer(ResourceManager &resourceManager, const std::string &textureFilePath);
 
-    void render(SDL_Renderer *renderer);
+    void render();
 
 protected:
     SDL_Texture *texture;

@@ -11,7 +11,7 @@ public:
 
     virtual void handleEvents(SDL_Event &event) {}
     virtual void update(float deltaTime) {}
-    virtual void render(SDL_Renderer *renderer) {}
+    virtual void render() {}
 
     GameObject *owner;
 };

@@ -21,7 +21,7 @@ public:
     void virtual init();
     void virtual handleEvents(SDL_Event &event);
     void virtual update(float deltaTime);
-    void render(SDL_Renderer *renderer);
+    void render();
 
     string getName() const { return name; }
 

@@ -2,16 +2,17 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <string>
+#include "Renderer.hpp"
 
 class ResourceManager
 {
 public:
-    ResourceManager(SDL_Renderer *renderer);
+    ResourceManager(Renderer *renderer);
 
     bool init();
 
     SDL_Texture *loadTexture(const std::string &filePath);
 
 private:
-    SDL_Renderer *renderer;
+    Renderer *renderer;
 };

@@ -11,7 +11,7 @@ public:
 
     void update(float deltaTime) override;
     void followTransform();
-    void render(SDL_Renderer *renderer) override;
+    void render() override;
 
     BoundingBox getBoundingBox() const;
     Vector getOverlap(const BoundingBox b);

@@ -1,6 +1,6 @@
 #include "ResourceManager.hpp"
 
-ResourceManager::ResourceManager(SDL_Renderer *renderer) : renderer(renderer) {}
+ResourceManager::ResourceManager(Renderer *renderer) : renderer(renderer) {}
 
 bool ResourceManager::init()
 {
@@ -16,6 +16,6 @@ bool ResourceManager::init()
 
 SDL_Texture *ResourceManager::loadTexture(const std::string &filePath)
 {
-    SDL_Texture *texture = IMG_LoadTexture(renderer, ("../assets/" + filePath).c_str());
+    SDL_Texture *texture = IMG_LoadTexture(renderer->getSDLRenderer(), ("../assets/" + filePath).c_str());
     return texture;
 }

@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "Renderer.hpp"
 #include "Vector.hpp"
 #include "Camera.hpp"
 #include "ResourceManager.hpp"
@@ -34,6 +35,8 @@ public:
     Tile getTile(Vector tilePos) const { return tiles[tilePos.y][tilePos.x]; }
     int getGravity() const { return gravity; }
     int getMaxFallSpeed() const { return maxFallSpeed; }
+
+    Renderer *renderer;
     vector<Collider *> colliders;
 
 protected:
@@ -42,7 +45,6 @@ protected:
 private:
     bool running;
     SDL_Window *window;
-    SDL_Renderer *renderer;
     SDL_Texture *background;
     float deltaTime;
     unsigned int lastFrameTime;
