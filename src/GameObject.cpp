@@ -22,10 +22,10 @@ void GameObject::update(float deltaTime)
     }
 }
 
-void GameObject::render()
+void GameObject::render(SDL_Renderer *renderer)
 {
     for (auto component : components)
     {
-        component->render();
+        component->render(renderer);
     }
 }

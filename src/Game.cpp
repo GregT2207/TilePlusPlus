@@ -53,7 +53,12 @@ bool Game::init(const string &title, int width, int height, bool fullscreen)
     }
 
     // Create renderer
-    renderer = new Renderer(window);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    if (!renderer)
+    {
+        cerr << "Renderer could not be created! SDL Error: " << SDL_GetError() << endl;
+        return false;
+    }
 
     // Load resources
     resourceManager = ResourceManager(renderer);
@@ -301,21 +306,20 @@ void Game::resolveCollisions(Transform *transform, Collider *collider, BoundingB
 
 void Game::render()
 {
-    renderer->setRenderDrawColor(0, 0, 0, 255);
-    renderer->renderClear();
-    renderer->renderCopy(background, nullptr, nullptr);
-    renderer->setRenderDrawColor(255, 0, 0, 255);
-    renderer->drawString(10, 10, "Greg's Game", true);
-    renderer->drawString(10, 40, (std::to_string(static_cast<int>(round(1.0f / deltaTime))) + "FPS").c_str(), true);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+    SDL_RenderCopy(renderer, background, nullptr, nullptr);
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDLTest_DrawString(renderer, 10, 10, "Greg's Game");
+    SDLTest_DrawString(renderer, 10, 40, (std::to_string(static_cast<int>(round(1.0f / deltaTime))) + "FPS").c_str());
 
     renderTiles();
     for (auto &gameObject : gameObjects)
     {
-        gameObject->render();
+        gameObject->render(renderer);
     }
 
-    renderer->renderPresent();
-    ;
+    SDL_RenderPresent(renderer);
 }
 
 void Game::renderTiles()
@@ -328,7 +332,7 @@ void Game::renderTiles()
             if (tileTexture)
             {
                 SDL_Rect tileRect = camera->getWorldPos({x * tileSize, y * tileSize, tileSize, tileSize});
-                renderer->renderCopy(tileTexture, nullptr, &tileRect);
+                SDL_RenderCopy(renderer, tileTexture, nullptr, &tileRect);
             }
         }
     }
@@ -336,6 +340,12 @@ void Game::renderTiles()
 
 void Game::cleanUp()
 {
+    if (renderer)
+    {
+        SDL_DestroyRenderer(renderer);
+        renderer = nullptr;
+    }
+
     if (window)
     {
         SDL_DestroyWindow(window);

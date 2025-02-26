@@ -30,14 +30,14 @@ void Collider::followTransform()
     position = transform->getPosition() + offset;
 }
 
-void Collider::render()
+void Collider::render(SDL_Renderer *renderer)
 {
     if (debug)
     {
         BoundingBox box = getBoundingBox();
-        owner->game->renderer->setRenderDrawColor(debugColor.r, debugColor.g, debugColor.b, debugColor.a);
+        SDL_SetRenderDrawColor(renderer, debugColor.r, debugColor.g, debugColor.b, debugColor.a);
         SDL_Rect rect = owner->game->getCamera()->getWorldPos({static_cast<int>(box.x), static_cast<int>(box.y), static_cast<int>(box.w), static_cast<int>(box.h)});
-        owner->game->renderer->renderDrawRect(&rect);
+        SDL_RenderDrawRect(renderer, &rect);
     }
 }
 
