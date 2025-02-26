@@ -76,7 +76,7 @@ bool Game::init(const string &title, int width, int height, bool fullscreen)
         cerr << "Failed to load music! SDL_mixer Error: " << Mix_GetError() << endl;
         return false;
     }
-    Mix_PlayMusic(music, -1);
+    // Mix_PlayMusic(music, -1);
 
     // Set up environment
     camera = new Camera(this, width, height);
@@ -122,7 +122,7 @@ void Game::createTiles()
 void Game::createGameObjects()
 {
     GameObject *player = new GameObject(this, "Greg");
-    player->addComponent<Transform>(Vector{40.0f, 60.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
+    player->addComponent<Transform>(Vector{0.0f, 0.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
     player->addComponent<Collider>(Vector{70.0f, 100.0f});
     player->addComponent<SpriteRenderer>(resourceManager, "sprites/player.png");
     player->addComponent<PlayerBehaviour>();
