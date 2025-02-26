@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Renderer.hpp"
 
-Renderer::Renderer(Game *game, SDL_Window *window) : game(game)
+Renderer::Renderer(SDL_Window *window)
 {
     sdlRenderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (!sdlRenderer)

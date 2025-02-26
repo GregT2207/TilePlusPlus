@@ -53,16 +53,16 @@ bool Game::init(const string &title, int width, int height, bool fullscreen)
     }
 
     // Create renderer
-    renderer = new Renderer(this, window);
+    renderer = new Renderer(window);
 
     // Load resources
-    resourceManager = new ResourceManager(renderer);
-    if (!resourceManager->init())
+    resourceManager = ResourceManager(renderer);
+    if (!resourceManager.init())
     {
         cerr << "Resources could not load!" << endl;
         return false;
     }
-    background = resourceManager->loadTexture("backgrounds/background.png");
+    background = resourceManager.loadTexture("backgrounds/background.png");
 
     // Load audio
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
@@ -79,7 +79,7 @@ bool Game::init(const string &title, int width, int height, bool fullscreen)
     // Mix_PlayMusic(music, -1);
 
     // Set up environment
-    camera = new Camera(this, width, height);
+    camera = new Camera(width, height);
     createTiles();
     createGameObjects();
 
@@ -89,9 +89,9 @@ bool Game::init(const string &title, int width, int height, bool fullscreen)
 
 void Game::createTiles()
 {
-    tileTextures.insert({Tile::Dirt, resourceManager->loadTexture("sprites/dirt.jpg")});
-    tileTextures.insert({Tile::Grass, resourceManager->loadTexture("sprites/grass.jpg")});
-    tileTextures.insert({Tile::Water, resourceManager->loadTexture("sprites/water.png")});
+    tileTextures.insert({Tile::Dirt, resourceManager.loadTexture("sprites/dirt.jpg")});
+    tileTextures.insert({Tile::Grass, resourceManager.loadTexture("sprites/grass.jpg")});
+    tileTextures.insert({Tile::Water, resourceManager.loadTexture("sprites/water.png")});
 
     vector<Tile> airRow = {};
     vector<Tile> grassRow = {};
@@ -303,7 +303,7 @@ void Game::render()
 {
     renderer->setRenderDrawColor(0, 0, 0, 255);
     renderer->renderClear();
-    renderer->renderCopy(background, {-1, -1, -1, -1}, {-1, -1, -1, -1});
+    renderer->renderCopy(background, nullptr, nullptr);
     renderer->setRenderDrawColor(255, 0, 0, 255);
     renderer->drawString(10, 10, "Greg's Game", true);
     renderer->drawString(10, 40, (std::to_string(static_cast<int>(round(1.0f / deltaTime))) + "FPS").c_str(), true);
@@ -327,7 +327,8 @@ void Game::renderTiles()
             SDL_Texture *tileTexture = tileTextures[tiles[y][x]];
             if (tileTexture)
             {
-                renderer->renderCopy(tileTexture, {-1, -1, -1, -1}, {x * tileSize, y * tileSize, tileSize, tileSize});
+                SDL_Rect tileRect = camera->getWorldPos({x * tileSize, y * tileSize, tileSize, tileSize});
+                renderer->renderCopy(tileTexture, nullptr, &tileRect);
             }
         }
     }

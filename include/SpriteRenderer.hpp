@@ -7,7 +7,7 @@ class ResourceManager;
 class SpriteRenderer : public Component
 {
 public:
-    SpriteRenderer(ResourceManager *resourceManager, const std::string &textureFilePath);
+    SpriteRenderer(ResourceManager &resourceManager, const std::string &textureFilePath);
 
     void render();
 

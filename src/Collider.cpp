@@ -36,7 +36,8 @@ void Collider::render()
     {
         BoundingBox box = getBoundingBox();
         owner->game->renderer->setRenderDrawColor(debugColor.r, debugColor.g, debugColor.b, debugColor.a);
-        owner->game->renderer->renderDrawRect({static_cast<int>(box.x), static_cast<int>(box.y), static_cast<int>(box.w), static_cast<int>(box.h)});
+        SDL_Rect rect = owner->game->getCamera()->getWorldPos({static_cast<int>(box.x), static_cast<int>(box.y), static_cast<int>(box.w), static_cast<int>(box.h)});
+        owner->game->renderer->renderDrawRect(&rect);
     }
 }
 
