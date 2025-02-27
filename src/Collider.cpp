@@ -2,10 +2,11 @@
 #include "Component.hpp"
 #include "GameObject.hpp"
 #include "PlayerBehaviour.hpp"
+#include "Camera.hpp"
 
 using namespace std;
 
-bool Collider::debug = false;
+bool Collider::debug = true;
 
 Collider::Collider(Vector size, Vector offset, bool isStatic)
     : size(size), offset(offset), isStatic(isStatic)
@@ -34,23 +35,19 @@ void Collider::render(SDL_Renderer *renderer)
 {
     if (debug)
     {
-        BoundingBox box = getBoundingBox();
+        Camera *camera = owner->getComponent<Camera>();
+        if (!camera)
+            return;
+
         SDL_SetRenderDrawColor(renderer, debugColor.r, debugColor.g, debugColor.b, debugColor.a);
-        SDL_Rect rect = owner->game->getCamera()->getWorldPos({static_cast<int>(box.x), static_cast<int>(box.y), static_cast<int>(box.w), static_cast<int>(box.h)});
+        SDL_Rect rect = camera->worldRectToScreenRect(getBoundingBox());
         SDL_RenderDrawRect(renderer, &rect);
     }
 }
 
 BoundingBox Collider::getBoundingBox() const
 {
-    BoundingBox box;
-
-    box.x = (position.x - size.x / 2);
-    box.y = (position.y - size.y / 2);
-    box.w = (size.x);
-    box.h = (size.y);
-
-    return box;
+    return BoundingBox(position, size);
 }
 
 // Returns a positive (right/down) or negative (left/up) overlap, or 0s if none

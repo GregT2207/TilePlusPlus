@@ -4,7 +4,6 @@
 #include <vector>
 #include <map>
 #include "Vector.hpp"
-#include "Camera.hpp"
 #include "ResourceManager.hpp"
 #include "enums/Tile.hpp"
 
@@ -14,6 +13,7 @@ class BoundingBox;
 class GameObject;
 class Transform;
 class Collider;
+class Camera;
 
 class Game
 {
@@ -29,12 +29,12 @@ public:
     void cleanUp();
 
     bool isRunning() const { return running; }
-    Camera *getCamera() const { return camera; }
-    Vector getTilePos(Vector worldPos) const { return {floor(worldPos.x / tileSize), floor(worldPos.y / tileSize)}; }
+    Vector getTilePos(Vector worldPos) const { return {floor(worldPos.x / tileSize - tileMapOffset.x), floor(worldPos.y / tileSize - tileMapOffset.y)}; }
     Tile getTile(Vector tilePos) const { return tiles[tilePos.y][tilePos.x]; }
     int getGravity() const { return gravity; }
     int getMaxFallSpeed() const { return maxFallSpeed; }
     vector<Collider *> colliders;
+    vector<Camera *> cameras;
 
 protected:
     ResourceManager resourceManager;
@@ -48,10 +48,10 @@ private:
     unsigned int lastFrameTime;
     int gravity;
     int maxFallSpeed;
-    Camera *camera;
     vector<GameObject *> gameObjects;
     vector<vector<Tile>> tiles;
     int tileSize = 32;
+    Vector tileMapOffset = {-30, -12};
     map<Tile, SDL_Texture *> tileTextures;
 
     void createTiles();

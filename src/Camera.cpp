@@ -3,30 +3,42 @@
 
 class Transform;
 
-Vector Camera::getPos() const
+Vector Camera::getPosition() const
 {
-    if (!attachment)
-        return {0.0f, 0.0f};
-
-    Transform *transform = attachment->getComponent<Transform>();
+    Transform *transform = owner->getComponent<Transform>();
     if (!transform)
         return {0.0f, 0.0f};
 
     return transform->getPosition();
 }
 
-Vector Camera::getScreenPos(Vector vector) const
+void Camera::setZoom(float newZoom)
 {
-    return {vector.x + getPos().x - (width / 2), vector.y + getPos().y - (height / 2)};
+    zoom = newZoom;
+    width = originalWidth * zoom;
+    height = originalHeight * zoom;
 }
 
-Vector Camera::getWorldPos(Vector vector) const
+Vector Camera::screenPosToWorldPos(Vector screenPos) const
 {
-    return {vector.x - getPos().x + (width / 2), vector.y - getPos().y + (height / 2)};
+    Vector cameraWorldPos = getPosition();
+    Vector cameraScreenPos = Vector({width / 2, height / 2});
+    Vector difference = screenPos - cameraScreenPos;
+
+    return {cameraWorldPos.x + difference.x, cameraWorldPos.y + difference.y};
 }
 
-SDL_Rect Camera::getWorldPos(SDL_Rect rect) const
+Vector Camera::worldPosToScreenPos(Vector worldPos) const
 {
-    Vector offsetPos = getWorldPos(Vector({rect.x, rect.y}));
-    return {static_cast<int>(offsetPos.x), static_cast<int>(offsetPos.y), rect.w, rect.h};
+    Vector cameraWorldPos = getPosition();
+    Vector cameraScreenPos = Vector({width / 2, height / 2});
+    Vector difference = worldPos - cameraWorldPos;
+
+    return {cameraScreenPos.x + difference.x, cameraScreenPos.y + difference.y};
+}
+
+SDL_Rect Camera::worldRectToScreenRect(BoundingBox rect) const
+{
+    Vector screenPoint = worldPosToScreenPos({rect.x, rect.y});
+    return {static_cast<int>(screenPoint.x), static_cast<int>(screenPoint.y), static_cast<int>(rect.w * zoom), static_cast<int>(rect.h * zoom)};
 }

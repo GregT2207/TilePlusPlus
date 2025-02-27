@@ -1,24 +1,28 @@
 #pragma once
 #include <SDL2/SDL.h>
+#include "Component.hpp"
 #include "Vector.hpp"
 
+class Game;
 class GameObject;
+class BoundingBox;
 
-class Camera
+class Camera : public Component
 {
 public:
-    Camera(int width, int height, GameObject *attachment = nullptr) : width(width), height(height), attachment(attachment) {};
+    Camera(int width, int height) : originalWidth(width), originalHeight(height) { setZoom(zoom); }
 
-    void attach(GameObject *newAttachment) { attachment = newAttachment; }
-    Vector getPos() const;
-    Vector getScreenPos(Vector vector) const;
-    Vector getWorldPos(Vector vector) const;
-    SDL_Rect getWorldPos(SDL_Rect rect) const;
-    SDL_Rect offsetRect(SDL_Rect rect) const;
-
-    int width;
-    int height;
+    Vector screenPosToWorldPos(Vector screenPos) const;
+    Vector worldPosToScreenPos(Vector worldPos) const;
+    SDL_Rect worldRectToScreenRect(BoundingBox rect) const;
 
 private:
-    GameObject *attachment;
+    Vector getPosition() const;
+    void setZoom(float newZoom);
+
+    const int originalWidth;
+    const int originalHeight;
+    int width;
+    int height;
+    float zoom = 1.0f;
 };

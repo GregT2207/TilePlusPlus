@@ -2,6 +2,7 @@
 #include "Component.hpp"
 #include "GameObject.hpp"
 #include "MovementBehaviour.hpp"
+#include "Camera.hpp"
 
 class Transform;
 class Collider;
@@ -91,17 +92,20 @@ void PlayerBehaviour::checkTileActions(SDL_Event &event)
     int x, y;
     SDL_GetMouseState(&x, &y);
 
-    Vector offsetPos = owner->game->getCamera()->getScreenPos({x, y});
-    SDL_Log("Offset Position: (%f, %f)", offsetPos.x, offsetPos.y);
+    Camera *camera = owner->getComponent<Camera>();
+    if (!camera)
+        return;
+
+    Vector tilePos = camera->screenPosToWorldPos({x, y});
 
     switch (event.button.button)
     {
     case SDL_BUTTON_LEFT:
-        destroyTile(offsetPos);
+        destroyTile(tilePos);
         break;
 
     case SDL_BUTTON_RIGHT:
-        placeTile(offsetPos);
+        placeTile(tilePos);
         break;
     }
 }

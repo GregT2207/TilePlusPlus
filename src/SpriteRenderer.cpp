@@ -4,6 +4,7 @@
 #include "SpriteRenderer.hpp"
 #include "GameObject.hpp"
 #include "ResourceManager.hpp"
+#include "Camera.hpp"
 
 struct Vector;
 
@@ -23,15 +24,18 @@ void SpriteRenderer::render(SDL_Renderer *renderer)
     Vector size = transform->getSize();
     Vector dir = transform->getDirection();
 
-    int left = static_cast<int>(pos.x - (size.x / 2));
-    int top = static_cast<int>(pos.y - (size.y / 2));
+    float left = pos.x - (size.x / 2);
+    float top = pos.y - (size.y / 2);
 
-    SDL_Rect dest = owner->game->getCamera()->getWorldPos({left, top, static_cast<int>(size.x), static_cast<int>(size.y)});
-    SDL_RenderCopyEx(renderer, texture, nullptr, &dest, 0, nullptr, dir.x > 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+    for (Camera *camera : owner->game->cameras)
+    {
+        SDL_Rect dest = camera->worldRectToScreenRect({left, top, size.x, size.y});
+        SDL_RenderCopyEx(renderer, texture, nullptr, &dest, 0, nullptr, dir.x > 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 
-    std::string label = owner->getName();
-    const int approxCharWidth = 8;
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    SDL_Rect stringRect = owner->game->getCamera()->getWorldPos({static_cast<int>(pos.x - (label.size() * approxCharWidth / 2)), top - 20, 0, 0});
-    SDLTest_DrawString(renderer, stringRect.x, stringRect.y, label.c_str());
+        std::string label = owner->getName();
+        const int approxCharWidth = 8;
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        Vector stringPoint = camera->worldPosToScreenPos({pos.x - (label.size() * approxCharWidth / 2), pos.y - (size.y / 2) - 20});
+        SDLTest_DrawString(renderer, stringPoint.x, stringPoint.y, label.c_str());
+    }
 }

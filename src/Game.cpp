@@ -4,6 +4,8 @@
 #include <SDL2/SDL_mixer.h>
 #include "Game.hpp"
 #include "GameObject.hpp"
+#include "Collider.hpp"
+#include "Camera.hpp"
 #include "enums/Tile.hpp"
 
 Game::Game() : running(false), window(nullptr), renderer(nullptr), resourceManager(nullptr), gravity(2000), maxFallSpeed(1000) {}
@@ -84,7 +86,6 @@ bool Game::init(const string &title, int width, int height, bool fullscreen)
     // Mix_PlayMusic(music, -1);
 
     // Set up environment
-    camera = new Camera(width, height);
     createTiles();
     createGameObjects();
 
@@ -130,17 +131,17 @@ void Game::createGameObjects()
     player->addComponent<Transform>(Vector{0.0f, 0.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
     player->addComponent<Collider>(Vector{70.0f, 100.0f});
     player->addComponent<SpriteRenderer>(resourceManager, "sprites/player.png");
+    player->addComponent<Camera>(1440, 896);
     player->addComponent<PlayerBehaviour>();
     player->addComponent<MovementBehaviour>();
     gameObjects.push_back(player);
-    camera->attach(player);
 
     GameObject *enemy = new GameObject(this, "Flobbage Jr.");
     enemy->addComponent<Transform>(Vector{1000.0f, 60.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
-    enemy->addComponent<Collider>(Vector{70.0f, 100.0f});
+    // enemy->addComponent<Collider>(Vector{70.0f, 100.0f});
     enemy->addComponent<SpriteRenderer>(resourceManager, "sprites/enemy.png");
-    enemy->addComponent<EnemyBehaviour>(player);
-    enemy->addComponent<MovementBehaviour>();
+    // enemy->addComponent<EnemyBehaviour>(player);
+    // enemy->addComponent<MovementBehaviour>();
     gameObjects.push_back(enemy);
 
     for (auto &gameObject : gameObjects)
@@ -206,7 +207,7 @@ void Game::handleCollisions(GameObject *gameObject)
         collider->setGrounded(false);
 
         // Handle collisions for game objects
-        for (auto &otherCollider : colliders)
+        for (Collider *otherCollider : colliders)
         {
             if (collider == otherCollider)
             {
@@ -219,21 +220,21 @@ void Game::handleCollisions(GameObject *gameObject)
         // Handle collisions for tiles
         BoundingBox boundingBox = collider->getBoundingBox();
 
-        int yRangeStart = ((boundingBox.y - (static_cast<int>(boundingBox.y) % tileSize)) / tileSize) - 2;
-        int yRangeEnd = ((boundingBox.y + boundingBox.h) - (static_cast<int>(boundingBox.y + boundingBox.h) % tileSize)) / tileSize + 1;
-        int xRangeStart = ((boundingBox.x - (static_cast<int>(boundingBox.x) % tileSize)) / tileSize) - 2;
-        int xRangeEnd = ((boundingBox.x + boundingBox.w) - (static_cast<int>(boundingBox.x + boundingBox.w) % tileSize)) / tileSize + 1;
+        int yRangeStart = ((boundingBox.y - (static_cast<int>(boundingBox.y) % tileSize)) / tileSize) - 2 - tileMapOffset.y;
+        int yRangeEnd = ((boundingBox.y + boundingBox.h) - (static_cast<int>(boundingBox.y + boundingBox.h) % tileSize)) / tileSize + 1 - tileMapOffset.y;
+        int xRangeStart = ((boundingBox.x - (static_cast<int>(boundingBox.x) % tileSize)) / tileSize) - 2 - tileMapOffset.x;
+        int xRangeEnd = ((boundingBox.x + boundingBox.w) - (static_cast<int>(boundingBox.x + boundingBox.w) % tileSize)) / tileSize + 1 - tileMapOffset.x;
 
         float waterOverlap = 0.0f;
 
         for (int y = yRangeStart; y < yRangeEnd; y++)
         {
-            if (y >= tiles.size())
+            if (y < 0 || y >= tiles.size())
                 continue;
 
             for (int x = xRangeStart; x < xRangeEnd; x++)
             {
-                if (x >= tiles[y].size())
+                if (x < 0 || x >= tiles[y].size())
                     continue;
 
                 if (tiles[y][x] == Tile::Air)
@@ -241,7 +242,7 @@ void Game::handleCollisions(GameObject *gameObject)
                     continue;
                 }
 
-                BoundingBox tileBb = {x * tileSize, y * tileSize, tileSize, tileSize};
+                BoundingBox tileBb = {static_cast<int>((x + tileMapOffset.x) * tileSize), static_cast<int>((y + tileMapOffset.y) * tileSize), tileSize, tileSize};
 
                 if (tiles[y][x] == Tile::Water)
                 {
@@ -331,8 +332,11 @@ void Game::renderTiles()
             SDL_Texture *tileTexture = tileTextures[tiles[y][x]];
             if (tileTexture)
             {
-                SDL_Rect tileRect = camera->getWorldPos({x * tileSize, y * tileSize, tileSize, tileSize});
-                SDL_RenderCopy(renderer, tileTexture, nullptr, &tileRect);
+                for (Camera *camera : cameras)
+                {
+                    SDL_Rect tileRect = camera->worldRectToScreenRect({static_cast<int>((x + tileMapOffset.x) * tileSize), static_cast<int>((y + tileMapOffset.y) * tileSize), tileSize, tileSize});
+                    SDL_RenderCopy(renderer, tileTexture, nullptr, &tileRect);
+                }
             }
         }
     }

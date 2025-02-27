@@ -36,6 +36,10 @@ public:
         {
             game->colliders.push_back(comp);
         }
+        else if constexpr (is_same_v<T, Camera>)
+        {
+            game->cameras.push_back(comp);
+        }
 
         return comp;
     }
