@@ -128,7 +128,7 @@ void Game::createTiles()
 void Game::createGameObjects()
 {
     GameObject *player = new GameObject(this, "Greg");
-    player->addComponent<Transform>(Vector{0.0f, 0.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
+    player->addComponent<Transform>(Vector{0.0f, 0.0f}, Vector{10.0f, 10.0f}, Vector{70.0f, 100.0f});
     player->addComponent<Collider>(Vector{70.0f, 100.0f});
     player->addComponent<SpriteRenderer>(resourceManager, "sprites/player.png");
     player->addComponent<Camera>(1440, 896);
@@ -138,7 +138,7 @@ void Game::createGameObjects()
 
     GameObject *enemy = new GameObject(this, "Flobbage Jr.");
     enemy->addComponent<Transform>(Vector{1000.0f, 60.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
-    // enemy->addComponent<Collider>(Vector{70.0f, 100.0f});
+    enemy->addComponent<Collider>(Vector{70.0f, 100.0f});
     enemy->addComponent<SpriteRenderer>(resourceManager, "sprites/enemy.png");
     // enemy->addComponent<EnemyBehaviour>(player);
     // enemy->addComponent<MovementBehaviour>();
@@ -168,6 +168,11 @@ void Game::handleEvents()
     }
 }
 
+Vector Game::worldPosToTileIndices(Vector worldPos) const
+{
+    return {floor((worldPos.x - tileMapOffset.x * tileSize) / tileSize), floor((worldPos.y - tileMapOffset.y * tileSize) / tileSize)};
+}
+
 bool Game::setTile(Vector tilePos, Tile tile)
 {
     try
@@ -184,7 +189,7 @@ bool Game::setTile(Vector tilePos, Tile tile)
 void Game::update()
 {
     unsigned int currentFrameTime = SDL_GetTicks64();
-    deltaTime = (currentFrameTime - lastFrameTime) / 1000.0f;
+    deltaTime = min(0.1f, (currentFrameTime - lastFrameTime) / 1000.0f);
     lastFrameTime = currentFrameTime;
 
     int winWidth, winHeight;
@@ -312,7 +317,9 @@ void Game::render()
     SDL_RenderCopy(renderer, background, nullptr, nullptr);
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     SDLTest_DrawString(renderer, 10, 10, "Greg's Game");
-    SDLTest_DrawString(renderer, 10, 40, (std::to_string(static_cast<int>(round(1.0f / deltaTime))) + "FPS").c_str());
+    Vector playerPos = gameObjects[0]->getComponent<Transform>()->getPosition();
+    SDLTest_DrawString(renderer, 10, 40, (to_string(static_cast<int>(round(playerPos.x))) + " " + to_string(static_cast<int>(round(playerPos.y)))).c_str());
+    SDLTest_DrawString(renderer, 10, 70, (to_string(static_cast<int>(floor(1.0f / deltaTime))) + "FPS").c_str());
 
     renderTiles();
     for (auto &gameObject : gameObjects)

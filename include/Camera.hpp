@@ -10,19 +10,21 @@ class BoundingBox;
 class Camera : public Component
 {
 public:
-    Camera(int width, int height) : originalWidth(width), originalHeight(height) { setZoom(zoom); }
+    Camera(int width, int height) : originalWidth(width), originalHeight(height), width(width), height(height) {}
 
     Vector screenPosToWorldPos(Vector screenPos) const;
     Vector worldPosToScreenPos(Vector worldPos) const;
     SDL_Rect worldRectToScreenRect(BoundingBox rect) const;
 
 private:
+    void handleEvents(SDL_Event &event) override;
+    void render(SDL_Renderer *renderer) override;
     Vector getPosition() const;
-    void setZoom(float newZoom);
 
     const int originalWidth;
     const int originalHeight;
     int width;
     int height;
     float zoom = 1.0f;
+    float targetZoom = zoom;
 };

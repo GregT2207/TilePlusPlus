@@ -96,28 +96,28 @@ void PlayerBehaviour::checkTileActions(SDL_Event &event)
     if (!camera)
         return;
 
-    Vector tilePos = camera->screenPosToWorldPos({x, y});
+    Vector tileWorldPos = camera->screenPosToWorldPos({x, y});
 
     switch (event.button.button)
     {
     case SDL_BUTTON_LEFT:
-        destroyTile(tilePos);
+        destroyTile(tileWorldPos);
         break;
 
     case SDL_BUTTON_RIGHT:
-        placeTile(tilePos);
+        placeTile(tileWorldPos);
         break;
     }
 }
 
-void PlayerBehaviour::destroyTile(Vector mousePos)
+void PlayerBehaviour::destroyTile(Vector worldPos)
 {
-    owner->game->setTile(owner->game->getTilePos(mousePos), Tile::Air);
+    owner->game->setTile(owner->game->worldPosToTileIndices(worldPos), Tile::Air);
 }
 
-void PlayerBehaviour::placeTile(Vector mousePos)
+void PlayerBehaviour::placeTile(Vector worldPos)
 {
-    Vector tilePos = owner->game->getTilePos(mousePos);
+    Vector tilePos = owner->game->worldPosToTileIndices(worldPos);
 
     if (owner->game->getTile(tilePos) == Tile::Air)
         owner->game->setTile(tilePos, Tile::Dirt);

@@ -6,7 +6,7 @@
 
 using namespace std;
 
-bool Collider::debug = true;
+bool Collider::debug = false;
 
 Collider::Collider(Vector size, Vector offset, bool isStatic)
     : size(size), offset(offset), isStatic(isStatic)

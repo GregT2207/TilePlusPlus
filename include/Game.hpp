@@ -29,8 +29,8 @@ public:
     void cleanUp();
 
     bool isRunning() const { return running; }
-    Vector getTilePos(Vector worldPos) const { return {floor(worldPos.x / tileSize - tileMapOffset.x), floor(worldPos.y / tileSize - tileMapOffset.y)}; }
     Tile getTile(Vector tilePos) const { return tiles[tilePos.y][tilePos.x]; }
+    Vector worldPosToTileIndices(Vector worldPos) const;
     int getGravity() const { return gravity; }
     int getMaxFallSpeed() const { return maxFallSpeed; }
     vector<Collider *> colliders;
@@ -51,7 +51,7 @@ private:
     vector<GameObject *> gameObjects;
     vector<vector<Tile>> tiles;
     int tileSize = 32;
-    Vector tileMapOffset = {-30, -12};
+    Vector tileMapOffset = {-30, -10};
     map<Tile, SDL_Texture *> tileTextures;
 
     void createTiles();
