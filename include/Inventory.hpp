@@ -8,7 +8,7 @@ class Inventory : public Component
 public:
     Inventory();
 
-    Item *getItem() const { return items[activeItem]; }
+    Item *getItem() const { return activeItem < items.size() ? items[activeItem] : nullptr; }
     bool addItem(Item *newItem);
     void removeItem();
     void dropItem();
