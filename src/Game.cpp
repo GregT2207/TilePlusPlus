@@ -102,7 +102,7 @@ void Game::createTiles()
     vector<Tile> airRow = {};
     vector<Tile> grassRow = {};
     vector<Tile> dirtRow = {};
-    for (int i = 0; i < 45; i++)
+    for (int i = 0; i < 200; i++)
     {
         airRow.push_back(Tile::Air);
         grassRow.push_back(rand() % 3 == 1 ? Tile::Water : Tile::Grass);
@@ -119,7 +119,7 @@ void Game::createTiles()
         tiles.push_back(grassRow);
     }
 
-    for (int i = 0; i < 15; i++)
+    for (int i = 0; i < 30; i++)
     {
         tiles.push_back(dirtRow);
     }
