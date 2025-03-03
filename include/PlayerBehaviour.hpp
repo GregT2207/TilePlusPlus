@@ -1,5 +1,6 @@
 #pragma once
 #include "Component.hpp"
+#include "enums/Tile.hpp"
 
 class Vector;
 
@@ -12,9 +13,9 @@ public:
     void update(float deltaTime) override;
 
 protected:
-    void checkTileActions(SDL_Event &event);
-    void destroyTile(Vector mousePos);
-    void placeTile(Vector mousePos);
+    Vector getClickedWorldPos();
+    void useItem();
+    void placeTile(Vector mousePos, Tile tile);
 
     const int keyboardMovementSpeed = 300;
     float movementVelocity = 0.0f;

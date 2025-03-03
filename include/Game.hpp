@@ -49,6 +49,7 @@ private:
     int gravity;
     int maxFallSpeed;
     vector<GameObject *> gameObjects;
+    GameObject *player;
     vector<vector<Tile>> tiles;
     int tileSize = 32;
     Vector tileMapOffset = {-30, -10};
@@ -59,4 +60,5 @@ private:
     void handleCollisions(GameObject *gameobject);
     void resolveCollisions(Transform *transform, Collider *collider, BoundingBox other);
     void renderTiles();
+    void renderUi();
 };

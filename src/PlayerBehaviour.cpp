@@ -14,6 +14,7 @@ void PlayerBehaviour::handleEvents(SDL_Event &event)
         return;
 
     MovementBehaviour *mb = owner->getComponent<MovementBehaviour>();
+    Inventory *inv = owner->getComponent<Inventory>();
 
     switch (event.type)
     {
@@ -31,6 +32,46 @@ void PlayerBehaviour::handleEvents(SDL_Event &event)
         case SDLK_SPACE:
             if (mb)
                 mb->jump();
+            break;
+        case SDLK_1:
+            if (inv)
+                inv->activeItem = 0;
+            break;
+        case SDLK_2:
+            if (inv)
+                inv->activeItem = 1;
+            break;
+        case SDLK_3:
+            if (inv)
+                inv->activeItem = 2;
+            break;
+        case SDLK_4:
+            if (inv)
+                inv->activeItem = 3;
+            break;
+        case SDLK_5:
+            if (inv)
+                inv->activeItem = 4;
+            break;
+        case SDLK_6:
+            if (inv)
+                inv->activeItem = 5;
+            break;
+        case SDLK_7:
+            if (inv)
+                inv->activeItem = 6;
+            break;
+        case SDLK_8:
+            if (inv)
+                inv->activeItem = 7;
+            break;
+        case SDLK_9:
+            if (inv)
+                inv->activeItem = 8;
+            break;
+        case SDLK_0:
+            if (inv)
+                inv->activeItem = 9;
             break;
         }
         break;
@@ -69,10 +110,12 @@ void PlayerBehaviour::handleEvents(SDL_Event &event)
         break;
 
     case SDL_MOUSEBUTTONDOWN:
-        checkTileActions(event);
+        if (event.button.button == SDL_BUTTON_LEFT)
+            useItem();
         break;
     case SDL_MOUSEMOTION:
-        checkTileActions(event);
+        if (event.button.button == SDL_BUTTON_LEFT)
+            useItem();
         break;
     }
 }
@@ -87,38 +130,45 @@ void PlayerBehaviour::update(float deltaTime)
     }
 }
 
-void PlayerBehaviour::checkTileActions(SDL_Event &event)
+Vector PlayerBehaviour::getClickedWorldPos()
 {
     int x, y;
     SDL_GetMouseState(&x, &y);
 
     Camera *camera = owner->getComponent<Camera>();
     if (!camera)
+        return {0, 0};
+
+    return camera->screenPosToWorldPos({x, y});
+}
+
+void PlayerBehaviour::useItem()
+{
+    Inventory *inventory = owner->getComponent<Inventory>();
+    if (!inventory)
         return;
 
-    Vector tileWorldPos = camera->screenPosToWorldPos({x, y});
+    Item *item = inventory->getItem();
+    if (!item)
+        return;
 
-    switch (event.button.button)
+    if (item->tile)
     {
-    case SDL_BUTTON_LEFT:
-        destroyTile(tileWorldPos);
-        break;
+        placeTile(getClickedWorldPos(), item->tile.value());
+        return;
+    }
 
-    case SDL_BUTTON_RIGHT:
-        placeTile(tileWorldPos);
-        break;
+    if (item->name == "Pickaxe")
+    {
+        placeTile(getClickedWorldPos(), Tile::Air);
+        return;
     }
 }
 
-void PlayerBehaviour::destroyTile(Vector worldPos)
-{
-    owner->game->setTile(owner->game->worldPosToTileIndices(worldPos), Tile::Air);
-}
-
-void PlayerBehaviour::placeTile(Vector worldPos)
+void PlayerBehaviour::placeTile(Vector worldPos, Tile tile)
 {
     Vector tilePos = owner->game->worldPosToTileIndices(worldPos);
 
-    if (owner->game->getTile(tilePos) == Tile::Air)
-        owner->game->setTile(tilePos, Tile::Dirt);
+    if (tile == Tile::Air || owner->game->getTile(tilePos) == Tile::Air)
+        owner->game->setTile(tilePos, tile);
 }

@@ -9,6 +9,7 @@
 #include "PlayerBehaviour.hpp"
 #include "EnemyBehaviour.hpp"
 #include "MovementBehaviour.hpp"
+#include "Inventory.hpp"
 
 using namespace std;
 
