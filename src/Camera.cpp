@@ -59,14 +59,16 @@ Vector Camera::worldPosToScreenPos(Vector worldPos) const
     Vector cameraScreenPos = Vector({originalWidth / 2, originalHeight / 2});
     Vector difference = worldPos - cameraWorldPos;
 
-    return {cameraScreenPos.x + difference.x, cameraScreenPos.y + difference.y};
+    Vector newScreenPos = {cameraScreenPos.x + difference.x, cameraScreenPos.y + difference.y};
+    newScreenPos *= zoom;
+    newScreenPos += Vector({originalWidth * 0.5f, originalHeight * 0.5f}) * (1 - zoom);
+
+    return newScreenPos;
 }
 
 SDL_Rect Camera::worldRectToScreenRect(BoundingBox rect) const
 {
-    Vector screenPoint = worldPosToScreenPos({rect.x, rect.y});
-    screenPoint *= zoom;
-    screenPoint += Vector({originalWidth * 0.5f, originalHeight * 0.5f}) * (1 - zoom);
+    Vector newScreenPos = worldPosToScreenPos({rect.x, rect.y});
 
-    return {static_cast<int>(screenPoint.x), static_cast<int>(screenPoint.y), static_cast<int>(rect.w * zoom), static_cast<int>(rect.h * zoom)};
+    return {static_cast<int>(newScreenPos.x), static_cast<int>(newScreenPos.y), static_cast<int>(rect.w * zoom), static_cast<int>(rect.h * zoom)};
 }

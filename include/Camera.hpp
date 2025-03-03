@@ -16,6 +16,8 @@ public:
     Vector worldPosToScreenPos(Vector worldPos) const;
     SDL_Rect worldRectToScreenRect(BoundingBox rect) const;
 
+    float getZoom() const { return zoom; }
+
 private:
     void handleEvents(SDL_Event &event) override;
     void render(SDL_Renderer *renderer) override;

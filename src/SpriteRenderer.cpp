@@ -35,7 +35,7 @@ void SpriteRenderer::render(SDL_Renderer *renderer)
         std::string label = owner->getName();
         const int approxCharWidth = 8;
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        Vector stringPoint = camera->worldPosToScreenPos({pos.x - (label.size() * approxCharWidth / 2), pos.y - (size.y / 2) - 20});
+        Vector stringPoint = camera->worldPosToScreenPos({pos.x - (label.size() * approxCharWidth / camera->getZoom() / 2), pos.y - (size.y / 2) - 20});
         SDLTest_DrawString(renderer, stringPoint.x, stringPoint.y, label.c_str());
     }
 }
