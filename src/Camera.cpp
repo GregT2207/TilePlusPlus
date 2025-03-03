@@ -48,7 +48,7 @@ Vector Camera::screenPosToWorldPos(Vector screenPos) const
 {
     Vector cameraWorldPos = getPosition();
     Vector cameraScreenPos = Vector({originalWidth / 2, originalHeight / 2});
-    Vector difference = screenPos - cameraScreenPos;
+    Vector difference = (screenPos - cameraScreenPos) / zoom;
 
     return {cameraWorldPos.x + difference.x, cameraWorldPos.y + difference.y};
 }
