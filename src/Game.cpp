@@ -267,7 +267,7 @@ void Game::handleCollisions(GameObject *gameObject)
 
         if (waterOverlap > 0)
         {
-            const float defaultBuoyancy = 1.5f;
+            const float defaultBuoyancy = 2.0f;
             const float bobbingBuoyancy = defaultBuoyancy * 3.0f;
 
             float waterBuoyancy = 0.0f;
