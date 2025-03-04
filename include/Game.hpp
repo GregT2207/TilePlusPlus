@@ -43,7 +43,7 @@ private:
     bool running;
     SDL_Window *window;
     SDL_Renderer *renderer;
-    SDL_Texture *background;
+    vector<SDL_Texture *> backgrounds;
     float deltaTime;
     unsigned int lastFrameTime;
     int gravity;

@@ -70,7 +70,10 @@ bool Game::init(const string &title, int width, int height, bool fullscreen)
         cerr << "Resources could not load!" << endl;
         return false;
     }
-    background = resourceManager->loadTexture("backgrounds/background.png");
+
+    backgrounds.push_back(resourceManager->loadTexture("backgrounds/sky.png"));
+    backgrounds.push_back(resourceManager->loadTexture("backgrounds/mountains.png"));
+    backgrounds.push_back(resourceManager->loadTexture("backgrounds/clouds.png"));
 
     // Load audio
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
@@ -316,7 +319,12 @@ void Game::render()
 {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, background, nullptr, nullptr);
+
+    for (SDL_Texture *background : backgrounds)
+    {
+        SDL_RenderCopy(renderer, background, nullptr, nullptr);
+    }
+
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     SDLTest_DrawString(renderer, 10, 10, "Greg's Game");
     Vector playerPos = gameObjects[0]->getComponent<Transform>()->getPosition();
@@ -401,11 +409,6 @@ void Game::cleanUp()
     {
         SDL_DestroyWindow(window);
         window = nullptr;
-    }
-
-    if (background)
-    {
-        SDL_DestroyTexture(background);
     }
 
     SDL_Quit();

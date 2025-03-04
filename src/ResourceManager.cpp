@@ -16,6 +16,12 @@ bool ResourceManager::init()
 
 SDL_Texture *ResourceManager::loadTexture(const std::string &filePath)
 {
-    SDL_Texture *texture = IMG_LoadTexture(renderer, ("../assets/" + filePath).c_str());
+    std::string fullFilePath = ("../assets/" + filePath);
+    SDL_Texture *texture = IMG_LoadTexture(renderer, fullFilePath.c_str());
+    if (!texture)
+    {
+        SDL_Log("File %s not found", fullFilePath.c_str());
+    }
+
     return texture;
 }

@@ -158,7 +158,7 @@ void PlayerBehaviour::useItem()
         return;
     }
 
-    if (item->name == "Pickaxe")
+    if (item->name == "Cradle Picker")
     {
         placeTile(getClickedWorldPos(), Tile::Air);
         return;
