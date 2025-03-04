@@ -61,15 +61,16 @@ bool Game::init(const string &title, int width, int height, bool fullscreen)
         cerr << "Renderer could not be created! SDL Error: " << SDL_GetError() << endl;
         return false;
     }
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
     // Load resources
-    resourceManager = ResourceManager(renderer);
-    if (!resourceManager.init())
+    resourceManager = new ResourceManager(renderer);
+    if (!resourceManager->init())
     {
         cerr << "Resources could not load!" << endl;
         return false;
     }
-    background = resourceManager.loadTexture("backgrounds/background.png");
+    background = resourceManager->loadTexture("backgrounds/background.png");
 
     // Load audio
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
@@ -95,9 +96,9 @@ bool Game::init(const string &title, int width, int height, bool fullscreen)
 
 void Game::createTiles()
 {
-    tileTextures.insert({Tile::Dirt, resourceManager.loadTexture("sprites/dirt.jpg")});
-    tileTextures.insert({Tile::Grass, resourceManager.loadTexture("sprites/grass.jpg")});
-    tileTextures.insert({Tile::Water, resourceManager.loadTexture("sprites/water.png")});
+    tileTextures.insert({Tile::Dirt, resourceManager->loadTexture("sprites/dirt.jpg")});
+    tileTextures.insert({Tile::Grass, resourceManager->loadTexture("sprites/grass.jpg")});
+    tileTextures.insert({Tile::Water, resourceManager->loadTexture("sprites/water.png")});
 
     vector<Tile> airRow = {};
     vector<Tile> grassRow = {};
@@ -134,15 +135,15 @@ void Game::createGameObjects()
     player->addComponent<Camera>(1440, 896);
     player->addComponent<PlayerBehaviour>();
     player->addComponent<MovementBehaviour>();
-    player->addComponent<Inventory>();
+    player->addComponent<Inventory>(resourceManager);
     gameObjects.push_back(player);
 
     GameObject *enemy = new GameObject(this, "Flobbage Jr.");
     enemy->addComponent<Transform>(Vector{1000.0f, 60.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
     enemy->addComponent<Collider>(Vector{70.0f, 100.0f});
     enemy->addComponent<SpriteRenderer>(resourceManager, "sprites/enemy.png");
-    // enemy->addComponent<EnemyBehaviour>(player);
-    // enemy->addComponent<MovementBehaviour>();
+    enemy->addComponent<EnemyBehaviour>(player);
+    enemy->addComponent<MovementBehaviour>();
     gameObjects.push_back(enemy);
 
     for (auto *gameObject : gameObjects)
@@ -364,13 +365,24 @@ void Game::renderUi()
     std::vector<Item *> items = inv->getItems();
     for (int i = 0; i < 5; i++)
     {
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 80);
-        SDL_RenderDrawRect(renderer, &nextRect);
+        // Render squares around slots
+        if (i == inv->activeItem)
+        {
+            SDL_Rect outlineDestRect = {nextRect.x - 5, nextRect.y - 5, nextRect.w + 10, nextRect.h + 10};
+            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+            SDL_RenderFillRect(renderer, &outlineDestRect);
+        }
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 180);
+        SDL_RenderFillRect(renderer, &nextRect);
 
         if (i < items.size() && items[i] != nullptr)
         {
-            i == inv->activeItem ? SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255) : SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-            SDLTest_DrawString(renderer, nextRect.x + 20, nextRect.y + 40, items[i]->name.c_str());
+            // Render texture and name
+            SDL_Rect textureDestRect = {nextRect.x + 5, nextRect.y + 5, nextRect.w - 10, nextRect.h - 10};
+            SDL_RenderCopy(renderer, items[i]->getTexture(), nullptr, &textureDestRect);
+
+            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+            SDLTest_DrawString(renderer, nextRect.x + 5, nextRect.y + 30, items[i]->name.c_str());
         }
 
         nextRect.x += 110;

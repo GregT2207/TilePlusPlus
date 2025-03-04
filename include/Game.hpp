@@ -37,7 +37,7 @@ public:
     vector<Camera *> cameras;
 
 protected:
-    ResourceManager resourceManager;
+    ResourceManager *resourceManager;
 
 private:
     bool running;

@@ -1,11 +1,19 @@
 #pragma once
 #include "enums/Tile.hpp"
 
+using namespace std;
+
 class Item
 {
 public:
-    Item(std::string name, std::optional<Tile> tile = std::nullopt) : name(name), tile(tile) {};
+    Item(string name, SDL_Texture *texture, optional<Tile> tile = nullopt) : name(name), texture(texture), tile(tile) {};
 
-    std::string name;
-    std::optional<Tile> tile;
+    SDL_Texture *getTexture() const { return texture; }
+    optional<Tile> getTile() const { return tile; }
+
+    string name;
+
+private:
+    SDL_Texture *texture;
+    optional<Tile> tile;
 };

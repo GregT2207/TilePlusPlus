@@ -8,9 +8,9 @@
 
 struct Vector;
 
-SpriteRenderer::SpriteRenderer(ResourceManager &resourceManager, const std::string &textureFilePath)
+SpriteRenderer::SpriteRenderer(ResourceManager *resourceManager, const std::string &textureFilePath)
 {
-    texture = resourceManager.loadTexture(textureFilePath);
+    texture = resourceManager->loadTexture(textureFilePath);
     if (!texture)
     {
         std::cerr << "Failed to load texture: " << textureFilePath << std::endl;

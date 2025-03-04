@@ -152,9 +152,9 @@ void PlayerBehaviour::useItem()
     if (!item)
         return;
 
-    if (item->tile)
+    if (item->getTile())
     {
-        placeTile(getClickedWorldPos(), item->tile.value());
+        placeTile(getClickedWorldPos(), item->getTile().value());
         return;
     }
 
