@@ -9,7 +9,7 @@ Inventory::Inventory(ResourceManager *resourceManager) : resourceManager(resourc
     items.push_back(new Item("Cradle Picker", resourceManager->loadTexture("sprites/pickaxe.jpg")));
     items.push_back(new Item("Dirt", resourceManager->loadTexture("sprites/dirt.jpg"), Tile::Dirt));
     items.push_back(new Item("Grass", resourceManager->loadTexture("sprites/grass.jpg"), Tile::Grass));
-    items.push_back(new Item("Water", resourceManager->loadTexture("sprites/water.jpg"), Tile::Water));
+    items.push_back(new Item("Water", resourceManager->loadTexture("sprites/water.png"), Tile::Water));
 }
 
 // Returns true if item added or false if inventory is full
