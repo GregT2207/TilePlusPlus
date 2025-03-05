@@ -9,7 +9,7 @@ class Inventory : public Component
 public:
     Inventory(ResourceManager *resourceManager);
 
-    Item *getItem() const { return activeItem < items.size() ? items[activeItem] : nullptr; }
+    Item *getActiveItem() const { return activeItem < items.size() ? items[activeItem] : nullptr; }
     bool addItem(Item *newItem);
     void removeItem();
     void dropItem();

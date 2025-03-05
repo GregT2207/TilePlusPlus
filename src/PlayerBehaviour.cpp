@@ -23,11 +23,11 @@ void PlayerBehaviour::handleEvents(SDL_Event &event)
         {
         case SDLK_a:
             movementVelocity = -keyboardMovementSpeed;
-            transform->setDirection({1.0f, 1.0f});
+            transform->setDirection({-1.0f, 1.0f});
             break;
         case SDLK_d:
             movementVelocity = keyboardMovementSpeed;
-            transform->setDirection({-1.0f, 1.0f});
+            transform->setDirection({1.0f, 1.0f});
             break;
         case SDLK_SPACE:
             if (mb)
@@ -148,7 +148,7 @@ void PlayerBehaviour::useItem()
     if (!inventory)
         return;
 
-    Item *item = inventory->getItem();
+    Item *item = inventory->getActiveItem();
     if (!item)
         return;
 

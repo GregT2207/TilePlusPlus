@@ -16,6 +16,8 @@ public:
     Vector worldPosToScreenPos(Vector worldPos) const;
     SDL_Rect worldRectToScreenRect(BoundingBox rect) const;
 
+    int getOriginalWidth() const { return originalWidth; }
+    int getOriginalHeight() const { return originalHeight; }
     float getZoom() const { return zoom; }
 
 private:
