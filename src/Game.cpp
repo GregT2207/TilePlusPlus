@@ -317,20 +317,24 @@ void Game::resolveCollisions(Transform *transform, Collider *collider, BoundingB
 
 void Game::render()
 {
+    // Reset
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
+    // Background
     for (SDL_Texture *background : backgrounds)
     {
         SDL_RenderCopy(renderer, background, nullptr, nullptr);
     }
 
+    // Info
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     SDLTest_DrawString(renderer, 10, 10, "Greg's Game");
     Vector playerPos = gameObjects[0]->getComponent<Transform>()->getPosition();
     SDLTest_DrawString(renderer, 10, 40, (to_string((int)(round(playerPos.x))) + " " + to_string((int)(round(playerPos.y)))).c_str());
     SDLTest_DrawString(renderer, 10, 70, (to_string((int)(floor(1.0f / deltaTime))) + "FPS").c_str());
 
+    // Game
     renderTiles();
     for (auto *gameObject : gameObjects)
     {
