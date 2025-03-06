@@ -73,6 +73,29 @@ void Renderer::renderInventoryItem(Camera *camera, Transform *transform)
 
 void Renderer::renderHealthBar(Camera *camera, Transform *transform)
 {
+    Health *health = owner->getComponent<Health>();
+    if (!health)
+        return;
+
+    RenderParams rp = getRenderParams(transform);
+
+    const int singleHpWidth = 1;
+    const int barMargin = 3;
+    const int barHeight = 15;
+
+    int healthBarWidth = health->getHp() * singleHpWidth;
+    int maxBarWidth = health->getMaxHp() * singleHpWidth;
+
+    BoundingBox healthBar = {(int)rp.pos.x - (maxBarWidth / 2) - barMargin, (int)rp.top - 30 - barHeight, healthBarWidth, barHeight};
+    BoundingBox maxBar = {(int)healthBar.x - barMargin, (int)healthBar.y - barMargin, maxBarWidth + (barMargin * 2), (int)healthBar.h + (barMargin * 2)};
+
+    SDL_Rect maxBarRect = camera->worldRectToScreenRect(maxBar);
+    SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
+    SDL_RenderFillRect(renderer, &maxBarRect);
+
+    SDL_Rect healthBarRect = camera->worldRectToScreenRect(healthBar);
+    SDL_SetRenderDrawColor(renderer, 255, 0, 50, 255);
+    SDL_RenderFillRect(renderer, &healthBarRect);
 }
 
 void Renderer::renderNameTag(Camera *camera, Transform *transform)
@@ -82,6 +105,6 @@ void Renderer::renderNameTag(Camera *camera, Transform *transform)
     std::string label = owner->getName();
     const int approxCharWidth = 8;
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    Vector stringPoint = camera->worldPosToScreenPos({rp.pos.x - (label.size() * approxCharWidth / camera->getZoom() / 2), rp.top - 20});
+    Vector stringPoint = camera->worldPosToScreenPos({rp.pos.x - (label.size() * approxCharWidth / camera->getZoom() / 2), rp.top - 15});
     SDLTest_DrawString(renderer, stringPoint.x, stringPoint.y, label.c_str());
 }

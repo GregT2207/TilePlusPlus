@@ -5,6 +5,7 @@
 #include "Component.hpp"
 #include "Transform.hpp"
 #include "Collider.hpp"
+#include "Health.hpp"
 #include "Renderer.hpp"
 #include "PlayerBehaviour.hpp"
 #include "EnemyBehaviour.hpp"
