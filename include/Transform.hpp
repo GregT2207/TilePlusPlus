@@ -31,23 +31,18 @@ public:
     void flipDirectionX() { direction.x = -direction.x; }
     void flipDirectionY() { direction.y = -direction.y; }
 
-    Vector
-    getPosition() const
-    {
-        return position;
-    }
+    Vector getPosition() const { return position; }
     Vector getVelocity() const { return velocity; }
     Vector getSize() const { return size; }
     Vector getDirection() const { return direction; }
 
     void update(float deltaTime) override;
 
-protected:
+private:
     Vector position;
     Vector velocity;
     Vector size;
     Vector direction = {1.0f, 1.0f};
 
-private:
     void applyGravity(float deltaTime);
 };
