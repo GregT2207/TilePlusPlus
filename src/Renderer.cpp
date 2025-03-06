@@ -28,7 +28,7 @@ void Renderer::render(SDL_Renderer *renderer)
     }
 }
 
-RenderParams Renderer::getRenderParams(Transform *transform)
+RenderParams Renderer::getRenderParams(Transform *transform) const
 {
     Vector pos = transform->getPosition();
     Vector size = transform->getSize();

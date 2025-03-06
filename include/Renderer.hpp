@@ -23,7 +23,7 @@ public:
     Renderer(SDL_Renderer *renderer, ResourceManager *resourceManager, const std::string &textureFilePath);
 
     void render(SDL_Renderer *renderer);
-    RenderParams getRenderParams(Transform *transform);
+    RenderParams getRenderParams(Transform *transform) const;
     void renderMainSprite(Camera *camera, Transform *transform);
     void renderInventoryItem(Camera *camera, Transform *transform);
     void renderHealthBar(Camera *camera, Transform *transform);
