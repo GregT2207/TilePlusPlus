@@ -20,9 +20,9 @@ public:
     GameObject(Game *game, string name);
     ~GameObject();
 
-    void virtual init();
-    void virtual handleEvents(SDL_Event &event);
-    void virtual update(float deltaTime);
+    virtual void init();
+    virtual void handleEvents(SDL_Event &event);
+    virtual void update(float deltaTime);
     void render(SDL_Renderer *renderer);
 
     string getName() const { return name; }
