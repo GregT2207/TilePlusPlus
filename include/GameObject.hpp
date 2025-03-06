@@ -5,7 +5,7 @@
 #include "Component.hpp"
 #include "Transform.hpp"
 #include "Collider.hpp"
-#include "SpriteRenderer.hpp"
+#include "Renderer.hpp"
 #include "PlayerBehaviour.hpp"
 #include "EnemyBehaviour.hpp"
 #include "MovementBehaviour.hpp"

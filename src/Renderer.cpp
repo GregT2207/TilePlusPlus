@@ -1,19 +1,19 @@
 #include <iostream>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_test.h>
-#include "SpriteRenderer.hpp"
+#include "Renderer.hpp"
 #include "GameObject.hpp"
 #include "ResourceManager.hpp"
 #include "Camera.hpp"
 
 struct Vector;
 
-SpriteRenderer::SpriteRenderer(SDL_Renderer *renderer, ResourceManager *resourceManager, const std::string &textureFilePath) : renderer(renderer)
+Renderer::Renderer(SDL_Renderer *renderer, ResourceManager *resourceManager, const std::string &textureFilePath) : renderer(renderer)
 {
     texture = resourceManager->loadTexture(textureFilePath);
 }
 
-void SpriteRenderer::render(SDL_Renderer *renderer)
+void Renderer::render(SDL_Renderer *renderer)
 {
     Transform *transform = owner->getComponent<Transform>();
     if (!transform)
@@ -27,7 +27,7 @@ void SpriteRenderer::render(SDL_Renderer *renderer)
     }
 }
 
-void SpriteRenderer::renderMainSprite(Camera *camera, Transform *transform)
+void Renderer::renderMainSprite(Camera *camera, Transform *transform)
 {
     Vector pos = transform->getPosition();
     Vector size = transform->getSize();
@@ -40,7 +40,7 @@ void SpriteRenderer::renderMainSprite(Camera *camera, Transform *transform)
     SDL_RenderCopyEx(renderer, texture, nullptr, &dest, 0, nullptr, dir.x > 0 ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
 }
 
-void SpriteRenderer::renderInventoryItem(Camera *camera, Transform *transform)
+void Renderer::renderInventoryItem(Camera *camera, Transform *transform)
 {
     Inventory *inv = owner->getComponent<Inventory>();
     if (!inv)
@@ -63,7 +63,7 @@ void SpriteRenderer::renderInventoryItem(Camera *camera, Transform *transform)
     SDL_RenderCopyEx(renderer, item->getTexture(), nullptr, &destRect, item->getTile() ? 40 * (dir.x > 0 ? 1 : -1) : 0, nullptr, dir.x > 0 ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
 }
 
-void SpriteRenderer::renderNameTag(Camera *camera, Transform *transform)
+void Renderer::renderNameTag(Camera *camera, Transform *transform)
 {
     std::string label = owner->getName();
     const int approxCharWidth = 8;

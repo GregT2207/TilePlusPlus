@@ -6,10 +6,10 @@ class ResourceManager;
 class Camera;
 class Transform;
 
-class SpriteRenderer : public Component
+class Renderer : public Component
 {
 public:
-    SpriteRenderer(SDL_Renderer *renderer, ResourceManager *resourceManager, const std::string &textureFilePath);
+    Renderer(SDL_Renderer *renderer, ResourceManager *resourceManager, const std::string &textureFilePath);
 
     void render(SDL_Renderer *renderer);
     void renderMainSprite(Camera *camera, Transform *transform);
