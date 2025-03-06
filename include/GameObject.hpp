@@ -18,7 +18,7 @@ class GameObject
 {
 public:
     GameObject(Game *game, string name);
-    ~GameObject();
+    virtual ~GameObject();
 
     virtual void init();
     virtual void handleEvents(SDL_Event &event);

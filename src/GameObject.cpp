@@ -1,4 +1,4 @@
-#include "string"
+#include <string>
 #include "GameObject.hpp"
 
 GameObject::GameObject(Game *game, std::string name) : game(game), name(name) {}
