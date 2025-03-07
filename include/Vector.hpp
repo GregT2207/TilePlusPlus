@@ -50,6 +50,62 @@ struct Vector
         return copy;
     }
 
+    inline Vector *operator+=(const Vector &b)
+    {
+        x += b.x;
+        y += b.y;
+        return this;
+    }
+
+    inline Vector *operator-=(const Vector &b)
+    {
+        x -= b.x;
+        y -= b.y;
+        return this;
+    }
+
+    inline Vector *operator*=(const Vector &b)
+    {
+        x *= b.x;
+        y *= b.y;
+        return this;
+    }
+
+    inline Vector *operator/=(const Vector &b)
+    {
+        x /= b.x;
+        y /= b.y;
+        return this;
+    }
+
+    inline Vector *operator+=(float b)
+    {
+        x += b;
+        y += b;
+        return this;
+    }
+
+    inline Vector *operator-=(float b)
+    {
+        x -= b;
+        y -= b;
+        return this;
+    }
+
+    inline Vector *operator*=(float b)
+    {
+        x *= b;
+        y *= b;
+        return this;
+    }
+
+    inline Vector *operator/=(float b)
+    {
+        x /= b;
+        y /= b;
+        return this;
+    }
+
     float x;
     float y;
 };
@@ -74,34 +130,6 @@ inline Vector operator/(const Vector &a, const Vector &b)
     return {a.x / b.x, a.y / b.y};
 }
 
-inline Vector operator+=(Vector &a, const Vector &b)
-{
-    a.x += b.x;
-    a.y += b.y;
-    return a;
-}
-
-inline Vector operator-=(Vector &a, const Vector &b)
-{
-    a.x -= b.x;
-    a.y -= b.y;
-    return a;
-}
-
-inline Vector operator*=(Vector &a, const Vector &b)
-{
-    a.x *= b.x;
-    a.y *= b.y;
-    return a;
-}
-
-inline Vector operator/=(Vector &a, const Vector &b)
-{
-    a.x /= b.x;
-    a.y /= b.y;
-    return a;
-}
-
 inline Vector operator+(const Vector &a, float b)
 {
     return {a.x + b, a.y + b};
@@ -120,32 +148,4 @@ inline Vector operator*(const Vector &a, float b)
 inline Vector operator/(const Vector &a, float b)
 {
     return {a.x / b, a.y / b};
-}
-
-inline Vector operator+=(Vector &a, float b)
-{
-    a.x += b;
-    a.y += b;
-    return a;
-}
-
-inline Vector operator-=(Vector &a, float b)
-{
-    a.x -= b;
-    a.y -= b;
-    return a;
-}
-
-inline Vector operator*=(Vector &a, float b)
-{
-    a.x *= b;
-    a.y *= b;
-    return a;
-}
-
-inline Vector operator/=(Vector &a, float b)
-{
-    a.x /= b;
-    a.y /= b;
-    return a;
 }
