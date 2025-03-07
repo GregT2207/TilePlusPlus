@@ -23,7 +23,7 @@ public:
     virtual void update(float deltaTime);
     void render(SDL_Renderer *renderer);
 
-    string getName() const { return name; }
+    std::string getName() const { return name; }
 
     template <typename T, typename... Args>
     T *addComponent(Args &&...args)
@@ -32,11 +32,11 @@ public:
         comp->owner = this;
         components.push_back(comp);
 
-        if constexpr (is_same_v<T, Collider>)
+        if constexpr (std::is_same_v<T, Collider>)
         {
             game->colliders.push_back(comp);
         }
-        else if constexpr (is_same_v<T, Camera>)
+        else if constexpr (std::is_same_v<T, Camera>)
         {
             game->cameras.push_back(comp);
         }

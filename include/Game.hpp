@@ -19,7 +19,7 @@ public:
     Game();
     ~Game();
 
-    bool init(const string &title, int width, int height, bool fullscreen);
+    bool init(const std::string &title, int width, int height, bool fullscreen);
     void handleEvents();
     bool setTile(Vector tilePos, Tile tile);
     void update();
@@ -31,8 +31,8 @@ public:
     Vector worldPosToTileIndices(Vector worldPos) const;
     int getGravity() const { return gravity; }
     int getMaxFallSpeed() const { return maxFallSpeed; }
-    vector<Collider *> colliders;
-    vector<Camera *> cameras;
+    std::vector<Collider *> colliders;
+    std::vector<Camera *> cameras;
 
 protected:
     ResourceManager *resourceManager;
@@ -41,17 +41,17 @@ private:
     bool running;
     SDL_Window *window;
     SDL_Renderer *renderer;
-    vector<SDL_Texture *> backgrounds;
+    std::vector<SDL_Texture *> backgrounds;
     float deltaTime;
     unsigned int lastFrameTime;
     int gravity;
     int maxFallSpeed;
-    vector<GameObject *> gameObjects;
+    std::vector<GameObject *> gameObjects;
     GameObject *player;
-    vector<vector<Tile>> tiles;
+    std::vector<std::vector<Tile>> tiles;
     int tileSize = 32;
     Vector tileMapOffset = {-30, -10};
-    map<Tile, SDL_Texture *> tileTextures;
+    std::map<Tile, SDL_Texture *> tileTextures;
 
     void createTiles();
     void createGameObjects();

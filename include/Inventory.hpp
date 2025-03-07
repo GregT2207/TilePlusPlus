@@ -1,4 +1,6 @@
 #pragma once
+#include <string>
+#include <vector>
 #include "Component.hpp"
 #include "Item.hpp"
 #include "ResourceManager.hpp"
