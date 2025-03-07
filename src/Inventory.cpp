@@ -15,7 +15,7 @@ Inventory::Inventory(ResourceManager *resourceManager) : resourceManager(resourc
 // Returns true if item added or false if inventory is full
 bool Inventory::addItem(Item *newItem)
 {
-    for (int i = 0; i < sizeof(items); i++)
+    for (int i = 0; i < items.size(); i++)
     {
         if (items[i] == nullptr)
         {
