@@ -36,5 +36,5 @@ protected:
 
 private:
     static bool debug;
-    float grounded = false;
+    bool grounded = false;
 };
