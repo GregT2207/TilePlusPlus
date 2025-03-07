@@ -12,12 +12,10 @@
 #include "MovementBehaviour.hpp"
 #include "Inventory.hpp"
 
-using namespace std;
-
 class GameObject
 {
 public:
-    GameObject(Game *game, string name);
+    GameObject(Game *game, std::string name);
     virtual ~GameObject();
 
     virtual void init();

@@ -8,6 +8,8 @@
 #include "Camera.hpp"
 #include "enums/Tile.hpp"
 
+using namespace std;
+
 Game::Game() : running(false), window(nullptr), renderer(nullptr), resourceManager(nullptr), gravity(2000), maxFallSpeed(1000) {}
 Game::~Game()
 {
@@ -332,7 +334,7 @@ void Game::render()
     // Info
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     SDLTest_DrawString(renderer, 10, 10, "Greg's Game");
-    Vector playerPos = gameObjects[0]->getComponent<Transform>()->getPosition();
+    Vector playerPos = player->getComponent<Transform>()->getPosition();
     SDLTest_DrawString(renderer, 10, 40, (to_string((int)(round(playerPos.x))) + " " + to_string((int)(round(playerPos.y)))).c_str());
     SDLTest_DrawString(renderer, 10, 70, (to_string((int)(floor(1.0f / deltaTime))) + "FPS").c_str());
 

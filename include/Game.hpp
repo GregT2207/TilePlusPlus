@@ -7,8 +7,6 @@
 #include "ResourceManager.hpp"
 #include "enums/Tile.hpp"
 
-using namespace std;
-
 class BoundingBox;
 class GameObject;
 class Transform;
