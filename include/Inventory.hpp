@@ -15,7 +15,7 @@ public:
     void removeItem();
     void dropItem();
 
-    std::vector<Item *> getItems() const { return items; }
+    const std::vector<Item *> &getItems() const { return items; }
 
     int activeItem = 0;
 
