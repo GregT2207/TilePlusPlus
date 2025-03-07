@@ -1,5 +1,4 @@
 #pragma once
-#include <map>
 #include "Component.hpp"
 #include "Item.hpp"
 #include "ResourceManager.hpp"
