@@ -234,10 +234,10 @@ void Game::handleCollisions(GameObject *gameObject)
         // Handle collisions for tiles
         BoundingBox boundingBox = collider->getBoundingBox();
 
-        int yRangeStart = ((boundingBox.y - ((int)(boundingBox.y) % tileSize)) / tileSize) - 2 - tileMapOffset.y;
-        int yRangeEnd = ((boundingBox.y + boundingBox.h) - ((int)(boundingBox.y + boundingBox.h) % tileSize)) / tileSize + 1 - tileMapOffset.y;
-        int xRangeStart = ((boundingBox.x - ((int)(boundingBox.x) % tileSize)) / tileSize) - 2 - tileMapOffset.x;
-        int xRangeEnd = ((boundingBox.x + boundingBox.w) - ((int)(boundingBox.x + boundingBox.w) % tileSize)) / tileSize + 1 - tileMapOffset.x;
+        int yRangeStart = ((boundingBox.y - (static_cast<int>(boundingBox.y) % tileSize)) / tileSize) - 2 - tileMapOffset.y;
+        int yRangeEnd = ((boundingBox.y + boundingBox.h) - (static_cast<int>(boundingBox.y + boundingBox.h) % tileSize)) / tileSize + 1 - tileMapOffset.y;
+        int xRangeStart = ((boundingBox.x - (static_cast<int>(boundingBox.x) % tileSize)) / tileSize) - 2 - tileMapOffset.x;
+        int xRangeEnd = ((boundingBox.x + boundingBox.w) - (static_cast<int>(boundingBox.x + boundingBox.w) % tileSize)) / tileSize + 1 - tileMapOffset.x;
 
         float waterOverlap = 0.0f;
 
@@ -256,7 +256,7 @@ void Game::handleCollisions(GameObject *gameObject)
                     continue;
                 }
 
-                BoundingBox tileBb = {(int)((x + tileMapOffset.x) * tileSize), (int)((y + tileMapOffset.y) * tileSize), tileSize, tileSize};
+                BoundingBox tileBb = {static_cast<int>((x + tileMapOffset.x) * tileSize), static_cast<int>((y + tileMapOffset.y) * tileSize), tileSize, tileSize};
 
                 if (tiles[y][x] == Tile::Water)
                 {
@@ -335,8 +335,8 @@ void Game::render()
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     SDLTest_DrawString(renderer, 10, 10, "Greg's Game");
     Vector playerPos = player->getComponent<Transform>()->getPosition();
-    SDLTest_DrawString(renderer, 10, 40, (to_string((int)(round(playerPos.x))) + " " + to_string((int)(round(playerPos.y)))).c_str());
-    SDLTest_DrawString(renderer, 10, 70, (to_string((int)(floor(1.0f / deltaTime))) + "FPS").c_str());
+    SDLTest_DrawString(renderer, 10, 40, (to_string(static_cast<int>(round(playerPos.x))) + " " + to_string(static_cast<int>(round(playerPos.y)))).c_str());
+    SDLTest_DrawString(renderer, 10, 70, (to_string(static_cast<int>(floor(1.0f / deltaTime))) + "FPS").c_str());
 
     // Game
     renderTiles();
@@ -360,7 +360,7 @@ void Game::renderTiles()
             {
                 for (Camera *camera : cameras)
                 {
-                    SDL_Rect tileRect = camera->worldRectToScreenRect({(int)((x + tileMapOffset.x) * tileSize), (int)((y + tileMapOffset.y) * tileSize), tileSize, tileSize});
+                    SDL_Rect tileRect = camera->worldRectToScreenRect({static_cast<int>((x + tileMapOffset.x) * tileSize), static_cast<int>((y + tileMapOffset.y) * tileSize), tileSize, tileSize});
                     SDL_RenderCopy(renderer, tileTexture, nullptr, &tileRect);
                 }
             }

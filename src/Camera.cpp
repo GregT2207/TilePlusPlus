@@ -70,5 +70,5 @@ SDL_Rect Camera::worldRectToScreenRect(BoundingBox rect) const
 {
     Vector newScreenPos = worldPosToScreenPos({rect.x, rect.y});
 
-    return {(int)(newScreenPos.x), (int)(newScreenPos.y), (int)(rect.w * zoom), (int)(rect.h * zoom)};
+    return {static_cast<int>(newScreenPos.x), static_cast<int>(newScreenPos.y), static_cast<int>(rect.w * zoom), static_cast<int>(rect.h * zoom)};
 }

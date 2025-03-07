@@ -86,8 +86,8 @@ void Renderer::renderHealthBar(Camera *camera, Transform *transform)
     int healthBarWidth = health->getHp() * singleHpWidth;
     int maxBarWidth = health->getMaxHp() * singleHpWidth;
 
-    BoundingBox healthBar = {(int)rp.pos.x - (maxBarWidth / 2) - barMargin, (int)rp.top - 30 - barHeight, healthBarWidth, barHeight};
-    BoundingBox maxBar = {(int)healthBar.x - barMargin, (int)healthBar.y - barMargin, maxBarWidth + (barMargin * 2), (int)healthBar.h + (barMargin * 2)};
+    BoundingBox healthBar = {static_cast<int>(rp.pos.x) - (maxBarWidth / 2) - barMargin, static_cast<int>(rp.top) - 30 - barHeight, healthBarWidth, barHeight};
+    BoundingBox maxBar = {static_cast<int>(healthBar.x) - barMargin, (int)healthBar.y - barMargin, maxBarWidth + (barMargin * 2), static_cast<int>(healthBar.h) + (barMargin * 2)};
 
     SDL_Rect maxBarRect = camera->worldRectToScreenRect(maxBar);
     SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
