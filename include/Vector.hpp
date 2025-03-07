@@ -4,7 +4,7 @@
 struct Vector
 {
     Vector(float x, float y) : x(x), y(y) {};
-    Vector(int x = 0, int y = 0) : x(x), y(y) {};
+    Vector(int x = 0, int y = 0) : x(static_cast<float>(x)), y(static_cast<float>(y)) {};
 
     float magnitude() const
     {
