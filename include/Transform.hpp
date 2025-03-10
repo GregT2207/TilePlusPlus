@@ -18,11 +18,7 @@ public:
     void addX(float x) { position.x += x; };
     void addY(float y) { position.y += y; };
 
-    void setVelocity(Vector newVel)
-    {
-        velocity = newVel;
-        SDL_Log("new vel %f | %f", newVel.x, newVel.y);
-    };
+    void setVelocity(Vector newVel) { velocity = newVel; };
     void setVelocityX(float x) { velocity.x = x; };
     void setVelocityY(float y) { velocity.y = y; };
     void addVelocity(Vector newVel) { velocity += newVel; };
