@@ -16,7 +16,7 @@ class Camera;
 class Game
 {
 public:
-    Game();
+    Game() : running(false), window(nullptr), renderer(nullptr), resourceManager(nullptr), gravity(2000), maxFallSpeed(1000), airResistance(1), groundResistance(6) {}
     ~Game();
 
     bool init(const std::string &title, int width, int height, bool fullscreen);
@@ -29,8 +29,10 @@ public:
     bool isRunning() const { return running; }
     Tile getTile(Vector tilePos) const { return tiles[tilePos.y][tilePos.x]; }
     Vector worldPosToTileIndices(Vector worldPos) const;
-    int getGravity() const { return gravity; }
-    int getMaxFallSpeed() const { return maxFallSpeed; }
+    int gravity;
+    int maxFallSpeed;
+    int airResistance;
+    int groundResistance;
     std::vector<Collider *> colliders;
     std::vector<Camera *> cameras;
 
@@ -44,8 +46,6 @@ private:
     std::vector<SDL_Texture *> backgrounds;
     float deltaTime;
     unsigned int lastFrameTime;
-    int gravity;
-    int maxFallSpeed;
     std::vector<GameObject *> gameObjects;
     GameObject *player;
     std::vector<std::vector<Tile>> tiles;

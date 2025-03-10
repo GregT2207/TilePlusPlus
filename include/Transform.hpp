@@ -40,8 +40,6 @@ public:
 
     void update(float deltaTime) override;
 
-    static constexpr float drag = 0.98f;
-
 private:
     Vector position;
     Vector velocity;
@@ -49,4 +47,5 @@ private:
     Vector direction = {1.0f, 1.0f};
 
     void applyGravity(float deltaTime);
+    void applyDrag(float deltaTime);
 };

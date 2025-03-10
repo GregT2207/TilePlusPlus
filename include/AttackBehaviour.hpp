@@ -10,8 +10,9 @@ public:
 private:
     const int reach = 50;
     const int damage = 5;
-    const int knockback = 1000;
+    const int knockback = 600;
     const int scoop = 1;
     const int cooldown = 2;
+
     float timeSinceAttack = 0.0f;
 };

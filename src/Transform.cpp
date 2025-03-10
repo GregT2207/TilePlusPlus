@@ -4,18 +4,25 @@ Transform::Transform(Vector position, Vector velocity, Vector size) : position(p
 
 void Transform::update(float deltaTime)
 {
-    applyGravity(deltaTime);
-
     position.x += velocity.x * deltaTime;
     position.y += velocity.y * deltaTime;
 
-    velocity *= drag;
+    applyGravity(deltaTime);
+    applyDrag(deltaTime);
 }
 
 void Transform::applyGravity(float deltaTime)
 {
-    if (velocity.y >= owner->game->getMaxFallSpeed())
+    if (velocity.y >= owner->game->maxFallSpeed)
         return;
 
-    addVelocityY(owner->game->getGravity() * deltaTime);
+    addVelocityY(owner->game->gravity * deltaTime);
+}
+
+void Transform::applyDrag(float deltaTime)
+{
+    Collider *collider = owner->getComponent<Collider>();
+    int drag = collider && collider->isGrounded() ? owner->game->groundResistance : owner->game->airResistance;
+
+    velocity -= velocity * drag * deltaTime;
 }

@@ -10,7 +10,6 @@
 
 using namespace std;
 
-Game::Game() : running(false), window(nullptr), renderer(nullptr), resourceManager(nullptr), gravity(2000), maxFallSpeed(1000) {}
 Game::~Game()
 {
     cleanUp();
