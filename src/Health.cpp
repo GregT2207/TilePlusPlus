@@ -2,7 +2,11 @@
 
 int Health::hurt(int amount)
 {
-    hp -= amount;
+    hp = std::max(hp - amount, 0);
+
+    if (hp <= 0)
+        die();
+
     return hp;
 }
 
@@ -20,6 +24,15 @@ int Health::hurtKnockback(int hurtAmount, int knockbackAmount, Vector direction)
 
 int Health::heal(int amount)
 {
-    hp += amount;
+    hp = std::min(hp + amount, maxHp);
     return hp;
+}
+
+void Health::die()
+{
+    Transform *transform = owner->getComponent<Transform>();
+    if (transform)
+        transform->setPosition({0, 0});
+
+    hp = maxHp;
 }

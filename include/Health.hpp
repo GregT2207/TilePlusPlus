@@ -11,6 +11,7 @@ public:
     int hurt(int amount);
     int hurtKnockback(int hurtAmount, int knockbackAmount, Vector overlap);
     int heal(int amount);
+    void die();
 
     int getHp() const { return hp; }
     int getMaxHp() const { return maxHp; }

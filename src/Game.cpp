@@ -133,7 +133,7 @@ void Game::createTiles()
 void Game::createGameObjects()
 {
     player = new GameObject(this, "Greg");
-    player->addComponent<Transform>(Vector{0.0f, 0.0f}, Vector{10.0f, 10.0f}, Vector{70.0f, 100.0f});
+    player->addComponent<Transform>(Vector{0.0f, 0.0f}, Vector{100.0f, 100.0f}, Vector{70.0f, 100.0f});
     player->addComponent<Collider>(Vector{70.0f, 100.0f});
     player->addComponent<Health>(100, 25);
     player->addComponent<Renderer>(renderer, resourceManager, "sprites/player.png");
@@ -145,7 +145,7 @@ void Game::createGameObjects()
     gameObjects.push_back(player);
 
     GameObject *enemy = new GameObject(this, "Flobbage Jr.");
-    enemy->addComponent<Transform>(Vector{80.0f, 60.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
+    enemy->addComponent<Transform>(Vector{300.0f, -600.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
     enemy->addComponent<Collider>(Vector{70.0f, 100.0f});
     enemy->addComponent<Health>(20, 18);
     enemy->addComponent<Renderer>(renderer, resourceManager, "sprites/enemy.png");
