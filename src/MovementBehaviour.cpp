@@ -6,7 +6,7 @@ void MovementBehaviour::jump()
     Transform *transform = owner->getComponent<Transform>();
     Collider *collider = owner->getComponent<Collider>();
 
-    if (transform && collider && collider->isGrounded())
+    if (canJump && transform && collider && collider->isGrounded())
     {
         transform->setVelocityY(-jumpPower);
     }

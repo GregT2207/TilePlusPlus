@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL2/SDL.h>
+#include "math.h"
 #include "Component.hpp"
 #include "Vector.hpp"
 #include "BoundingBox.hpp"
@@ -14,6 +15,8 @@ public:
     void render(SDL_Renderer *renderer) override;
 
     BoundingBox getBoundingBox() const;
+    bool contains(const Vector &otherPos, const float reach) const;
+    Vector getGap(const BoundingBox b);
     Vector getOverlap(const BoundingBox b);
 
     void setSize(const Vector newSize) { size = newSize; }
@@ -22,6 +25,7 @@ public:
     void addOffset(const Vector newOffset) { offset += newOffset; }
     void setGrounded(bool newGrounded) { grounded = newGrounded; }
 
+    Vector getPosition() const { return position; }
     Vector getSize() const { return size; };
     Vector getOffset() const { return offset; };
     bool isGrounded() const { return grounded; }

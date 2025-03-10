@@ -48,16 +48,36 @@ BoundingBox Collider::getBoundingBox() const
     return BoundingBox(position, size);
 }
 
-// Returns a positive (right/down) or negative (left/up) overlap, or 0s if none
-Vector Collider::getOverlap(const BoundingBox b)
+bool Collider::contains(const Vector &otherPos, const float reach = 0.0f) const
+{
+    const float radius = max(size.x, size.y) / 2 + reach;
+    SDL_Log("radius %f", radius);
+
+    return otherPos.x >= position.x - radius &&
+           otherPos.x <= position.x + radius &&
+           otherPos.y >= position.y - radius &&
+           otherPos.y <= position.y + radius;
+}
+
+Vector Collider::getGap(const BoundingBox b)
 {
     BoundingBox a = getBoundingBox();
 
     float xGap = a.x > b.x ? a.x - (b.x + b.w) : (a.x + a.w) - b.x;
     float yGap = a.y > b.y ? a.y - (b.y + b.h) : (a.y + a.h) - b.y;
 
-    float xOverlap = a.x > b.x ? min(0.0f, xGap) : max(0.0f, xGap);
-    float yOverlap = a.y > b.y ? min(0.0f, yGap) : max(0.0f, yGap);
+    return {xGap, yGap};
+}
+
+// Returns a positive (right/down) or negative (left/up) overlap, or 0s if none
+Vector Collider::getOverlap(const BoundingBox b)
+{
+    BoundingBox a = getBoundingBox();
+
+    Vector gap = getGap(b);
+
+    float xOverlap = a.x > b.x ? min(0.0f, gap.x) : max(0.0f, gap.x);
+    float yOverlap = a.y > b.y ? min(0.0f, gap.y) : max(0.0f, gap.y);
 
     if (xOverlap == 0 || yOverlap == 0)
         return {0, 0};

@@ -150,7 +150,7 @@ void Game::createGameObjects()
     enemy->addComponent<Health>(20, 18);
     enemy->addComponent<Renderer>(renderer, resourceManager, "sprites/enemy.png");
     enemy->addComponent<EnemyBehaviour>(player);
-    enemy->addComponent<MovementBehaviour>();
+    enemy->addComponent<MovementBehaviour>(false);
     gameObjects.push_back(enemy);
 
     for (auto *gameObject : gameObjects)

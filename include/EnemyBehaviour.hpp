@@ -8,9 +8,15 @@ public:
 
     void update(float deltaTime) override;
 
-protected:
-    GameObject *player;
-
 private:
     void followPlayer();
+    bool attackPlayer();
+
+    const int reach = 10;
+    const int damage = 5;
+    const int knockback = 1000;
+    const int scoop = 1;
+    const int cooldown = 2;
+    float timeSinceAttack = 0;
+    GameObject *player;
 };

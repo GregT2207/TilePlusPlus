@@ -1,5 +1,3 @@
-#include "Game.hpp"
-#include "GameObject.hpp"
 #include "Transform.hpp"
 
 Transform::Transform(Vector position, Vector velocity, Vector size) : position(position), velocity(velocity), size(size) {}

@@ -1,6 +1,8 @@
 #pragma once
 #include "Component.hpp"
 #include "Vector.hpp"
+#include "Game.hpp"
+#include "GameObject.hpp"
 
 class GameObject;
 
