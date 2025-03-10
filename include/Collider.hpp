@@ -15,7 +15,6 @@ public:
     void render(SDL_Renderer *renderer) override;
 
     BoundingBox getBoundingBox() const;
-    bool contains(const Vector &otherPos, const float reach) const;
     Vector getGap(const BoundingBox b);
     Vector getOverlap(const BoundingBox b);
 

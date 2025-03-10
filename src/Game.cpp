@@ -141,16 +141,18 @@ void Game::createGameObjects()
     player->addComponent<Camera>(1440, 896);
     player->addComponent<PlayerBehaviour>();
     player->addComponent<MovementBehaviour>();
+    player->addComponent<AttackBehaviour>();
     player->addComponent<Inventory>(resourceManager);
     gameObjects.push_back(player);
 
     GameObject *enemy = new GameObject(this, "Flobbage Jr.");
-    enemy->addComponent<Transform>(Vector{1000.0f, 60.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
+    enemy->addComponent<Transform>(Vector{80.0f, 60.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
     enemy->addComponent<Collider>(Vector{70.0f, 100.0f});
     enemy->addComponent<Health>(20, 18);
     enemy->addComponent<Renderer>(renderer, resourceManager, "sprites/enemy.png");
     enemy->addComponent<EnemyBehaviour>(player);
-    enemy->addComponent<MovementBehaviour>(false);
+    enemy->addComponent<MovementBehaviour>();
+    enemy->addComponent<AttackBehaviour>();
     gameObjects.push_back(enemy);
 
     for (auto *gameObject : gameObjects)

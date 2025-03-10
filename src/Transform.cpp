@@ -8,6 +8,8 @@ void Transform::update(float deltaTime)
 
     position.x += velocity.x * deltaTime;
     position.y += velocity.y * deltaTime;
+
+    velocity *= drag;
 }
 
 void Transform::applyGravity(float deltaTime)

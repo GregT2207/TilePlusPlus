@@ -18,7 +18,11 @@ public:
     void addX(float x) { position.x += x; };
     void addY(float y) { position.y += y; };
 
-    void setVelocity(Vector newVel) { velocity = newVel; };
+    void setVelocity(Vector newVel)
+    {
+        velocity = newVel;
+        SDL_Log("new vel %f | %f", newVel.x, newVel.y);
+    };
     void setVelocityX(float x) { velocity.x = x; };
     void setVelocityY(float y) { velocity.y = y; };
     void addVelocity(Vector newVel) { velocity += newVel; };
@@ -39,6 +43,8 @@ public:
     Vector getDirection() const { return direction; }
 
     void update(float deltaTime) override;
+
+    static constexpr float drag = 0.98f;
 
 private:
     Vector position;

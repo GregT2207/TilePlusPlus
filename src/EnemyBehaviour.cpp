@@ -7,13 +7,11 @@ void EnemyBehaviour::update(float deltaTime)
     if (!player)
         return;
 
-    timeSinceAttack += deltaTime;
-    if (timeSinceAttack < cooldown)
-        return;
-
     followPlayer();
-    if (attackPlayer())
-        timeSinceAttack = 0;
+
+    AttackBehaviour *ab = owner->getComponent<AttackBehaviour>();
+    if (ab)
+        ab->attack(player);
 }
 
 void EnemyBehaviour::followPlayer()
@@ -37,30 +35,4 @@ void EnemyBehaviour::followPlayer()
         if (mb)
             mb->jump();
     }
-}
-
-bool EnemyBehaviour::attackPlayer()
-{
-    Collider *collider = owner->getComponent<Collider>();
-    if (!collider)
-        return false;
-
-    Collider *playerCollider = player->getComponent<Collider>();
-    if (!playerCollider)
-        return false;
-
-    BoundingBox bb = collider->getBoundingBox();
-    if (!collider->contains(playerCollider->getPosition(), reach))
-        return false;
-
-    Health *playerHealth = player->getComponent<Health>();
-    if (!playerHealth)
-        return false;
-
-    Vector knockbackDir = playerCollider->getPosition() - collider->getPosition();
-    knockbackDir.normalize();
-    knockbackDir.y = std::min(static_cast<float>(-scoop), knockbackDir.y);
-    playerHealth->hurtKnockback(damage, knockback, knockbackDir);
-
-    return true;
 }

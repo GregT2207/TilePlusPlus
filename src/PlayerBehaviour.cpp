@@ -124,10 +124,8 @@ void PlayerBehaviour::update(float deltaTime)
 {
     Transform *transform = owner->getComponent<Transform>();
 
-    if (transform)
-    {
+    if (transform && movementVelocity != 0)
         transform->setVelocityX(movementVelocity);
-    }
 }
 
 Vector PlayerBehaviour::getClickedWorldPos()
@@ -155,6 +153,15 @@ void PlayerBehaviour::useItem()
     if (item->getTile())
     {
         placeTile(getClickedWorldPos(), item->getTile().value());
+        return;
+    }
+
+    if (item->name == "Midnight Slasher")
+    {
+        AttackBehaviour *ab = owner->getComponent<AttackBehaviour>();
+        // if (ab)
+        //     ab->attack();
+
         return;
     }
 

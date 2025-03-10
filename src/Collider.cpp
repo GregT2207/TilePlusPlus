@@ -48,17 +48,6 @@ BoundingBox Collider::getBoundingBox() const
     return BoundingBox(position, size);
 }
 
-bool Collider::contains(const Vector &otherPos, const float reach = 0.0f) const
-{
-    const float radius = max(size.x, size.y) / 2 + reach;
-    SDL_Log("radius %f", radius);
-
-    return otherPos.x >= position.x - radius &&
-           otherPos.x <= position.x + radius &&
-           otherPos.y >= position.y - radius &&
-           otherPos.y <= position.y + radius;
-}
-
 Vector Collider::getGap(const BoundingBox b)
 {
     BoundingBox a = getBoundingBox();

@@ -11,6 +11,7 @@
 #include "EnemyBehaviour.hpp"
 #include "MovementBehaviour.hpp"
 #include "Inventory.hpp"
+#include "AttackBehaviour.hpp"
 
 class GameObject
 {
