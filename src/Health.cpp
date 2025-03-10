@@ -32,7 +32,11 @@ void Health::die()
 {
     Transform *transform = owner->getComponent<Transform>();
     if (transform)
-        transform->setPosition({0, 0});
+    {
+        transform->setPosition({0.0f, 0.0f});
+        transform->setVelocity({0.0f, 0.0f});
+        transform->setDirection({1.0f, 1.0f});
+    }
 
     hp = maxHp;
 }
