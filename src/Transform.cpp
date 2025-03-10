@@ -4,8 +4,7 @@ Transform::Transform(Vector position, Vector velocity, Vector size) : position(p
 
 void Transform::update(float deltaTime)
 {
-    position.x += velocity.x * deltaTime;
-    position.y += velocity.y * deltaTime;
+    addPosition(velocity * deltaTime);
 
     applyGravity(deltaTime);
     applyDrag(deltaTime);
