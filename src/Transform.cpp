@@ -9,6 +9,9 @@ void Transform::update(float deltaTime)
 
     applyGravity(deltaTime);
     applyDrag(deltaTime);
+
+    if (velocity.magnitude() < 1.0f)
+        velocity = {0, 0};
 }
 
 void Transform::applyGravity(float deltaTime)
