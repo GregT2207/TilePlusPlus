@@ -19,4 +19,5 @@ protected:
 
     const int keyboardMovementSpeed = 300;
     float movementVelocity = 0.0f;
+    bool jumping = false;
 };

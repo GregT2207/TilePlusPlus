@@ -13,7 +13,6 @@ void PlayerBehaviour::handleEvents(SDL_Event &event)
     if (!transform)
         return;
 
-    MovementBehaviour *mb = owner->getComponent<MovementBehaviour>();
     Inventory *inv = owner->getComponent<Inventory>();
 
     switch (event.type)
@@ -30,8 +29,7 @@ void PlayerBehaviour::handleEvents(SDL_Event &event)
             transform->setDirection({1.0f, 1.0f});
             break;
         case SDLK_SPACE:
-            if (mb)
-                mb->jump();
+            jumping = true;
             break;
         case SDLK_1:
             if (inv)
@@ -102,8 +100,7 @@ void PlayerBehaviour::handleEvents(SDL_Event &event)
         switch (event.cbutton.button)
         {
         case SDL_CONTROLLER_BUTTON_A:
-            if (mb)
-                mb->jump();
+            jumping = true;
             break;
         }
 
@@ -123,9 +120,21 @@ void PlayerBehaviour::handleEvents(SDL_Event &event)
 void PlayerBehaviour::update(float deltaTime)
 {
     Transform *transform = owner->getComponent<Transform>();
+    if (!transform)
+        return;
 
-    if (transform && movementVelocity != 0)
+    if (movementVelocity != 0)
         transform->setVelocityX(movementVelocity);
+
+    if (jumping)
+    {
+        MovementBehaviour *mb = owner->getComponent<MovementBehaviour>();
+        if (mb)
+        {
+            mb->jump();
+            jumping = false;
+        }
+    }
 }
 
 Vector PlayerBehaviour::getClickedWorldPos()
