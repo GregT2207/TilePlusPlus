@@ -22,11 +22,6 @@ void Camera::handleEvents(SDL_Event &event)
 
 void Camera::render(SDL_Renderer *renderer)
 {
-    if (zoom > targetZoom - 0.1f && zoom < targetZoom + 0.1f)
-    {
-        zoom = targetZoom;
-    }
-
     if (zoom != targetZoom)
     {
         zoom = Math::lerp(zoom, targetZoom, 0.1f);
