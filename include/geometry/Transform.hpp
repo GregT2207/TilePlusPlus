@@ -1,6 +1,6 @@
 #pragma once
-#include "Component.hpp"
-#include "Vector.hpp"
+#include "components/Component.hpp"
+#include "geometry/Vector.hpp"
 #include "Game.hpp"
 #include "GameObject.hpp"
 

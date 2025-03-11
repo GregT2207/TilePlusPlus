@@ -1,10 +1,10 @@
 #include <iostream>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_test.h>
-#include "Renderer.hpp"
 #include "GameObject.hpp"
+#include "components/Renderer.hpp"
 #include "ResourceManager.hpp"
-#include "Camera.hpp"
+#include "components/Camera.hpp"
 
 struct Vector;
 

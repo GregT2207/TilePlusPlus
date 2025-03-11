@@ -1,6 +1,6 @@
 #pragma once
 #include <cmath>
-#include "Math.hpp"
+#include "utils/Math.hpp"
 
 struct Vector
 {
@@ -53,7 +53,7 @@ struct Vector
 
     Vector &lerp(Vector target, float t)
     {
-        *this = Math::lerp(*this, target, t);
+        // *this = Math::lerp(*this, target, t);
 
         return *this;
     }

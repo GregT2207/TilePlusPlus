@@ -1,7 +1,7 @@
 #pragma once
 #include <SDL2/SDL.h>
-#include "Component.hpp"
-#include "Vector.hpp"
+#include "components/Component.hpp"
+#include "geometry/Vector.hpp"
 
 class ResourceManager;
 class Camera;

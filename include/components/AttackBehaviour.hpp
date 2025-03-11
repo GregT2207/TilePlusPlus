@@ -1,5 +1,5 @@
 #pragma once
-#include "Component.hpp"
+#include "components/Component.hpp"
 
 class AttackBehaviour : public Component
 {

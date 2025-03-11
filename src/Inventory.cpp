@@ -1,5 +1,5 @@
-#include "Inventory.hpp"
 #include "GameObject.hpp"
+#include "components/Inventory.hpp"
 #include "Item.hpp"
 #include "enums/Tile.hpp"
 

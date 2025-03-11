@@ -1,9 +1,9 @@
 #pragma once
 #include <SDL2/SDL.h>
 #include "math.h"
-#include "Component.hpp"
-#include "Vector.hpp"
-#include "BoundingBox.hpp"
+#include "components/Component.hpp"
+#include "geometry/Vector.hpp"
+#include "geometry/BoundingBox.hpp"
 
 class Collider : public Component
 {

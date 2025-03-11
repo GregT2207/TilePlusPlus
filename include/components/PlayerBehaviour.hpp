@@ -1,5 +1,5 @@
 #pragma once
-#include "Component.hpp"
+#include "components/Component.hpp"
 #include "enums/Tile.hpp"
 
 class Vector;

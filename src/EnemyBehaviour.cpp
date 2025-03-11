@@ -1,6 +1,6 @@
-#include "EnemyBehaviour.hpp"
 #include "GameObject.hpp"
-#include "MovementBehaviour.hpp"
+#include "components/EnemyBehaviour.hpp"
+#include "components/MovementBehaviour.hpp"
 
 void EnemyBehaviour::update(float deltaTime)
 {

@@ -1,8 +1,8 @@
-#include "PlayerBehaviour.hpp"
-#include "Component.hpp"
 #include "GameObject.hpp"
-#include "MovementBehaviour.hpp"
-#include "Camera.hpp"
+#include "components/PlayerBehaviour.hpp"
+#include "components/Component.hpp"
+#include "components/MovementBehaviour.hpp"
+#include "components/Camera.hpp"
 
 class Transform;
 class Collider;

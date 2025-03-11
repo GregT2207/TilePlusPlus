@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include <map>
-#include "Vector.hpp"
+#include "geometry/Vector.hpp"
 #include "ResourceManager.hpp"
 #include "enums/Tile.hpp"
 

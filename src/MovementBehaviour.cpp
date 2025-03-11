@@ -1,5 +1,5 @@
-#include "MovementBehaviour.hpp"
 #include "GameObject.hpp"
+#include "components/MovementBehaviour.hpp"
 
 void MovementBehaviour::jump()
 {

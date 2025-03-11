@@ -1,7 +1,7 @@
 #pragma once
-#include "Component.hpp"
+#include "components/Component.hpp"
 #include "GameObject.hpp"
-#include "Vector.hpp"
+#include "geometry/Vector.hpp"
 
 class Health : public Component
 {

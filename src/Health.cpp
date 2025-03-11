@@ -1,4 +1,4 @@
-#include "Health.hpp"
+#include "components/Health.hpp"
 
 int Health::hurt(int amount)
 {

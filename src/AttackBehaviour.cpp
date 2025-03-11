@@ -1,4 +1,4 @@
-#include "AttackBehaviour.hpp"
+#include "components/AttackBehaviour.hpp"
 #include "GameObject.hpp"
 
 void AttackBehaviour::update(float deltaTime)

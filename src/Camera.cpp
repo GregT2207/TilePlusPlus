@@ -1,4 +1,4 @@
-#include "Camera.hpp"
+#include "components/Camera.hpp"
 #include "GameObject.hpp"
 
 class Transform;

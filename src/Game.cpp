@@ -4,8 +4,8 @@
 #include <SDL2/SDL_mixer.h>
 #include "Game.hpp"
 #include "GameObject.hpp"
-#include "Collider.hpp"
-#include "Camera.hpp"
+#include "components/Collider.hpp"
+#include "components/Camera.hpp"
 #include "enums/Tile.hpp"
 
 using namespace std;

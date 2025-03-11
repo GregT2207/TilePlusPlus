@@ -1,8 +1,8 @@
-#include "Collider.hpp"
-#include "Component.hpp"
 #include "GameObject.hpp"
-#include "PlayerBehaviour.hpp"
-#include "Camera.hpp"
+#include "components/Collider.hpp"
+#include "components/Component.hpp"
+#include "components/PlayerBehaviour.hpp"
+#include "components/Camera.hpp"
 
 using namespace std;
 
