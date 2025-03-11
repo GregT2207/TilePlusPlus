@@ -1,4 +1,5 @@
 #pragma once
+#include <algorithm>
 #include "geometry/Vector.hpp"
 
 namespace Math
