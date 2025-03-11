@@ -29,7 +29,7 @@ void Camera::render(SDL_Renderer *renderer)
 
     if (zoom != targetZoom)
     {
-        zoom += (targetZoom - zoom) * 0.1f;
+        zoom = Math::lerp(zoom, targetZoom, 0.1f);
         width = originalWidth / zoom;
         height = originalHeight / zoom;
     }

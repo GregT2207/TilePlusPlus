@@ -1,5 +1,6 @@
 #pragma once
 #include <cmath>
+#include "Math.hpp"
 
 struct Vector
 {
@@ -48,6 +49,13 @@ struct Vector
         copy.sgn();
 
         return copy;
+    }
+
+    Vector &lerp(Vector target, float t)
+    {
+        *this = Math::lerp(*this, target, t);
+
+        return *this;
     }
 
     inline Vector *operator+=(const Vector &b)
