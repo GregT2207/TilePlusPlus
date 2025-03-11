@@ -17,7 +17,6 @@
                 "-lSDL2_test",
                 "${workspaceFolder}/src/*.cpp",
                 "${workspaceFolder}/src/**/*.cpp",
-                "${workspaceFolder}/src/**/**/*.cpp",
                 "-o",
                 "${workspaceFolder}/build/main"
             ],

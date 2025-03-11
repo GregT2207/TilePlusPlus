@@ -3,7 +3,7 @@
 #include <vector>
 #include "Game.hpp"
 #include "geometry/Transform.hpp"
-#include "Components.hpp"
+#include "components/Components.hpp"
 
 class GameObject
 {
