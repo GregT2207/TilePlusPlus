@@ -2,16 +2,8 @@
 #include <string>
 #include <vector>
 #include "Game.hpp"
-#include "components/Component.hpp"
 #include "geometry/Transform.hpp"
-#include "components/Collider.hpp"
-#include "components/Health.hpp"
-#include "components/Renderer.hpp"
-#include "components/PlayerBehaviour.hpp"
-#include "components/EnemyBehaviour.hpp"
-#include "components/MovementBehaviour.hpp"
-#include "components/Inventory.hpp"
-#include "components/AttackBehaviour.hpp"
+#include "Components.hpp"
 
 class GameObject
 {
