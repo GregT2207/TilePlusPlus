@@ -3,6 +3,7 @@
 #include "geometry/Vector.hpp"
 #include "Game.hpp"
 #include "GameObject.hpp"
+#include "PhysicsManager.hpp"
 
 class GameObject;
 

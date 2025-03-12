@@ -4,10 +4,10 @@
 #include <vector>
 #include <map>
 #include "geometry/Vector.hpp"
-#include "ResourceManager.hpp"
-#include "PhysicsManager.hpp"
 #include "enums/Tile.hpp"
 
+class ResourceManager;
+class PhysicsManager;
 class BoundingBox;
 class GameObject;
 class Transform;
@@ -28,15 +28,18 @@ public:
     void cleanUp();
 
     bool isRunning() const { return running; }
+    int getTileSize() const { return tileSize; }
+    Vector getTileMapOffset() const { return tileMapOffset; }
     Tile getTile(Vector tilePos) const { return tiles[tilePos.y][tilePos.x]; }
     Vector worldPosToTileIndices(Vector worldPos) const;
-    PhysicsManager *getPhyiscsManager() const { return phyiscsManager; }
+    PhysicsManager *getPhysicsManager() const { return physicsManager; }
+    std::vector<std::vector<Tile>> tiles;
     std::vector<Collider *> colliders;
     std::vector<Camera *> cameras;
 
 protected:
     ResourceManager *resourceManager;
-    PhysicsManager *phyiscsManager;
+    PhysicsManager *physicsManager;
 
 private:
     bool running;
@@ -47,15 +50,12 @@ private:
     unsigned int lastFrameTime;
     std::vector<GameObject *> gameObjects;
     GameObject *player;
-    std::vector<std::vector<Tile>> tiles;
     int tileSize = 32;
     Vector tileMapOffset = {-30, -10};
     std::map<Tile, SDL_Texture *> tileTextures;
 
     void createTiles();
     void createGameObjects();
-    void handleCollisions(GameObject *gameobject);
-    void resolveCollisions(Transform *transform, Collider *collider, BoundingBox other);
     void renderTiles();
     void renderUi();
 };
