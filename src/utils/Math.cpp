@@ -1,6 +1,6 @@
 #include "utils/Math.hpp"
 
-inline float Math::lerp(float a, float b, float t)
+float Math::lerp(float a, float b, float t)
 {
     t = std::max(t, 0.0f);
     t = std::min(t, 1.0f);
