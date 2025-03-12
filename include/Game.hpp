@@ -5,6 +5,7 @@
 #include <map>
 #include "geometry/Vector.hpp"
 #include "ResourceManager.hpp"
+#include "PhysicsManager.hpp"
 #include "enums/Tile.hpp"
 
 class BoundingBox;
@@ -16,7 +17,7 @@ class Camera;
 class Game
 {
 public:
-    Game() : running(false), window(nullptr), renderer(nullptr), resourceManager(nullptr), gravity(2000), maxFallSpeed(1000), airResistance(1), groundResistance(6) {}
+    Game() : running(false), window(nullptr), renderer(nullptr), resourceManager(nullptr) {}
     ~Game();
 
     bool init(const std::string &title, int width, int height, bool fullscreen);
@@ -29,15 +30,13 @@ public:
     bool isRunning() const { return running; }
     Tile getTile(Vector tilePos) const { return tiles[tilePos.y][tilePos.x]; }
     Vector worldPosToTileIndices(Vector worldPos) const;
-    int gravity;
-    int maxFallSpeed;
-    int airResistance;
-    int groundResistance;
+    PhysicsManager *getPhyiscsManager() const { return phyiscsManager; }
     std::vector<Collider *> colliders;
     std::vector<Camera *> cameras;
 
 protected:
     ResourceManager *resourceManager;
+    PhysicsManager *phyiscsManager;
 
 private:
     bool running;

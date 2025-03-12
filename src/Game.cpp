@@ -91,6 +91,7 @@ bool Game::init(const string &title, int width, int height, bool fullscreen)
     // Mix_PlayMusic(music, -1);
 
     // Set up environment
+    phyiscsManager = new PhysicsManager(2000, 1000, 1, 6);
     createTiles();
     createGameObjects();
 
@@ -285,7 +286,7 @@ void Game::handleCollisions(GameObject *gameObject)
                 waterBuoyancy = defaultBuoyancy;
             }
 
-            transform->addVelocityY(-waterBuoyancy * gravity * 0.01f);
+            transform->addVelocityY(-waterBuoyancy * phyiscsManager->gravity * 0.01f);
         }
     }
 }

@@ -15,16 +15,16 @@ void Transform::update(float deltaTime)
 
 void Transform::applyGravity(float deltaTime)
 {
-    if (velocity.y >= owner->game->maxFallSpeed)
+    if (velocity.y >= owner->game->getPhyiscsManager()->maxFallSpeed)
         return;
 
-    addVelocityY(owner->game->gravity * deltaTime);
+    addVelocityY(owner->game->getPhyiscsManager()->gravity * deltaTime);
 }
 
 void Transform::applyDrag(float deltaTime)
 {
     Collider *collider = owner->getComponent<Collider>();
-    int drag = collider && collider->isGrounded() ? owner->game->groundResistance : owner->game->airResistance;
+    int drag = collider && collider->isGrounded() ? owner->game->getPhyiscsManager()->groundResistance : owner->game->getPhyiscsManager()->airResistance;
 
     velocity -= velocity * drag * deltaTime;
 }
