@@ -4,5 +4,5 @@
 
 namespace Math
 {
-    inline float lerp(float a, float b, float t);
+    float lerp(float a, float b, float t);
 }

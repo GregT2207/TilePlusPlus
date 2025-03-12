@@ -1,4 +1,4 @@
-#include "Math.hpp"
+#include "utils/Math.hpp"
 
 inline float Math::lerp(float a, float b, float t)
 {
