@@ -140,7 +140,7 @@ void Game::createGameObjects()
     player->addComponent<Camera>(1440, 896);
     player->addComponent<PlayerBehaviour>();
     player->addComponent<MovementBehaviour>();
-    player->addComponent<AttackBehaviour>();
+    player->addComponent<AttackBehaviour>(30, 700, 1, 2);
     player->addComponent<Inventory>(resourceManager);
     gameObjects.push_back(player);
 
@@ -151,7 +151,7 @@ void Game::createGameObjects()
     enemy->addComponent<Renderer>(renderer, resourceManager, "sprites/enemy.png");
     enemy->addComponent<EnemyBehaviour>(player);
     enemy->addComponent<MovementBehaviour>();
-    enemy->addComponent<AttackBehaviour>();
+    enemy->addComponent<AttackBehaviour>(5, 500, 2, 0, 2);
     gameObjects.push_back(enemy);
 
     for (auto *gameObject : gameObjects)

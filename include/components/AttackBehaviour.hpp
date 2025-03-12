@@ -4,15 +4,16 @@
 class AttackBehaviour : public Component
 {
 public:
+    AttackBehaviour(int damage, int knockback, int cooldown, int reach = 0, int scoop = 0) : damage(damage), knockback(knockback), cooldown(cooldown), reach(reach), scoop(scoop) {};
     void update(float deltaTime) override;
     bool attack(GameObject *other);
 
 private:
-    const int reach = 50;
-    const int damage = 5;
-    const int knockback = 600;
-    const int scoop = 1;
-    const int cooldown = 2;
+    int damage;
+    int knockback;
+    int cooldown;
+    int reach;
+    int scoop;
 
     float timeSinceAttack = 0.0f;
 };
