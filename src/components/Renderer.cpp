@@ -83,7 +83,7 @@ void Renderer::renderHealthBar(Camera *camera, Transform *transform)
     const int barMargin = 3;
     const int barHeight = 15;
 
-    int healthBarWidth = health->getHp() * singleHpWidth;
+    int healthBarWidth = health->getVisibleHp() * singleHpWidth;
     int maxBarWidth = health->getMaxHp() * singleHpWidth;
 
     BoundingBox healthBar = {static_cast<int>(rp.pos.x) - (maxBarWidth / 2) - barMargin, static_cast<int>(rp.top) - 30 - barHeight, healthBarWidth, barHeight};

@@ -1,4 +1,10 @@
 #include "components/Health.hpp"
+#include "utils/Math.hpp"
+
+void Health::render(SDL_Renderer *renderer)
+{
+    visibleHp = Math::lerp(visibleHp, hp, 0.05f);
+}
 
 int Health::hurt(int amount)
 {
@@ -25,6 +31,7 @@ int Health::hurtKnockback(int hurtAmount, int knockbackAmount, Vector direction)
 int Health::heal(int amount)
 {
     hp = std::min(hp + amount, maxHp);
+
     return hp;
 }
 
