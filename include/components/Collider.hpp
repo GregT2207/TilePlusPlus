@@ -15,8 +15,8 @@ public:
     void render(SDL_Renderer *renderer) override;
 
     BoundingBox getBoundingBox() const;
-    Vector getGap(const BoundingBox b);
-    Vector getOverlap(const BoundingBox b);
+    Vector getGap(const BoundingBox b) const;
+    Vector getOverlap(const BoundingBox b) const;
 
     void setSize(const Vector newSize) { size = newSize; }
     void addSize(const Vector newSize) { size += newSize; }
@@ -35,7 +35,7 @@ protected:
     Vector position;
     Vector size;
     Vector offset;
-    SDL_Color debugColor;
+    mutable SDL_Color debugColor;
 
 private:
     static bool debug;

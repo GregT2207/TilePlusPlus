@@ -48,7 +48,7 @@ BoundingBox Collider::getBoundingBox() const
     return BoundingBox(position, size);
 }
 
-Vector Collider::getGap(const BoundingBox b)
+Vector Collider::getGap(const BoundingBox b) const
 {
     BoundingBox a = getBoundingBox();
 
@@ -59,7 +59,7 @@ Vector Collider::getGap(const BoundingBox b)
 }
 
 // Returns a positive (right/down) or negative (left/up) overlap, or 0s if none
-Vector Collider::getOverlap(const BoundingBox b)
+Vector Collider::getOverlap(const BoundingBox b) const
 {
     BoundingBox a = getBoundingBox();
 
