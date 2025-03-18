@@ -4,7 +4,6 @@
 #include <SDL2/SDL_mixer.h>
 #include "Game.hpp"
 #include "GameObject.hpp"
-#include "components/Collider.hpp"
 #include "components/Camera.hpp"
 #include "enums/Tile.hpp"
 
@@ -12,18 +11,6 @@ using namespace std;
 
 Game::~Game()
 {
-    if (renderer)
-    {
-        SDL_DestroyRenderer(renderer);
-        renderer = nullptr;
-    }
-
-    if (window)
-    {
-        SDL_DestroyWindow(window);
-        window = nullptr;
-    }
-
     SDL_Quit();
 }
 
@@ -54,30 +41,32 @@ bool Game::init(const string &title, int width, int height, bool fullscreen)
     }
 
     // Create window
-    window = SDL_CreateWindow(
+    SDL_Window *sdlWindow = SDL_CreateWindow(
         title.c_str(),
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
         width,
         height,
         flags);
-    if (!window)
+    if (!sdlWindow)
     {
         cerr << "Window could not be created! SDL Error: " << SDL_GetError() << endl;
         return false;
     }
+    window.reset(sdlWindow);
 
     // Create renderer
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    if (!renderer)
+    SDL_Renderer *sdlRenderer = SDL_CreateRenderer(window.get(), -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    if (!sdlRenderer)
     {
         cerr << "Renderer could not be created! SDL Error: " << SDL_GetError() << endl;
         return false;
     }
-    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    renderer.reset(sdlRenderer);
+    SDL_SetRenderDrawBlendMode(renderer.get(), SDL_BLENDMODE_BLEND);
 
     // Load resources
-    resourceManager = std::make_unique<ResourceManager>(renderer);
+    resourceManager = make_unique<ResourceManager>(renderer.get());
     if (!resourceManager->init())
     {
         cerr << "Resources could not load!" << endl;
@@ -103,7 +92,7 @@ bool Game::init(const string &title, int width, int height, bool fullscreen)
     // Mix_PlayMusic(music, -1);
 
     // Set up environment
-    physicsManager = std::make_unique<PhysicsManager>(this, 2000, 1000, 1, 6);
+    physicsManager = make_unique<PhysicsManager>(this, 2000, 1000, 1, 6);
     createTiles();
     createGameObjects();
 
@@ -149,7 +138,7 @@ void Game::createGameObjects()
     player->addComponent<Transform>(Vector{0.0f, 0.0f}, Vector{100.0f, 100.0f}, Vector{70.0f, 100.0f});
     player->addComponent<Collider>(Vector{70.0f, 100.0f});
     player->addComponent<Health>(100, 25);
-    player->addComponent<Renderer>(renderer, resourceManager.get(), "sprites/player.png");
+    player->addComponent<Renderer>(renderer.get(), resourceManager.get(), "sprites/player.png");
     player->addComponent<Camera>(1440, 896);
     player->addComponent<PlayerBehaviour>();
     player->addComponent<MovementBehaviour>();
@@ -161,7 +150,7 @@ void Game::createGameObjects()
     enemy->addComponent<Transform>(Vector{300.0f, -600.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
     enemy->addComponent<Collider>(Vector{70.0f, 100.0f});
     enemy->addComponent<Health>(20, 18);
-    enemy->addComponent<Renderer>(renderer, resourceManager.get(), "sprites/enemy.png");
+    enemy->addComponent<Renderer>(renderer.get(), resourceManager.get(), "sprites/enemy.png");
     enemy->addComponent<EnemyBehaviour>(player);
     enemy->addComponent<MovementBehaviour>();
     enemy->addComponent<AttackBehaviour>(5, 500, 2, 0, 2);
@@ -215,9 +204,6 @@ void Game::update()
     deltaTime = min(0.1f, (currentFrameTime - lastFrameTime) / 1000.0f);
     lastFrameTime = currentFrameTime;
 
-    int winWidth, winHeight;
-    SDL_GetWindowSize(window, &winWidth, &winHeight);
-
     for (auto *gameObject : gameObjects)
     {
         gameObject->update(deltaTime);
@@ -228,31 +214,31 @@ void Game::update()
 void Game::render()
 {
     // Reset
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderClear(renderer);
+    SDL_SetRenderDrawColor(renderer.get(), 0, 0, 0, 255);
+    SDL_RenderClear(renderer.get());
 
     // Background
     for (SDL_Texture *background : backgrounds)
     {
-        SDL_RenderCopy(renderer, background, nullptr, nullptr);
+        SDL_RenderCopy(renderer.get(), background, nullptr, nullptr);
     }
 
     // Info
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-    SDLTest_DrawString(renderer, 10, 10, "Greg's Game");
+    SDL_SetRenderDrawColor(renderer.get(), 255, 0, 0, 255);
+    SDLTest_DrawString(renderer.get(), 10, 10, "Greg's Game");
     Vector playerPos = player->getComponent<Transform>()->getPosition();
-    SDLTest_DrawString(renderer, 10, 40, (to_string(static_cast<int>(round(playerPos.x))) + " " + to_string(static_cast<int>(round(playerPos.y)))).c_str());
-    SDLTest_DrawString(renderer, 10, 70, (to_string(static_cast<int>(floor(1.0f / deltaTime))) + "FPS").c_str());
+    SDLTest_DrawString(renderer.get(), 10, 40, (to_string(static_cast<int>(round(playerPos.x))) + " " + to_string(static_cast<int>(round(playerPos.y)))).c_str());
+    SDLTest_DrawString(renderer.get(), 10, 70, (to_string(static_cast<int>(floor(1.0f / deltaTime))) + "FPS").c_str());
 
     // Game
     renderTiles();
     for (auto *gameObject : gameObjects)
     {
-        gameObject->render(renderer);
+        gameObject->render(renderer.get());
     }
     renderUi();
 
-    SDL_RenderPresent(renderer);
+    SDL_RenderPresent(renderer.get());
 }
 
 void Game::renderTiles()
@@ -267,7 +253,7 @@ void Game::renderTiles()
                 for (Camera *camera : cameras)
                 {
                     SDL_Rect tileRect = camera->worldRectToScreenRect({static_cast<int>((x + tileMapOffset.x) * tileSize), static_cast<int>((y + tileMapOffset.y) * tileSize), tileSize, tileSize});
-                    SDL_RenderCopy(renderer, tileTexture, nullptr, &tileRect);
+                    SDL_RenderCopy(renderer.get(), tileTexture, nullptr, &tileRect);
                 }
             }
         }
@@ -291,20 +277,20 @@ void Game::renderUi()
         if (i == inv->activeItem)
         {
             SDL_Rect outlineDestRect = {nextRect.x - 5, nextRect.y - 5, nextRect.w + 10, nextRect.h + 10};
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-            SDL_RenderFillRect(renderer, &outlineDestRect);
+            SDL_SetRenderDrawColor(renderer.get(), 255, 0, 0, 255);
+            SDL_RenderFillRect(renderer.get(), &outlineDestRect);
         }
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 180);
-        SDL_RenderFillRect(renderer, &nextRect);
+        SDL_SetRenderDrawColor(renderer.get(), 0, 0, 0, 180);
+        SDL_RenderFillRect(renderer.get(), &nextRect);
 
         if (i < items.size() && items[i] != nullptr)
         {
             // Render texture and name
             SDL_Rect textureDestRect = {nextRect.x + 5, nextRect.y + 5, nextRect.w - 10, nextRect.h - 10};
-            SDL_RenderCopy(renderer, items[i]->getTexture(), nullptr, &textureDestRect);
+            SDL_RenderCopy(renderer.get(), items[i]->getTexture(), nullptr, &textureDestRect);
 
-            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-            SDLTest_DrawString(renderer, nextRect.x + 5, nextRect.y + 30, items[i]->name.c_str());
+            SDL_SetRenderDrawColor(renderer.get(), 255, 255, 255, 255);
+            SDLTest_DrawString(renderer.get(), nextRect.x + 5, nextRect.y + 30, items[i]->name.c_str());
         }
 
         nextRect.x += 110;

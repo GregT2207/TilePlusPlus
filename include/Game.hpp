@@ -20,7 +20,7 @@ class Camera;
 class Game
 {
 public:
-    Game() : running(false), window(nullptr), renderer(nullptr), resourceManager(nullptr) {}
+    Game() : running(false) {}
     ~Game();
 
     bool init(const std::string &title, int width, int height, bool fullscreen);
@@ -45,8 +45,8 @@ protected:
 
 private:
     bool running;
-    SDL_Window *window;
-    SDL_Renderer *renderer;
+    std::unique_ptr<SDL_Window, void (*)(SDL_Window *)> window{nullptr, SDL_DestroyWindow};
+    std::unique_ptr<SDL_Renderer, void (*)(SDL_Renderer *)> renderer{nullptr, SDL_DestroyRenderer};
     std::vector<SDL_Texture *> backgrounds;
     float deltaTime;
     unsigned int lastFrameTime;
