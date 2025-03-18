@@ -1,8 +1,7 @@
 #pragma once
-#include "Game.hpp"
-#include "GameObject.hpp"
 #include "geometry/Vector.hpp"
 
+class Game;
 class GameObject;
 class Transform;
 class Collider;

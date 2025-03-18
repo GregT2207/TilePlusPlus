@@ -1,4 +1,5 @@
 #include "PhysicsManager.hpp"
+#include "GameObject.hpp"
 
 void PhysicsManager::handleCollisions(GameObject *gameObject)
 {

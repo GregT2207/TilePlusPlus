@@ -4,8 +4,6 @@
 #include <SDL2/SDL_mixer.h>
 #include "Game.hpp"
 #include "GameObject.hpp"
-#include "ResourceManager.hpp"
-#include "PhysicsManager.hpp"
 #include "components/Collider.hpp"
 #include "components/Camera.hpp"
 #include "enums/Tile.hpp"
@@ -14,7 +12,19 @@ using namespace std;
 
 Game::~Game()
 {
-    cleanUp();
+    if (renderer)
+    {
+        SDL_DestroyRenderer(renderer);
+        renderer = nullptr;
+    }
+
+    if (window)
+    {
+        SDL_DestroyWindow(window);
+        window = nullptr;
+    }
+
+    SDL_Quit();
 }
 
 bool Game::init(const string &title, int width, int height, bool fullscreen)
@@ -67,7 +77,7 @@ bool Game::init(const string &title, int width, int height, bool fullscreen)
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
     // Load resources
-    resourceManager = new ResourceManager(renderer);
+    resourceManager = std::make_unique<ResourceManager>(renderer);
     if (!resourceManager->init())
     {
         cerr << "Resources could not load!" << endl;
@@ -93,7 +103,7 @@ bool Game::init(const string &title, int width, int height, bool fullscreen)
     // Mix_PlayMusic(music, -1);
 
     // Set up environment
-    physicsManager = new PhysicsManager(this, 2000, 1000, 1, 6);
+    physicsManager = std::make_unique<PhysicsManager>(this, 2000, 1000, 1, 6);
     createTiles();
     createGameObjects();
 
@@ -139,19 +149,19 @@ void Game::createGameObjects()
     player->addComponent<Transform>(Vector{0.0f, 0.0f}, Vector{100.0f, 100.0f}, Vector{70.0f, 100.0f});
     player->addComponent<Collider>(Vector{70.0f, 100.0f});
     player->addComponent<Health>(100, 25);
-    player->addComponent<Renderer>(renderer, resourceManager, "sprites/player.png");
+    player->addComponent<Renderer>(renderer, resourceManager.get(), "sprites/player.png");
     player->addComponent<Camera>(1440, 896);
     player->addComponent<PlayerBehaviour>();
     player->addComponent<MovementBehaviour>();
     player->addComponent<AttackBehaviour>(30, 700, 1, 2);
-    player->addComponent<Inventory>(resourceManager);
+    player->addComponent<Inventory>(resourceManager.get());
     gameObjects.push_back(player);
 
     GameObject *enemy = new GameObject(this, "Flobbage Jr.");
     enemy->addComponent<Transform>(Vector{300.0f, -600.0f}, Vector{0.0f, 0.0f}, Vector{70.0f, 100.0f});
     enemy->addComponent<Collider>(Vector{70.0f, 100.0f});
     enemy->addComponent<Health>(20, 18);
-    enemy->addComponent<Renderer>(renderer, resourceManager, "sprites/enemy.png");
+    enemy->addComponent<Renderer>(renderer, resourceManager.get(), "sprites/enemy.png");
     enemy->addComponent<EnemyBehaviour>(player);
     enemy->addComponent<MovementBehaviour>();
     enemy->addComponent<AttackBehaviour>(5, 500, 2, 0, 2);
@@ -299,21 +309,4 @@ void Game::renderUi()
 
         nextRect.x += 110;
     }
-}
-
-void Game::cleanUp()
-{
-    if (renderer)
-    {
-        SDL_DestroyRenderer(renderer);
-        renderer = nullptr;
-    }
-
-    if (window)
-    {
-        SDL_DestroyWindow(window);
-        window = nullptr;
-    }
-
-    SDL_Quit();
 }

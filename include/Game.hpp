@@ -1,10 +1,13 @@
 #pragma once
 #include <SDL2/SDL.h>
+#include <memory>
 #include <string>
 #include <vector>
 #include <map>
 #include "geometry/Vector.hpp"
 #include "enums/Tile.hpp"
+#include "ResourceManager.hpp"
+#include "PhysicsManager.hpp"
 
 class ResourceManager;
 class PhysicsManager;
@@ -25,21 +28,20 @@ public:
     bool setTile(Vector tilePos, Tile tile);
     void update();
     void render();
-    void cleanUp();
 
     bool isRunning() const { return running; }
     int getTileSize() const { return tileSize; }
     Vector getTileMapOffset() const { return tileMapOffset; }
     Tile getTile(Vector tilePos) const { return tiles[tilePos.y][tilePos.x]; }
     Vector worldPosToTileIndices(Vector worldPos) const;
-    PhysicsManager *getPhysicsManager() const { return physicsManager; }
+    PhysicsManager *getPhysicsManager() const { return physicsManager.get(); }
     std::vector<std::vector<Tile>> tiles;
     std::vector<Collider *> colliders;
     std::vector<Camera *> cameras;
 
 protected:
-    ResourceManager *resourceManager;
-    PhysicsManager *physicsManager;
+    std::unique_ptr<ResourceManager> resourceManager;
+    std::unique_ptr<PhysicsManager> physicsManager;
 
 private:
     bool running;
